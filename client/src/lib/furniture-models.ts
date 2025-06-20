@@ -81,6 +81,8 @@ export function createFurnitureItem(
     rotation: 0,
     width: template.defaultWidth,
     height: template.defaultHeight,
-    depth: template.defaultDepth
+    depth: template.defaultDepth,
+    scale: 1.0,
+    color: template.color
   };
 }

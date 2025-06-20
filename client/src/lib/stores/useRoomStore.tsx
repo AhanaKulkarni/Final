@@ -8,11 +8,14 @@ interface RoomState {
   selectedFurniture: string | null;
   isDrawingWall: boolean;
   currentWallStart: Point | null;
+  editMode: 'select' | 'wall' | 'furniture';
   
   // Actions
   setViewMode: (mode: ViewMode) => void;
+  setEditMode: (mode: 'select' | 'wall' | 'furniture') => void;
   addWall: (wall: Wall) => void;
   removeWall: (index: number) => void;
+  updateWall: (index: number, updates: Partial<Wall>) => void;
   addFurniture: (furniture: FurnitureItem) => void;
   updateFurniture: (id: string, updates: Partial<FurnitureItem>) => void;
   removeFurniture: (id: string) => void;
@@ -45,8 +48,10 @@ export const useRoomStore = create<RoomState>()(
     selectedFurniture: null,
     isDrawingWall: false,
     currentWallStart: null,
+    editMode: "select",
     
     setViewMode: (mode) => set({ viewMode: mode }),
+    setEditMode: (mode) => set({ editMode: mode }),
     
     addWall: (wall) => set((state) => ({
       currentRoom: {
@@ -59,6 +64,15 @@ export const useRoomStore = create<RoomState>()(
       currentRoom: {
         ...state.currentRoom,
         walls: state.currentRoom.walls.filter((_, i) => i !== index)
+      }
+    })),
+    
+    updateWall: (index, updates) => set((state) => ({
+      currentRoom: {
+        ...state.currentRoom,
+        walls: state.currentRoom.walls.map((wall, i) =>
+          i === index ? { ...wall, ...updates } : wall
+        )
       }
     })),
     
@@ -96,7 +110,8 @@ export const useRoomStore = create<RoomState>()(
       currentRoom: { ...defaultRoom, furniture: [] },
       selectedFurniture: null,
       isDrawingWall: false,
-      currentWallStart: null
+      currentWallStart: null,
+      editMode: "select"
     }),
     
     setRoomDimensions: (width, height) => set((state) => ({

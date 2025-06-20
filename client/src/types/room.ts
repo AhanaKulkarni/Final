@@ -16,7 +16,9 @@ export interface FurnitureItem {
   rotation: number;
   width: number;
   height: number;
-  depth?: number; // for 3D
+  depth: number; // for 3D
+  scale: number; // for resizing
+  color?: string; // custom color
 }
 
 export interface Room {

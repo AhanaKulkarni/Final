@@ -1,50 +1,155 @@
-import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, useTexture } from '@react-three/drei';
+import React, { Suspense, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera, useTexture, Environment, ContactShadows, Text } from '@react-three/drei';
 import { useRoomStore } from '../lib/stores/useRoomStore';
 import { furnitureTemplates } from '../lib/furniture-models';
 import { FurnitureItem, Wall } from '../types/room';
 import * as THREE from 'three';
 
-// 3D Furniture Component
+// Enhanced 3D Furniture Component
 function Furniture3D({ furniture }: { furniture: FurnitureItem }) {
+  const groupRef = useRef<THREE.Group>(null);
   const template = furnitureTemplates.find(t => t.type === furniture.type);
-  const color = template?.color || '#8B4513';
+  const color = furniture.color || template?.color || '#8B4513';
   
-  // Convert 2D position to 3D (scale down and center)
+  // Convert 2D position to 3D with proper scaling
   const position: [number, number, number] = [
-    (furniture.position.x - 400) / 50, // Scale and center
-    (furniture.depth || 50) / 100, // Height from floor
-    (furniture.position.y - 300) / 50 // Scale and center
+    (furniture.position.x - 400) / 40,
+    (furniture.depth * furniture.scale) / 120,
+    (furniture.position.y - 300) / 40
   ];
   
   const scale: [number, number, number] = [
-    furniture.width / 100,
-    (furniture.depth || 50) / 100,
-    furniture.height / 100
+    (furniture.width * furniture.scale) / 80,
+    (furniture.depth * furniture.scale) / 80,
+    (furniture.height * furniture.scale) / 80
   ];
   
+  // Add subtle animation
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.5) * 0.01;
+    }
+  });
+  
+  const getGeometry = () => {
+    switch (furniture.type) {
+      case 'chair':
+        return (
+          <group>
+            {/* Seat */}
+            <mesh position={[0, 0.2, 0]}>
+              <boxGeometry args={[0.8, 0.1, 0.8]} />
+              <meshStandardMaterial color={color} roughness={0.3} metalness={0.1} />
+            </mesh>
+            {/* Backrest */}
+            <mesh position={[0, 0.6, -0.35]}>
+              <boxGeometry args={[0.8, 0.8, 0.1]} />
+              <meshStandardMaterial color={color} roughness={0.3} metalness={0.1} />
+            </mesh>
+            {/* Legs */}
+            {[[-0.3, -0.3], [0.3, -0.3], [-0.3, 0.3], [0.3, 0.3]].map((pos, i) => (
+              <mesh key={i} position={[pos[0], -0.2, pos[1]]}>
+                <cylinderGeometry args={[0.03, 0.03, 0.4]} />
+                <meshStandardMaterial color={new THREE.Color(color).multiplyScalar(0.8)} />
+              </mesh>
+            ))}
+          </group>
+        );
+      case 'table':
+        return (
+          <group>
+            {/* Table top */}
+            <mesh position={[0, 0.4, 0]}>
+              <boxGeometry args={[1, 0.08, 1]} />
+              <meshStandardMaterial color={color} roughness={0.2} metalness={0.1} />
+            </mesh>
+            {/* Legs */}
+            {[[-0.4, -0.4], [0.4, -0.4], [-0.4, 0.4], [0.4, 0.4]].map((pos, i) => (
+              <mesh key={i} position={[pos[0], 0, pos[1]]}>
+                <cylinderGeometry args={[0.04, 0.04, 0.8]} />
+                <meshStandardMaterial color={new THREE.Color(color).multiplyScalar(0.7)} />
+              </mesh>
+            ))}
+          </group>
+        );
+      case 'bed':
+        return (
+          <group>
+            {/* Mattress */}
+            <mesh position={[0, 0.2, 0]}>
+              <boxGeometry args={[1, 0.2, 1.2]} />
+              <meshStandardMaterial color="#f8f8f8" roughness={0.8} />
+            </mesh>
+            {/* Frame */}
+            <mesh position={[0, 0.1, 0]}>
+              <boxGeometry args={[1.1, 0.1, 1.3]} />
+              <meshStandardMaterial color={color} roughness={0.3} metalness={0.1} />
+            </mesh>
+            {/* Headboard */}
+            <mesh position={[0, 0.5, -0.6]}>
+              <boxGeometry args={[1.1, 0.8, 0.1]} />
+              <meshStandardMaterial color={color} roughness={0.3} metalness={0.1} />
+            </mesh>
+          </group>
+        );
+      case 'sofa':
+        return (
+          <group>
+            {/* Base */}
+            <mesh position={[0, 0.2, 0]}>
+              <boxGeometry args={[1.2, 0.4, 0.8]} />
+              <meshStandardMaterial color={color} roughness={0.6} />
+            </mesh>
+            {/* Backrest */}
+            <mesh position={[0, 0.5, -0.3]}>
+              <boxGeometry args={[1.2, 0.6, 0.2]} />
+              <meshStandardMaterial color={color} roughness={0.6} />
+            </mesh>
+            {/* Arms */}
+            <mesh position={[-0.5, 0.4, 0]}>
+              <boxGeometry args={[0.2, 0.4, 0.8]} />
+              <meshStandardMaterial color={color} roughness={0.6} />
+            </mesh>
+            <mesh position={[0.5, 0.4, 0]}>
+              <boxGeometry args={[0.2, 0.4, 0.8]} />
+              <meshStandardMaterial color={color} roughness={0.6} />
+            </mesh>
+          </group>
+        );
+      default:
+        return (
+          <mesh>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color={color} roughness={0.3} metalness={0.1} />
+          </mesh>
+        );
+    }
+  };
+  
   return (
-    <mesh
+    <group 
+      ref={meshRef}
       position={position}
       scale={scale}
       rotation={[0, (furniture.rotation * Math.PI) / 180, 0]}
+      castShadow
+      receiveShadow
     >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshLambertMaterial color={color} />
-    </mesh>
+      {getGeometry()}
+    </group>
   );
 }
 
-// 3D Wall Component
+// Enhanced 3D Wall Component
 function Wall3D({ wall }: { wall: Wall }) {
   const length = Math.sqrt(
     Math.pow(wall.end.x - wall.start.x, 2) + 
     Math.pow(wall.end.y - wall.start.y, 2)
-  ) / 50; // Scale down
+  ) / 40;
   
-  const centerX = ((wall.start.x + wall.end.x) / 2 - 400) / 50;
-  const centerZ = ((wall.start.y + wall.end.y) / 2 - 300) / 50;
+  const centerX = ((wall.start.x + wall.end.x) / 2 - 400) / 40;
+  const centerZ = ((wall.start.y + wall.end.y) / 2 - 300) / 40;
   
   const angle = Math.atan2(
     wall.end.y - wall.start.y,
@@ -52,13 +157,35 @@ function Wall3D({ wall }: { wall: Wall }) {
   );
   
   return (
-    <mesh
-      position={[centerX, 1, centerZ]}
-      rotation={[0, angle, 0]}
-    >
-      <boxGeometry args={[length, 2, 0.2]} />
-      <meshLambertMaterial color="#ddd" />
-    </mesh>
+    <group>
+      {/* Main wall */}
+      <mesh
+        position={[centerX, 1.5, centerZ]}
+        rotation={[0, angle, 0]}
+        castShadow
+        receiveShadow
+      >
+        <boxGeometry args={[length, 3, 0.2]} />
+        <meshStandardMaterial 
+          color="#f5f5f5" 
+          roughness={0.8}
+          metalness={0.1}
+        />
+      </mesh>
+      
+      {/* Wall base/trim */}
+      <mesh
+        position={[centerX, 0.1, centerZ]}
+        rotation={[0, angle, 0]}
+        receiveShadow
+      >
+        <boxGeometry args={[length, 0.2, 0.25]} />
+        <meshStandardMaterial 
+          color="#e0e0e0" 
+          roughness={0.6}
+        />
+      </mesh>
+    </group>
   );
 }
 
