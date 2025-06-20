@@ -20,11 +20,13 @@ export function isPointNearWall(point: Point, wall: Wall, threshold: number = 10
 }
 
 export function isPointInFurniture(point: Point, furniture: FurnitureItem): boolean {
-  const { position, width, height, rotation } = furniture;
+  const { position, width, height, scale = 1 } = furniture;
   
-  // Simple AABB collision for now (ignoring rotation for simplicity)
-  const halfWidth = width / 2;
-  const halfHeight = height / 2;
+  // Account for scale when checking collision
+  const scaledWidth = width * scale;
+  const scaledHeight = height * scale;
+  const halfWidth = scaledWidth / 2;
+  const halfHeight = scaledHeight / 2;
   
   return point.x >= position.x - halfWidth &&
          point.x <= position.x + halfWidth &&

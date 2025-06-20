@@ -236,7 +236,8 @@ export function Canvas2D() {
     const pos = getMousePos(e);
     const snappedPos = snapToGrid(pos);
     
-    if (isDrawingWall) {
+    // Only allow wall drawing when in wall mode
+    if (editMode === 'wall' && isDrawingWall) {
       if (!currentWallStart) {
         setCurrentWallStart(snappedPos);
       } else {
@@ -251,29 +252,32 @@ export function Canvas2D() {
       return;
     }
     
-    // Check if clicking on furniture
-    const clickedFurniture = currentRoom.furniture.find(furniture =>
-      isPointInFurniture(pos, furniture)
-    );
-    
-    if (clickedFurniture) {
-      selectFurniture(clickedFurniture.id);
+    // Only allow furniture interaction when in select mode
+    if (editMode === 'select') {
+      // Check if clicking on furniture
+      const clickedFurniture = currentRoom.furniture.find(furniture =>
+        isPointInFurniture(pos, furniture)
+      );
       
-      // Check if clicking on resize handle
-      const handle = getResizeHandle(pos, clickedFurniture);
-      if (handle) {
-        setIsResizing(true);
-        setResizeHandle(handle);
-        setDragOffset(pos);
+      if (clickedFurniture) {
+        selectFurniture(clickedFurniture.id);
+        
+        // Check if clicking on resize handle
+        const handle = getResizeHandle(pos, clickedFurniture);
+        if (handle) {
+          setIsResizing(true);
+          setResizeHandle(handle);
+          setDragOffset(pos);
+        } else {
+          setIsDragging(true);
+          setDragOffset({
+            x: pos.x - clickedFurniture.position.x,
+            y: pos.y - clickedFurniture.position.y
+          });
+        }
       } else {
-        setIsDragging(true);
-        setDragOffset({
-          x: pos.x - clickedFurniture.position.x,
-          y: pos.y - clickedFurniture.position.y
-        });
+        selectFurniture(null);
       }
-    } else {
-      selectFurniture(null);
     }
   };
   
@@ -281,43 +285,46 @@ export function Canvas2D() {
     const pos = getMousePos(e);
     setMousePos(pos);
     
-    if (isDragging && selectedFurniture) {
-      const newPosition = {
-        x: pos.x - dragOffset.x,
-        y: pos.y - dragOffset.y
-      };
-      updateFurniture(selectedFurniture, { position: newPosition });
-    }
-    
-    if (isResizing && selectedFurniture && resizeHandle) {
-      const selectedItem = currentRoom.furniture.find(f => f.id === selectedFurniture);
-      if (selectedItem) {
-        const deltaX = pos.x - dragOffset.x;
-        const deltaY = pos.y - dragOffset.y;
-        
-        let newWidth = selectedItem.width;
-        let newHeight = selectedItem.height;
-        
-        switch (resizeHandle) {
-          case 'se': // bottom-right
-            newWidth = Math.max(20, selectedItem.width + deltaX);
-            newHeight = Math.max(20, selectedItem.height + deltaY);
-            break;
-          case 'sw': // bottom-left
-            newWidth = Math.max(20, selectedItem.width - deltaX);
-            newHeight = Math.max(20, selectedItem.height + deltaY);
-            break;
-          case 'ne': // top-right
-            newWidth = Math.max(20, selectedItem.width + deltaX);
-            newHeight = Math.max(20, selectedItem.height - deltaY);
-            break;
-          case 'nw': // top-left
-            newWidth = Math.max(20, selectedItem.width - deltaX);
-            newHeight = Math.max(20, selectedItem.height - deltaY);
-            break;
+    if (editMode === 'select') {
+      if (isDragging && selectedFurniture) {
+        const newPosition = {
+          x: pos.x - dragOffset.x,
+          y: pos.y - dragOffset.y
+        };
+        updateFurniture(selectedFurniture, { position: newPosition });
+      }
+      
+      if (isResizing && selectedFurniture && resizeHandle) {
+        const selectedItem = currentRoom.furniture.find(f => f.id === selectedFurniture);
+        if (selectedItem) {
+          const deltaX = pos.x - dragOffset.x;
+          const deltaY = pos.y - dragOffset.y;
+          
+          let newWidth = selectedItem.width;
+          let newHeight = selectedItem.height;
+          
+          switch (resizeHandle) {
+            case 'se': // bottom-right
+              newWidth = Math.max(20, selectedItem.width + deltaX);
+              newHeight = Math.max(20, selectedItem.height + deltaY);
+              break;
+            case 'sw': // bottom-left
+              newWidth = Math.max(20, selectedItem.width - deltaX);
+              newHeight = Math.max(20, selectedItem.height + deltaY);
+              break;
+            case 'ne': // top-right
+              newWidth = Math.max(20, selectedItem.width + deltaX);
+              newHeight = Math.max(20, selectedItem.height - deltaY);
+              break;
+            case 'nw': // top-left
+              newWidth = Math.max(20, selectedItem.width - deltaX);
+              newHeight = Math.max(20, selectedItem.height - deltaY);
+              break;
+          }
+          
+          updateFurniture(selectedFurniture, { width: newWidth, height: newHeight });
+          setDragOffset(pos); // Update offset for continuous resizing
         }
-        
-        updateFurniture(selectedFurniture, { width: newWidth, height: newHeight });
       }
     }
   };
@@ -349,8 +356,8 @@ export function Canvas2D() {
   };
   
   const getCursor = () => {
-    if (isDrawingWall) return 'crosshair';
-    if (selectedFurniture) {
+    if (editMode === 'wall' && isDrawingWall) return 'crosshair';
+    if (editMode === 'select' && selectedFurniture) {
       const selectedItem = currentRoom.furniture.find(f => f.id === selectedFurniture);
       if (selectedItem) {
         const handle = getResizeHandle(mousePos, selectedItem);
@@ -365,6 +372,7 @@ export function Canvas2D() {
       }
       return isDragging ? 'grabbing' : 'grab';
     }
+    if (editMode === 'furniture') return 'copy';
     return 'default';
   };
 
