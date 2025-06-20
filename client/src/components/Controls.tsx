@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRoomStore } from '../lib/stores/useRoomStore';
-import { Trash2, Move, RotateCw, Pencil, Hand, Home } from 'lucide-react';
+import { Trash2, Move, RotateCw, Pencil, Hand, Home, DoorOpen, RectangleHorizontal } from 'lucide-react';
 
 export function Controls() {
   const { 
@@ -62,6 +62,34 @@ export function Controls() {
               >
                 <Move size={12} />
                 Items
+              </Button>
+            </div>
+            
+            {/* Secondary mode row for doors and windows */}
+            <div className="grid grid-cols-2 gap-1 p-1 bg-gray-50 rounded-lg">
+              <Button
+                variant={editMode === 'door' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => {
+                  setEditMode('door');
+                  setDrawingWall(false);
+                }}
+                className="flex items-center gap-1 text-xs"
+              >
+                <DoorOpen size={12} />
+                Doors
+              </Button>
+              <Button
+                variant={editMode === 'window' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => {
+                  setEditMode('window');
+                  setDrawingWall(false);
+                }}
+                className="flex items-center gap-1 text-xs"
+              >
+                <RectangleHorizontal size={12} />
+                Windows
               </Button>
             </div>
           </div>

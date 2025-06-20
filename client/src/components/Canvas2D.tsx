@@ -18,6 +18,7 @@ export function Canvas2D() {
   const {
     currentRoom,
     selectedFurniture,
+    selectedDoorWindow,
     isDrawingWall,
     currentWallStart,
     editMode,
@@ -25,6 +26,10 @@ export function Canvas2D() {
     addFurniture,
     updateFurniture,
     selectFurniture,
+    addDoor,
+    addWindow,
+    selectDoorWindow,
+    updateDoorWindow,
     setCurrentWallStart
   } = useRoomStore();
   
@@ -281,8 +286,79 @@ export function Canvas2D() {
       return;
     }
     
+    // Handle door/window placement
+    if (editMode === 'door' || editMode === 'window') {
+      // Find which wall is closest to the click
+      let closestWall = null;
+      let closestWallIndex = -1;
+      let minDistance = Infinity;
+      
+      currentRoom.walls.forEach((wall, index) => {
+        const distance = getDistanceToWall(pos, wall);
+        if (distance < minDistance && distance < 20) { // 20px threshold
+          minDistance = distance;
+          closestWall = wall;
+          closestWallIndex = index;
+        }
+      });
+      
+      if (closestWall && closestWallIndex >= 0) {
+        // Calculate position along wall (0-1)
+        const wallLength = Math.sqrt(
+          Math.pow(closestWall.end.x - closestWall.start.x, 2) + 
+          Math.pow(closestWall.end.y - closestWall.start.y, 2)
+        );
+        
+        // Project click point onto wall
+        const t = Math.max(0.1, Math.min(0.9, 
+          ((pos.x - closestWall.start.x) * (closestWall.end.x - closestWall.start.x) + 
+           (pos.y - closestWall.start.y) * (closestWall.end.y - closestWall.start.y)) / 
+          (wallLength * wallLength)
+        ));
+        
+        const newDoorWindow = {
+          id: `${editMode}_${Date.now()}`,
+          type: editMode as 'door' | 'window',
+          wallIndex: closestWallIndex,
+          position: t,
+          width: editMode === 'door' ? 80 : 100,
+          height: editMode === 'door' ? 200 : 80,
+          color: editMode === 'door' ? '#8B4513' : '#4169E1'
+        };
+        
+        if (editMode === 'door') {
+          addDoor(newDoorWindow);
+        } else {
+          addWindow(newDoorWindow);
+        }
+        
+        selectDoorWindow(newDoorWindow.id);
+      }
+      return;
+    }
+    
     // Only allow furniture interaction when in select mode
     if (editMode === 'select') {
+      // Check if clicking on door/window first
+      const allDoorWindows = [...currentRoom.doors, ...currentRoom.windows];
+      const clickedDoorWindow = allDoorWindows.find(item => {
+        const wall = currentRoom.walls[item.wallIndex];
+        if (!wall) return false;
+        
+        const wallPos = getPositionOnWall(wall, item.position);
+        const distance = Math.sqrt(
+          Math.pow(pos.x - wallPos.x, 2) + 
+          Math.pow(pos.y - wallPos.y, 2)
+        );
+        return distance < 30; // 30px selection radius
+      });
+      
+      if (clickedDoorWindow) {
+        selectDoorWindow(clickedDoorWindow.id);
+        selectFurniture(null);
+        return;
+      }
+      
       // Check if clicking on furniture
       const clickedFurniture = currentRoom.furniture.find(furniture =>
         isPointInFurniture(pos, furniture)
@@ -290,6 +366,7 @@ export function Canvas2D() {
       
       if (clickedFurniture) {
         selectFurniture(clickedFurniture.id);
+        selectDoorWindow(null);
         
         // Check if clicking on resize handle
         const handle = getResizeHandle(pos, clickedFurniture);
@@ -306,6 +383,7 @@ export function Canvas2D() {
         }
       } else {
         selectFurniture(null);
+        selectDoorWindow(null);
       }
     }
   };
