@@ -1,18 +1,19 @@
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
-import { Room, FurnitureItem, Wall, Point, ViewMode } from "../../types/room";
+import { Room, FurnitureItem, Wall, Point, ViewMode, DoorWindow } from "../../types/room";
 
 interface RoomState {
   currentRoom: Room;
   viewMode: ViewMode;
   selectedFurniture: string | null;
+  selectedDoorWindow: string | null;
   isDrawingWall: boolean;
   currentWallStart: Point | null;
-  editMode: 'select' | 'wall' | 'furniture';
+  editMode: 'select' | 'wall' | 'furniture' | 'door' | 'window';
   
   // Actions
   setViewMode: (mode: ViewMode) => void;
-  setEditMode: (mode: 'select' | 'wall' | 'furniture') => void;
+  setEditMode: (mode: 'select' | 'wall' | 'furniture' | 'door' | 'window') => void;
   addWall: (wall: Wall) => void;
   removeWall: (index: number) => void;
   updateWall: (index: number, updates: Partial<Wall>) => void;
@@ -20,6 +21,11 @@ interface RoomState {
   updateFurniture: (id: string, updates: Partial<FurnitureItem>) => void;
   removeFurniture: (id: string) => void;
   selectFurniture: (id: string | null) => void;
+  addDoor: (door: DoorWindow) => void;
+  addWindow: (window: DoorWindow) => void;
+  updateDoorWindow: (id: string, updates: Partial<DoorWindow>) => void;
+  removeDoorWindow: (id: string) => void;
+  selectDoorWindow: (id: string | null) => void;
   setDrawingWall: (drawing: boolean) => void;
   setCurrentWallStart: (point: Point | null) => void;
   clearRoom: () => void;
@@ -37,6 +43,8 @@ const defaultRoom: Room = {
     { start: { x: 50, y: 450 }, end: { x: 50, y: 50 }, thickness: 10 },
   ],
   furniture: [],
+  doors: [],
+  windows: [],
   width: 600,
   height: 500,
 };
@@ -46,6 +54,7 @@ export const useRoomStore = create<RoomState>()(
     currentRoom: defaultRoom,
     viewMode: "2d",
     selectedFurniture: null,
+    selectedDoorWindow: null,
     isDrawingWall: false,
     currentWallStart: null,
     editMode: "select",
@@ -102,13 +111,50 @@ export const useRoomStore = create<RoomState>()(
     
     selectFurniture: (id) => set({ selectedFurniture: id }),
     
+    addDoor: (door) => set((state) => ({
+      currentRoom: {
+        ...state.currentRoom,
+        doors: [...state.currentRoom.doors, door]
+      }
+    })),
+    
+    addWindow: (window) => set((state) => ({
+      currentRoom: {
+        ...state.currentRoom,
+        windows: [...state.currentRoom.windows, window]
+      }
+    })),
+    
+    updateDoorWindow: (id, updates) => set((state) => ({
+      currentRoom: {
+        ...state.currentRoom,
+        doors: state.currentRoom.doors.map(door => 
+          door.id === id ? { ...door, ...updates } : door
+        ),
+        windows: state.currentRoom.windows.map(window => 
+          window.id === id ? { ...window, ...updates } : window
+        )
+      }
+    })),
+    
+    removeDoorWindow: (id) => set((state) => ({
+      currentRoom: {
+        ...state.currentRoom,
+        doors: state.currentRoom.doors.filter(door => door.id !== id),
+        windows: state.currentRoom.windows.filter(window => window.id !== id)
+      }
+    })),
+    
+    selectDoorWindow: (id) => set({ selectedDoorWindow: id }),
+    
     setDrawingWall: (drawing) => set({ isDrawingWall: drawing }),
     
     setCurrentWallStart: (point) => set({ currentWallStart: point }),
     
     clearRoom: () => set({
-      currentRoom: { ...defaultRoom, furniture: [] },
+      currentRoom: { ...defaultRoom, furniture: [], doors: [], windows: [] },
       selectedFurniture: null,
+      selectedDoorWindow: null,
       isDrawingWall: false,
       currentWallStart: null,
       editMode: "select"

@@ -10,6 +10,16 @@ export interface Wall {
   color?: string;
 }
 
+export interface DoorWindow {
+  id: string;
+  type: 'door' | 'window';
+  wallIndex: number;
+  position: number; // 0-1 representing position along wall
+  width: number;
+  height: number;
+  color?: string;
+}
+
 export interface FurnitureItem {
   id: string;
   type: 'chair' | 'table' | 'bed' | 'sofa' | 'desk' | 'wardrobe';
@@ -27,6 +37,8 @@ export interface Room {
   name: string;
   walls: Wall[];
   furniture: FurnitureItem[];
+  doors: DoorWindow[];
+  windows: DoorWindow[];
   width: number;
   height: number;
 }
