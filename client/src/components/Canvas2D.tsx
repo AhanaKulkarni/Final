@@ -83,7 +83,8 @@ export function Canvas2D() {
     
     // Draw walls with enhanced styling
     currentRoom.walls.forEach((wall, index) => {
-      ctx.strokeStyle = '#2c3e50';
+      const wallColor = wall.color || '#2c3e50';
+      ctx.strokeStyle = wallColor;
       ctx.lineWidth = 12;
       ctx.lineCap = 'round';
       ctx.shadowColor = 'rgba(0,0,0,0.3)';
@@ -103,7 +104,7 @@ export function Canvas2D() {
       ctx.shadowOffsetY = 0;
       
       // Draw wall outline
-      ctx.strokeStyle = '#34495e';
+      ctx.strokeStyle = adjustBrightness(wallColor, -30);
       ctx.lineWidth = 14;
       ctx.globalCompositeOperation = 'destination-over';
       ctx.beginPath();

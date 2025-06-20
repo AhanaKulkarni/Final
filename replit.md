@@ -88,6 +88,14 @@ This is a full-stack web application that allows users to design rooms in 2D and
 ```
 Changelog:
 - June 20, 2025. Initial setup
+- June 20, 2025. Enhanced room designer with:
+  * Advanced 3D graphics with detailed furniture models and realistic lighting
+  * Comprehensive furniture controls (resize, rotate, scale, color customization)
+  * Canvas navigation with pan and zoom functionality
+  * Wall color customization system
+  * Fixed 3D furniture positioning to sit on floor
+  * Added precise furniture rotation controls with slider
+  * Improved UI with modern design and glass morphism effects
 ```
 
 ## User Preferences

@@ -15,7 +15,7 @@ function Furniture3D({ furniture }: { furniture: FurnitureItem }) {
   // Convert 2D position to 3D with proper scaling
   const position: [number, number, number] = [
     (furniture.position.x - 400) / 40,
-    (furniture.depth * furniture.scale) / 120,
+    (furniture.depth * furniture.scale) / 200, // Fixed height calculation to be on floor
     (furniture.position.y - 300) / 40
   ];
   
@@ -156,6 +156,8 @@ function Wall3D({ wall }: { wall: Wall }) {
     wall.end.x - wall.start.x
   );
   
+  const wallColor = wall.color || "#f5f5f5";
+  
   return (
     <group>
       {/* Main wall */}
@@ -167,7 +169,7 @@ function Wall3D({ wall }: { wall: Wall }) {
       >
         <boxGeometry args={[length, 3, 0.2]} />
         <meshStandardMaterial 
-          color="#f5f5f5" 
+          color={wallColor} 
           roughness={0.8}
           metalness={0.1}
         />
@@ -181,7 +183,7 @@ function Wall3D({ wall }: { wall: Wall }) {
       >
         <boxGeometry args={[length, 0.2, 0.25]} />
         <meshStandardMaterial 
-          color="#e0e0e0" 
+          color={new THREE.Color(wallColor).multiplyScalar(0.8)} 
           roughness={0.6}
         />
       </mesh>

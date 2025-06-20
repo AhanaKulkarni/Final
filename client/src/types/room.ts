@@ -7,6 +7,7 @@ export interface Wall {
   start: Point;
   end: Point;
   thickness: number;
+  color?: string;
 }
 
 export interface FurnitureItem {

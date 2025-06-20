@@ -24,6 +24,10 @@ export function FurnitureControls() {
       rotation: (selectedItem.rotation + 15) % 360
     });
   };
+
+  const updateRotation = (value: number[]) => {
+    updateFurniture(selectedItem.id, { rotation: value[0] });
+  };
   
   const updateScale = (value: number[]) => {
     updateFurniture(selectedItem.id, { scale: value[0] });
@@ -74,6 +78,19 @@ export function FurnitureControls() {
           </Button>
         </div>
         
+        {/* Rotation Control */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Rotation: {selectedItem.rotation}°</label>
+          <Slider
+            value={[selectedItem.rotation]}
+            onValueChange={updateRotation}
+            min={0}
+            max={360}
+            step={15}
+            className="w-full"
+          />
+        </div>
+
         {/* Scale Control */}
         <div className="space-y-2">
           <label className="text-sm font-medium">Overall Size: {selectedItem.scale.toFixed(1)}x</label>
