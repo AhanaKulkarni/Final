@@ -96,6 +96,9 @@ Changelog:
   * Fixed 3D furniture positioning to sit on floor
   * Added precise furniture rotation controls with slider
   * Improved UI with modern design and glass morphism effects
+  * Complete doors and windows system with movable positioning along walls
+  * 2D and 3D door/window rendering with realistic materials and customization
+  * Interactive door/window controls with size, position, and color options
 ```
 
 ## User Preferences

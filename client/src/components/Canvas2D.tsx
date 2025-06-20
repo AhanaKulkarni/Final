@@ -217,6 +217,70 @@ export function Canvas2D() {
       ctx.restore();
     });
     
+    // Draw doors and windows
+    const allDoorWindows = [...currentRoom.doors, ...currentRoom.windows];
+    allDoorWindows.forEach((item) => {
+      const wall = currentRoom.walls[item.wallIndex];
+      if (!wall) return;
+      
+      const wallPos = getPositionOnWall(wall, item.position);
+      const wallAngle = Math.atan2(wall.end.y - wall.start.y, wall.end.x - wall.start.x);
+      
+      ctx.save();
+      ctx.translate(wallPos.x, wallPos.y);
+      ctx.rotate(wallAngle);
+      
+      const isSelected = selectedDoorWindow === item.id;
+      const color = item.color || (item.type === 'door' ? '#8B4513' : '#4169E1');
+      
+      if (item.type === 'door') {
+        // Draw door
+        ctx.fillStyle = color;
+        ctx.fillRect(-item.width / 2, -10, item.width, 20);
+        
+        // Door frame
+        ctx.strokeStyle = adjustBrightness(color, -40);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(-item.width / 2, -10, item.width, 20);
+        
+        // Door handle
+        ctx.fillStyle = '#FFD700';
+        ctx.beginPath();
+        ctx.arc(item.width / 2 - 8, 0, 3, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Draw window
+        ctx.fillStyle = color;
+        ctx.fillRect(-item.width / 2, -8, item.width, 16);
+        
+        // Window frame
+        ctx.strokeStyle = adjustBrightness(color, -40);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(-item.width / 2, -8, item.width, 16);
+        
+        // Window cross
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, -8);
+        ctx.lineTo(0, 8);
+        ctx.moveTo(-item.width / 2, 0);
+        ctx.lineTo(item.width / 2, 0);
+        ctx.stroke();
+      }
+      
+      // Selection indicator
+      if (isSelected) {
+        ctx.strokeStyle = '#e74c3c';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.strokeRect(-item.width / 2 - 5, -15, item.width + 10, 30);
+        ctx.setLineDash([]);
+      }
+      
+      ctx.restore();
+    });
+    
     // Draw current wall being drawn
     if (isDrawingWall && currentWallStart) {
       ctx.strokeStyle = '#e74c3c';

@@ -4,12 +4,13 @@ import { Canvas3D } from './Canvas3D';
 import { FurnitureLibrary } from './FurnitureLibrary';
 import { FurnitureControls } from './FurnitureControls';
 import { WallControls } from './WallControls';
+import { DoorWindowControls } from './DoorWindowControls';
 import { Controls } from './Controls';
 import { ViewToggle } from './ViewToggle';
 import { useRoomStore } from '../lib/stores/useRoomStore';
 
 export function RoomDesigner() {
-  const { viewMode, selectedFurniture, editMode } = useRoomStore();
+  const { viewMode, selectedFurniture, selectedDoorWindow, editMode } = useRoomStore();
   
   return (
     <div className="w-full h-screen relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-200">
@@ -25,6 +26,7 @@ export function RoomDesigner() {
             <Controls />
             {selectedFurniture && <FurnitureControls />}
             {editMode === 'wall' && <WallControls />}
+            {selectedDoorWindow && <DoorWindowControls />}
           </>
         ) : (
           <Canvas3D />

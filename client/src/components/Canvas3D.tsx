@@ -3,7 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, useTexture, Environment, ContactShadows, Text } from '@react-three/drei';
 import { useRoomStore } from '../lib/stores/useRoomStore';
 import { furnitureTemplates } from '../lib/furniture-models';
-import { FurnitureItem, Wall } from '../types/room';
+import { FurnitureItem, Wall, DoorWindow } from '../types/room';
 import * as THREE from 'three';
 
 // Enhanced 3D Furniture Component
@@ -141,6 +141,81 @@ function Furniture3D({ furniture }: { furniture: FurnitureItem }) {
   );
 }
 
+// 3D Door and Window Component
+function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
+  const wallLength = Math.sqrt(
+    Math.pow(wall.end.x - wall.start.x, 2) + 
+    Math.pow(wall.end.y - wall.start.y, 2)
+  ) / 40;
+  
+  const wallCenterX = ((wall.start.x + wall.end.x) / 2 - 400) / 40;
+  const wallCenterZ = ((wall.start.y + wall.end.y) / 2 - 300) / 40;
+  
+  const wallAngle = Math.atan2(
+    wall.end.y - wall.start.y,
+    wall.end.x - wall.start.x
+  );
+  
+  // Calculate position along wall
+  const localX = (item.position - 0.5) * wallLength;
+  const itemColor = item.color || (item.type === 'door' ? '#8B4513' : '#4169E1');
+  
+  return (
+    <group
+      position={[wallCenterX, 0, wallCenterZ]}
+      rotation={[0, wallAngle, 0]}
+    >
+      <group position={[localX, 0, 0]}>
+        {item.type === 'door' ? (
+          <group>
+            {/* Door frame */}
+            <mesh position={[0, 1, 0]}>
+              <boxGeometry args={[item.width / 40, 2, 0.1]} />
+              <meshStandardMaterial 
+                color={itemColor} 
+                roughness={0.4}
+                metalness={0.1}
+              />
+            </mesh>
+            {/* Door handle */}
+            <mesh position={[item.width / 80, 1, 0.05]}>
+              <sphereGeometry args={[0.03]} />
+              <meshStandardMaterial 
+                color="#FFD700" 
+                roughness={0.2}
+                metalness={0.8}
+              />
+            </mesh>
+          </group>
+        ) : (
+          <group>
+            {/* Window frame */}
+            <mesh position={[0, 1.5, 0]}>
+              <boxGeometry args={[item.width / 40, item.height / 40, 0.05]} />
+              <meshStandardMaterial 
+                color={itemColor} 
+                roughness={0.1}
+                metalness={0.3}
+                transparent
+                opacity={0.7}
+              />
+            </mesh>
+            {/* Window cross bars */}
+            <mesh position={[0, 1.5, 0.02]}>
+              <boxGeometry args={[0.02, item.height / 40, 0.02]} />
+              <meshStandardMaterial color="#FFFFFF" />
+            </mesh>
+            <mesh position={[0, 1.5, 0.02]}>
+              <boxGeometry args={[item.width / 40, 0.02, 0.02]} />
+              <meshStandardMaterial color="#FFFFFF" />
+            </mesh>
+          </group>
+        )}
+      </group>
+    </group>
+  );
+}
+
 // Enhanced 3D Wall Component
 function Wall3D({ wall }: { wall: Wall }) {
   const length = Math.sqrt(
@@ -269,6 +344,22 @@ function Scene3D() {
       {currentRoom.furniture.map(furniture => (
         <Furniture3D key={furniture.id} furniture={furniture} />
       ))}
+      
+      {/* Render doors */}
+      {currentRoom.doors.map(door => {
+        const wall = currentRoom.walls[door.wallIndex];
+        return wall ? (
+          <DoorWindow3D key={door.id} item={door} wall={wall} />
+        ) : null;
+      })}
+      
+      {/* Render windows */}
+      {currentRoom.windows.map(window => {
+        const wall = currentRoom.walls[window.wallIndex];
+        return wall ? (
+          <DoorWindow3D key={window.id} item={window} wall={wall} />
+        ) : null;
+      })}
     </>
   );
 }
