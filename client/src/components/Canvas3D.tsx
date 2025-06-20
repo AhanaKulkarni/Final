@@ -27,8 +27,8 @@ function Furniture3D({ furniture }: { furniture: FurnitureItem }) {
   
   // Add subtle animation
   useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.5) * 0.01;
+    if (groupRef.current) {
+      groupRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.5) * 0.01;
     }
   });
   
@@ -129,7 +129,7 @@ function Furniture3D({ furniture }: { furniture: FurnitureItem }) {
   
   return (
     <group 
-      ref={meshRef}
+      ref={groupRef}
       position={position}
       scale={scale}
       rotation={[0, (furniture.rotation * Math.PI) / 180, 0]}
@@ -189,31 +189,62 @@ function Wall3D({ wall }: { wall: Wall }) {
   );
 }
 
-// Floor Component
+// Enhanced Floor Component
 function Floor() {
   const woodTexture = useTexture('/textures/wood.jpg');
   
   return (
-    <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[20, 20]} />
-      <meshLambertMaterial map={woodTexture} />
-    </mesh>
+    <group>
+      {/* Main floor */}
+      <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[25, 25]} />
+        <meshStandardMaterial 
+          map={woodTexture} 
+          roughness={0.8}
+          metalness={0.1}
+        />
+      </mesh>
+      
+      {/* Room perimeter base */}
+      <mesh position={[0, -0.05, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[25, 25]} />
+        <meshStandardMaterial 
+          color="#8B4513"
+          roughness={0.9}
+        />
+      </mesh>
+    </group>
   );
 }
 
-// Lighting setup
+// Enhanced Lighting setup
 function Lights() {
   return (
     <>
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={0.3} />
       <directionalLight
-        position={[10, 10, 5]}
-        intensity={1}
+        position={[10, 15, 5]}
+        intensity={1.2}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={4096}
+        shadow-mapSize-height={4096}
+        shadow-camera-far={50}
+        shadow-camera-left={-20}
+        shadow-camera-right={20}
+        shadow-camera-top={20}
+        shadow-camera-bottom={-20}
       />
-      <pointLight position={[0, 5, 0]} intensity={0.5} />
+      <pointLight position={[0, 8, 0]} intensity={0.4} color="#ffeaa7" />
+      <pointLight position={[-5, 3, -5]} intensity={0.3} color="#74b9ff" />
+      <pointLight position={[5, 3, 5]} intensity={0.3} color="#fd79a8" />
+      <spotLight
+        position={[0, 12, 0]}
+        angle={0.6}
+        penumbra={0.5}
+        intensity={0.8}
+        castShadow
+        color="#ffffff"
+      />
     </>
   );
 }
@@ -242,38 +273,57 @@ function Scene3D() {
 
 export function Canvas3D() {
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full relative">
       <Canvas
         shadows
-        gl={{ antialias: true }}
-        style={{ background: '#f0f8ff' }}
+        gl={{ 
+          antialias: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.2
+        }}
+        camera={{ position: [12, 10, 12], fov: 50 }}
+        style={{ background: 'linear-gradient(180deg, #87CEEB 0%, #f0f8ff 100%)' }}
       >
-        <PerspectiveCamera
-          makeDefault
-          position={[10, 8, 10]}
-          fov={60}
-        />
-        
         <OrbitControls
           enablePan={true}
           enableZoom={true}
           enableRotate={true}
           minDistance={5}
-          maxDistance={30}
-          maxPolarAngle={Math.PI / 2.2}
+          maxDistance={25}
+          maxPolarAngle={Math.PI / 2.1}
+          dampingFactor={0.05}
+          enableDamping
         />
         
         <Suspense fallback={null}>
+          <Environment preset="sunset" />
           <Scene3D />
+          <ContactShadows 
+            position={[0, 0, 0]} 
+            opacity={0.3} 
+            scale={20} 
+            blur={2} 
+            far={10} 
+          />
         </Suspense>
       </Canvas>
       
-      {/* 3D Controls overlay */}
-      <div className="absolute bottom-4 right-4 bg-black/50 text-white p-3 rounded-lg text-sm">
-        <div className="space-y-1">
-          <div>🖱️ Left click + drag: Rotate view</div>
-          <div>🖱️ Right click + drag: Pan view</div>
-          <div>🖱️ Scroll: Zoom in/out</div>
+      {/* Enhanced 3D Controls overlay */}
+      <div className="absolute bottom-4 right-4 bg-gradient-to-br from-black/70 to-black/50 backdrop-blur-sm text-white p-4 rounded-xl shadow-lg border border-white/10">
+        <h3 className="font-semibold mb-2 text-sm">3D Navigation</h3>
+        <div className="space-y-1 text-xs opacity-90">
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 bg-blue-500/30 rounded border border-blue-400 flex items-center justify-center text-xs">L</span>
+            <span>Rotate camera</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 bg-green-500/30 rounded border border-green-400 flex items-center justify-center text-xs">R</span>
+            <span>Pan view</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 bg-purple-500/30 rounded border border-purple-400 flex items-center justify-center text-xs">⟳</span>
+            <span>Zoom in/out</span>
+          </div>
         </div>
       </div>
     </div>
