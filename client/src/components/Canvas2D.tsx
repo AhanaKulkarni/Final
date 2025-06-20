@@ -212,6 +212,26 @@ export function Canvas2D() {
     };
   };
   
+  const getResizeHandle = (pos: Point, furniture: FurnitureItem): 'nw' | 'ne' | 'sw' | 'se' | null => {
+    const handleSize = 12;
+    const scaledWidth = furniture.width * furniture.scale;
+    const scaledHeight = furniture.height * furniture.scale;
+    
+    const corners = [
+      { handle: 'nw' as const, x: furniture.position.x - scaledWidth / 2, y: furniture.position.y - scaledHeight / 2 },
+      { handle: 'ne' as const, x: furniture.position.x + scaledWidth / 2, y: furniture.position.y - scaledHeight / 2 },
+      { handle: 'sw' as const, x: furniture.position.x - scaledWidth / 2, y: furniture.position.y + scaledHeight / 2 },
+      { handle: 'se' as const, x: furniture.position.x + scaledWidth / 2, y: furniture.position.y + scaledHeight / 2 }
+    ];
+    
+    for (const corner of corners) {
+      if (Math.abs(pos.x - corner.x) <= handleSize / 2 && Math.abs(pos.y - corner.y) <= handleSize / 2) {
+        return corner.handle;
+      }
+    }
+    return null;
+  };
+
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const pos = getMousePos(e);
     const snappedPos = snapToGrid(pos);
@@ -238,11 +258,20 @@ export function Canvas2D() {
     
     if (clickedFurniture) {
       selectFurniture(clickedFurniture.id);
-      setIsDragging(true);
-      setDragOffset({
-        x: pos.x - clickedFurniture.position.x,
-        y: pos.y - clickedFurniture.position.y
-      });
+      
+      // Check if clicking on resize handle
+      const handle = getResizeHandle(pos, clickedFurniture);
+      if (handle) {
+        setIsResizing(true);
+        setResizeHandle(handle);
+        setDragOffset(pos);
+      } else {
+        setIsDragging(true);
+        setDragOffset({
+          x: pos.x - clickedFurniture.position.x,
+          y: pos.y - clickedFurniture.position.y
+        });
+      }
     } else {
       selectFurniture(null);
     }
@@ -319,12 +348,33 @@ export function Canvas2D() {
     e.preventDefault();
   };
   
+  const getCursor = () => {
+    if (isDrawingWall) return 'crosshair';
+    if (selectedFurniture) {
+      const selectedItem = currentRoom.furniture.find(f => f.id === selectedFurniture);
+      if (selectedItem) {
+        const handle = getResizeHandle(mousePos, selectedItem);
+        if (handle) {
+          switch (handle) {
+            case 'nw': return 'nw-resize';
+            case 'ne': return 'ne-resize';
+            case 'sw': return 'sw-resize';
+            case 'se': return 'se-resize';
+          }
+        }
+      }
+      return isDragging ? 'grabbing' : 'grab';
+    }
+    return 'default';
+  };
+
   return (
     <canvas
       ref={canvasRef}
       width={800}
       height={600}
-      className="border border-gray-300 bg-white cursor-crosshair"
+      className="border-2 border-gray-200 bg-white rounded-lg shadow-lg"
+      style={{ cursor: getCursor() }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}

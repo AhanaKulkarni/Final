@@ -1,29 +1,37 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useRoomStore } from '../lib/stores/useRoomStore';
+import { Edit3, Eye, Layers3 } from 'lucide-react';
 
 export function ViewToggle() {
   const { viewMode, setViewMode } = useRoomStore();
   
   return (
-    <div className="fixed top-4 right-4 z-50 bg-white/90 backdrop-blur-sm rounded-lg p-2 shadow-lg border">
+    <div className="fixed top-4 right-4 z-50 bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/20">
       <div className="flex gap-2">
         <Button
           variant={viewMode === '2d' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setViewMode('2d')}
-          className="text-sm"
+          className="text-sm flex items-center gap-2 px-4 py-2 transition-all duration-200"
         >
-          2D Edit
+          <Edit3 size={16} />
+          2D Design
         </Button>
         <Button
           variant={viewMode === '3d' ? 'default' : 'outline'}
           size="sm"
           onClick={() => setViewMode('3d')}
-          className="text-sm"
+          className="text-sm flex items-center gap-2 px-4 py-2 transition-all duration-200"
         >
-          3D View
+          <Layers3 size={16} />
+          3D Preview
         </Button>
+      </div>
+      
+      {/* Status indicator */}
+      <div className="text-xs text-gray-600 mt-2 text-center">
+        {viewMode === '2d' ? 'Design your room layout' : 'Explore in 3D'}
       </div>
     </div>
   );
