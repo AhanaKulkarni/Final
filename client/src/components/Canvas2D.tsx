@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useRoomStore } from '../lib/stores/useRoomStore';
 import { createFurnitureItem } from '../lib/furniture-models';
-import { Point, FurnitureItem } from '../types/room';
+import { Point, FurnitureItem, Wall, DoorWindow } from '../types/room';
 import { isPointInFurniture, snapToGrid, getDistance } from '../lib/room-utils';
 
 export function Canvas2D() {
@@ -32,6 +32,45 @@ export function Canvas2D() {
     updateDoorWindow,
     setCurrentWallStart
   } = useRoomStore();
+
+  const getDistanceToWall = (point: Point, wall: any): number => {
+    const A = point.x - wall.start.x;
+    const B = point.y - wall.start.y;
+    const C = wall.end.x - wall.start.x;
+    const D = wall.end.y - wall.start.y;
+    
+    const dot = A * C + B * D;
+    const lenSq = C * C + D * D;
+    
+    if (lenSq === 0) return Math.sqrt(A * A + B * B);
+    
+    let t = Math.max(0, Math.min(1, dot / lenSq));
+    const projection = {
+      x: wall.start.x + t * C,
+      y: wall.start.y + t * D
+    };
+    
+    return Math.sqrt(
+      Math.pow(point.x - projection.x, 2) + 
+      Math.pow(point.y - projection.y, 2)
+    );
+  };
+
+  const getPositionOnWall = (wall: any, position: number): Point => {
+    return {
+      x: wall.start.x + position * (wall.end.x - wall.start.x),
+      y: wall.start.y + position * (wall.end.y - wall.start.y)
+    };
+  };
+
+  const adjustBrightness = (color: string, amount: number): string => {
+    const hex = color.replace('#', '');
+    const num = parseInt(hex, 16);
+    const r = Math.max(0, Math.min(255, (num >> 16) + amount));
+    const g = Math.max(0, Math.min(255, (num >> 8 & 0x00FF) + amount));
+    const b = Math.max(0, Math.min(255, (num & 0x0000FF) + amount));
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+  };
   
   const drawRoom = useCallback(() => {
     const canvas = canvasRef.current;
@@ -202,19 +241,7 @@ export function Canvas2D() {
     ctx.restore();
   }, [currentRoom, selectedFurniture, isDrawingWall, currentWallStart, mousePos, panOffset, zoom]);
   
-  // Helper function to adjust color brightness
-  const adjustBrightness = (color: string, amount: number): string => {
-    const usePound = color[0] === '#';
-    const col = usePound ? color.slice(1) : color;
-    const num = parseInt(col, 16);
-    let r = (num >> 16) + amount;
-    let g = (num >> 8 & 0x00FF) + amount;
-    let b = (num & 0x0000FF) + amount;
-    r = r > 255 ? 255 : r < 0 ? 0 : r;
-    g = g > 255 ? 255 : g < 0 ? 0 : g;
-    b = b > 255 ? 255 : b < 0 ? 0 : b;
-    return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
-  };
+
   
   useEffect(() => {
     drawRoom();
@@ -289,7 +316,7 @@ export function Canvas2D() {
     // Handle door/window placement
     if (editMode === 'door' || editMode === 'window') {
       // Find which wall is closest to the click
-      let closestWall = null;
+      let closestWall: any = null;
       let closestWallIndex = -1;
       let minDistance = Infinity;
       
