@@ -11,6 +11,9 @@ export function Canvas2D() {
   const [mousePos, setMousePos] = useState<Point>({ x: 0, y: 0 });
   const [isResizing, setIsResizing] = useState(false);
   const [resizeHandle, setResizeHandle] = useState<'nw' | 'ne' | 'sw' | 'se' | null>(null);
+  const [isPanning, setIsPanning] = useState(false);
+  const [panOffset, setPanOffset] = useState<Point>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
   
   const {
     currentRoom,
@@ -32,12 +35,19 @@ export function Canvas2D() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
+    // Save context and apply transformations
+    ctx.save();
+    ctx.translate(panOffset.x, panOffset.y);
+    ctx.scale(zoom, zoom);
+    
     // Clear canvas with gradient background
-    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    const gradient = ctx.createLinearGradient(-panOffset.x / zoom, -panOffset.y / zoom, 
+                                           (canvas.width - panOffset.x) / zoom, 
+                                           (canvas.height - panOffset.y) / zoom);
     gradient.addColorStop(0, '#f8f9fa');
     gradient.addColorStop(1, '#e9ecef');
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(-panOffset.x / zoom, -panOffset.y / zoom, canvas.width / zoom, canvas.height / zoom);
     
     // Draw enhanced grid
     ctx.strokeStyle = '#dee2e6';
@@ -181,7 +191,10 @@ export function Canvas2D() {
       ctx.arc(currentWallStart.x, currentWallStart.y, 6, 0, Math.PI * 2);
       ctx.fill();
     }
-  }, [currentRoom, selectedFurniture, isDrawingWall, currentWallStart, mousePos]);
+    
+    // Restore context
+    ctx.restore();
+  }, [currentRoom, selectedFurniture, isDrawingWall, currentWallStart, mousePos, panOffset, zoom]);
   
   // Helper function to adjust color brightness
   const adjustBrightness = (color: string, amount: number): string => {
@@ -207,8 +220,15 @@ export function Canvas2D() {
     
     const rect = canvas.getBoundingClientRect();
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
+      x: (e.clientX - rect.left - panOffset.x) / zoom,
+      y: (e.clientY - rect.top - panOffset.y) / zoom
+    };
+  };
+
+  const transformPoint = (point: Point): Point => {
+    return {
+      x: point.x * zoom + panOffset.x,
+      y: point.y * zoom + panOffset.y
     };
   };
   
@@ -235,6 +255,14 @@ export function Canvas2D() {
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const pos = getMousePos(e);
     const snappedPos = snapToGrid(pos);
+    
+    // Handle middle mouse or space+drag for panning
+    if (e.button === 1 || (e.button === 0 && e.ctrlKey)) {
+      setIsPanning(true);
+      setDragOffset(pos);
+      e.preventDefault();
+      return;
+    }
     
     // Only allow wall drawing when in wall mode
     if (editMode === 'wall' && isDrawingWall) {
@@ -285,6 +313,22 @@ export function Canvas2D() {
     const pos = getMousePos(e);
     setMousePos(pos);
     
+    // Handle canvas panning
+    if (isPanning) {
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (rect) {
+        const rawPos = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+        setPanOffset({
+          x: panOffset.x + (rawPos.x - (dragOffset.x * zoom + panOffset.x)),
+          y: panOffset.y + (rawPos.y - (dragOffset.y * zoom + panOffset.y))
+        });
+      }
+      return;
+    }
+    
     if (editMode === 'select') {
       if (isDragging && selectedFurniture) {
         const newPosition = {
@@ -333,7 +377,15 @@ export function Canvas2D() {
     setIsDragging(false);
     setIsResizing(false);
     setResizeHandle(null);
+    setIsPanning(false);
     setDragOffset({ x: 0, y: 0 });
+  };
+
+  const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    const zoomFactor = 0.1;
+    const newZoom = e.deltaY > 0 ? zoom - zoomFactor : zoom + zoomFactor;
+    setZoom(Math.max(0.3, Math.min(3, newZoom)));
   };
   
   const handleDrop = (e: React.DragEvent<HTMLCanvasElement>) => {
@@ -356,6 +408,7 @@ export function Canvas2D() {
   };
   
   const getCursor = () => {
+    if (isPanning) return 'grabbing';
     if (editMode === 'wall' && isDrawingWall) return 'crosshair';
     if (editMode === 'select' && selectedFurniture) {
       const selectedItem = currentRoom.furniture.find(f => f.id === selectedFurniture);
@@ -373,22 +426,46 @@ export function Canvas2D() {
       return isDragging ? 'grabbing' : 'grab';
     }
     if (editMode === 'furniture') return 'copy';
-    return 'default';
+    return 'move';
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={800}
-      height={600}
-      className="border-2 border-gray-200 bg-white rounded-lg shadow-lg"
-      style={{ cursor: getCursor() }}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
-    />
+    <div className="relative">
+      <canvas
+        ref={canvasRef}
+        width={800}
+        height={600}
+        className="border-2 border-gray-200 bg-white rounded-lg shadow-lg"
+        style={{ cursor: getCursor() }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onWheel={handleWheel}
+      />
+      
+      {/* Navigation controls overlay */}
+      <div className="absolute bottom-4 right-4 bg-black/70 text-white p-3 rounded-lg text-xs">
+        <div className="space-y-1">
+          <div className="font-semibold mb-2">Canvas Navigation:</div>
+          <div>• Ctrl+Drag: Pan view</div>
+          <div>• Mouse wheel: Zoom in/out</div>
+          <div>• Zoom: {Math.round(zoom * 100)}%</div>
+        </div>
+        <div className="mt-2 pt-2 border-t border-white/20">
+          <button
+            onClick={() => {
+              setPanOffset({ x: 0, y: 0 });
+              setZoom(1);
+            }}
+            className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded transition-colors"
+          >
+            Reset View
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
