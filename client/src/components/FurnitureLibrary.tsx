@@ -1,71 +1,70 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { furnitureTemplates, createFurnitureItem } from '../lib/furniture-models';
 import { useRoomStore } from '../lib/stores/useRoomStore';
-import { Package, Plus } from 'lucide-react';
+import { Package, Sparkles } from 'lucide-react';
 
 export function FurnitureLibrary() {
   const { addFurniture, editMode } = useRoomStore();
   
-  const handleDragStart = (e: React.DragEvent, furnitureType: any) => {
-    e.dataTransfer.setData('application/json', JSON.stringify({
-      type: 'furniture',
-      furnitureType
-    }));
-  };
+  if (editMode !== 'furniture') return null;
   
   const handleClick = (furnitureType: any) => {
-    // Add furniture at center of room when clicked
     const furniture = createFurnitureItem(furnitureType, { x: 400, y: 300 });
     addFurniture(furniture);
   };
   
   return (
-    <div className="fixed top-4 left-4 z-50">
-      <Card className="w-72 bg-white/95 backdrop-blur-sm shadow-xl border-0">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Package size={20} />
-            Furniture Library
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-3">
-            {furnitureTemplates.map((template) => (
-              <div
-                key={template.type}
-                draggable
-                onDragStart={(e) => handleDragStart(e, template.type)}
-                onClick={() => handleClick(template.type)}
-                className="group relative p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-dashed border-gray-300 hover:border-blue-400 hover:from-blue-50 hover:to-blue-100 cursor-pointer transition-all duration-200 text-center transform hover:scale-105"
-              >
-                <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-200">
+    <div className="fixed top-6 left-6 z-50 w-80">
+      <div className="glass-ultra p-6 rounded-2xl card-interactive">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 neon-glow">
+            <Package size={20} className="text-white" />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-white gradient-text">Furniture Library</h2>
+            <p className="text-xs text-white/60 flex items-center gap-1">
+              <Sparkles size={10} className="animate-pulse" />
+              Premium Collection
+            </p>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-3 max-h-80 overflow-y-auto custom-scrollbar">
+          {furnitureTemplates.map((template) => (
+            <button
+              key={template.type}
+              onClick={() => handleClick(template.type)}
+              className="group relative p-4 rounded-xl bg-black/20 backdrop-blur-sm border border-white/10
+                       hover:bg-black/30 hover:border-white/20 transition-all duration-300
+                       hover:scale-105 hover:shadow-lg overflow-hidden"
+            >
+              <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="relative z-10 text-center">
+                <div className="text-3xl mb-2 transition-transform group-hover:scale-110 duration-300">
                   {template.icon}
                 </div>
-                <div className="text-xs font-semibold text-gray-700 group-hover:text-blue-700">
+                <div className="text-sm font-semibold text-white capitalize mb-1">
                   {template.name}
                 </div>
-                
-                {/* Add indicator */}
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <Plus size={12} className="text-white" />
+                <div className="text-xs text-white/60">
+                  {template.defaultWidth}×{template.defaultHeight}
                 </div>
               </div>
-            ))}
-          </div>
-          
-          <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <div className="text-xs font-medium text-blue-800 mb-1">
-              Quick Tips:
-            </div>
-            <div className="text-xs text-blue-700 space-y-1">
-              <p>• Drag items onto canvas to place precisely</p>
-              <p>• Click to add items at room center</p>
-              <p>• Switch to Select mode to edit items</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            </button>
+          ))}
+        </div>
+        
+        <div className="text-xs text-white/60 mt-6 p-4 bg-black/20 rounded-xl backdrop-blur-sm space-y-2">
+          <p className="font-semibold text-white/80 flex items-center gap-1">
+            <Sparkles size={12} className="animate-pulse" />
+            Furniture Library:
+          </p>
+          <p>• Click any item to add to your room</p>
+          <p>• Switch to Select mode to customize</p>
+          <p>• Full control over size, position & color</p>
+        </div>
+      </div>
     </div>
   );
 }
