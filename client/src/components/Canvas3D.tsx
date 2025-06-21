@@ -166,6 +166,11 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
   
   const itemColor = item.color || (item.type === 'door' ? '#8B4513' : '#4169E1');
   
+  // Convert pixel dimensions to 3D world units (realistic scaling)
+  // Typical door: 80px = 0.8m, window: 100px = 1.0m
+  const width3D = item.width / 100; // 1 pixel = 1cm in 3D world
+  const height3D = item.height / 100;
+  
 
   
   return (
@@ -178,25 +183,35 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
       <group>
         {item.type === 'door' ? (
           <group>
-            {/* Door frame border - larger and more visible */}
-            <mesh position={[-item.width / 60, 1.0, 0]} castShadow>
-              <boxGeometry args={[0.12, 2.0, 0.35]} />
+            {/* Door opening (cuts through wall) */}
+            <mesh position={[0, 1.0, 0]}>
+              <boxGeometry args={[width3D + 0.02, 2.05, 0.3]} />
+              <meshStandardMaterial 
+                color="#000000" 
+                transparent
+                opacity={0}
+              />
+            </mesh>
+            
+            {/* Door frame border */}
+            <mesh position={[-width3D / 2 - 0.025, 1.0, 0]} castShadow>
+              <boxGeometry args={[0.05, 2.0, 0.3]} />
               <meshStandardMaterial 
                 color="#8B4513" 
                 roughness={0.6}
                 metalness={0.0}
               />
             </mesh>
-            <mesh position={[item.width / 60, 1.0, 0]} castShadow>
-              <boxGeometry args={[0.12, 2.0, 0.35]} />
+            <mesh position={[width3D / 2 + 0.025, 1.0, 0]} castShadow>
+              <boxGeometry args={[0.05, 2.0, 0.3]} />
               <meshStandardMaterial 
                 color="#8B4513" 
                 roughness={0.6}
                 metalness={0.0}
               />
             </mesh>
-            <mesh position={[0, 2.0, 0]} castShadow>
-              <boxGeometry args={[item.width / 30, 0.12, 0.35]} />
+            <mesh position={[0, 2.025, 0]} castShadow>
+              <boxGeometry args={[width3D + 0.1, 0.05, 0.3]} />
               <meshStandardMaterial 
                 color="#8B4513" 
                 roughness={0.6}
@@ -204,9 +219,9 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
               />
             </mesh>
             
-            {/* Door panel - larger and more visible */}
-            <mesh position={[0, 1.0, 0.05]} castShadow>
-              <boxGeometry args={[item.width / 30 - 0.24, 1.8, 0.12]} />
+            {/* Door panel */}
+            <mesh position={[width3D / 8, 1.0, 0.08]} castShadow>
+              <boxGeometry args={[width3D - 0.05, 1.95, 0.04]} />
               <meshStandardMaterial 
                 color={itemColor} 
                 roughness={0.4}
@@ -214,13 +229,29 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
               />
             </mesh>
             
-            {/* Door handle - larger */}
-            <mesh position={[item.width / 80, 0.9, 0.11]} castShadow>
-              <sphereGeometry args={[0.08]} />
+            {/* Door handle */}
+            <mesh position={[width3D / 2 - 0.1, 0.9, 0.1]} castShadow>
+              <sphereGeometry args={[0.025]} />
               <meshStandardMaterial 
                 color="#FFD700" 
                 roughness={0.2}
                 metalness={0.8}
+              />
+            </mesh>
+            
+            {/* Door panels (decorative) */}
+            <mesh position={[width3D / 8, 1.3, 0.081]} castShadow>
+              <boxGeometry args={[width3D - 0.2, 0.6, 0.01]} />
+              <meshStandardMaterial 
+                color={new THREE.Color(itemColor).multiplyScalar(0.8)}
+                roughness={0.6}
+              />
+            </mesh>
+            <mesh position={[width3D / 8, 0.7, 0.081]} castShadow>
+              <boxGeometry args={[width3D - 0.2, 0.6, 0.01]} />
+              <meshStandardMaterial 
+                color={new THREE.Color(itemColor).multiplyScalar(0.8)}
+                roughness={0.6}
               />
             </mesh>
             
@@ -242,9 +273,9 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
           </group>
         ) : (
           <group>
-            {/* Window frame - larger and more visible */}
+            {/* Window frame - realistic proportions */}
             <mesh position={[0, 1.5, 0]} castShadow>
-              <boxGeometry args={[item.width / 30, item.height / 30, 0.3]} />
+              <boxGeometry args={[width3D, height3D, 0.2]} />
               <meshStandardMaterial 
                 color="#FFFFFF" 
                 roughness={0.3}
@@ -252,8 +283,8 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
               />
             </mesh>
             {/* Window glass */}
-            <mesh position={[0, 1.5, 0.05]} castShadow>
-              <boxGeometry args={[item.width / 30 - 0.12, item.height / 30 - 0.12, 0.03]} />
+            <mesh position={[0, 1.5, 0.02]} castShadow>
+              <boxGeometry args={[width3D - 0.05, height3D - 0.05, 0.015]} />
               <meshStandardMaterial 
                 color={itemColor} 
                 roughness={0.0}
@@ -262,13 +293,13 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
                 opacity={0.7}
               />
             </mesh>
-            {/* Window cross bars - more visible */}
-            <mesh position={[0, 1.5, 0.06]} castShadow>
-              <boxGeometry args={[0.03, item.height / 30 - 0.12, 0.02]} />
+            {/* Window cross bars - realistic sizing */}
+            <mesh position={[0, 1.5, 0.025]} castShadow>
+              <boxGeometry args={[0.015, height3D - 0.05, 0.008]} />
               <meshStandardMaterial color="#FFFFFF" />
             </mesh>
-            <mesh position={[0, 1.5, 0.06]} castShadow>
-              <boxGeometry args={[item.width / 30 - 0.12, 0.03, 0.02]} />
+            <mesh position={[0, 1.5, 0.025]} castShadow>
+              <boxGeometry args={[width3D - 0.05, 0.015, 0.008]} />
               <meshStandardMaterial color="#FFFFFF" />
             </mesh>
           </group>
