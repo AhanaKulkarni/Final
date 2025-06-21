@@ -148,29 +148,33 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
     Math.pow(wall.end.y - wall.start.y, 2)
   ) / 40;
   
-  const wallCenterX = ((wall.start.x + wall.end.x) / 2 - 400) / 40;
-  const wallCenterZ = ((wall.start.y + wall.end.y) / 2 - 300) / 40;
+  // Calculate wall start position in 3D space
+  const wallStartX = (wall.start.x - 400) / 40;
+  const wallStartZ = (wall.start.y - 300) / 40;
   
   const wallAngle = Math.atan2(
     wall.end.y - wall.start.y,
     wall.end.x - wall.start.x
   );
   
-  // Calculate position along wall
-  const localX = (item.position - 0.5) * wallLength;
+  // Calculate position along wall from start
+  const offsetDistance = item.position * wallLength;
+  const itemX = wallStartX + Math.cos(wallAngle) * offsetDistance;
+  const itemZ = wallStartZ + Math.sin(wallAngle) * offsetDistance;
+  
   const itemColor = item.color || (item.type === 'door' ? '#8B4513' : '#4169E1');
   
   return (
     <group
-      position={[wallCenterX, 0, wallCenterZ]}
+      position={[itemX, 0, itemZ]}
       rotation={[0, wallAngle, 0]}
     >
-      <group position={[localX, 0, 0]}>
+      <group>
         {item.type === 'door' ? (
           <group>
             {/* Door frame */}
             <mesh position={[0, 1, 0]}>
-              <boxGeometry args={[item.width / 40, 2, 0.1]} />
+              <boxGeometry args={[item.width / 40, 2, 0.15]} />
               <meshStandardMaterial 
                 color={itemColor} 
                 roughness={0.4}
@@ -178,8 +182,8 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
               />
             </mesh>
             {/* Door handle */}
-            <mesh position={[item.width / 80, 1, 0.05]}>
-              <sphereGeometry args={[0.03]} />
+            <mesh position={[item.width / 80, 1, 0.08]}>
+              <sphereGeometry args={[0.05]} />
               <meshStandardMaterial 
                 color="#FFD700" 
                 roughness={0.2}
@@ -191,13 +195,13 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
           <group>
             {/* Window frame */}
             <mesh position={[0, 1.5, 0]}>
-              <boxGeometry args={[item.width / 40, item.height / 40, 0.05]} />
+              <boxGeometry args={[item.width / 40, item.height / 40, 0.1]} />
               <meshStandardMaterial 
                 color={itemColor} 
                 roughness={0.1}
                 metalness={0.3}
                 transparent
-                opacity={0.7}
+                opacity={0.8}
               />
             </mesh>
             {/* Window cross bars */}

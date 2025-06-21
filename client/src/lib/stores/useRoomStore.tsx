@@ -11,6 +11,12 @@ interface RoomState {
   currentWallStart: Point | null;
   editMode: 'select' | 'wall' | 'furniture' | 'door' | 'window';
   
+  // Undo/Redo
+  history: Room[];
+  historyIndex: number;
+  canUndo: boolean;
+  canRedo: boolean;
+  
   // Actions
   setViewMode: (mode: ViewMode) => void;
   setEditMode: (mode: 'select' | 'wall' | 'furniture' | 'door' | 'window') => void;
@@ -30,6 +36,11 @@ interface RoomState {
   setCurrentWallStart: (point: Point | null) => void;
   clearRoom: () => void;
   setRoomDimensions: (width: number, height: number) => void;
+  
+  // Undo/Redo Actions
+  undo: () => void;
+  redo: () => void;
+  saveToHistory: () => void;
 }
 
 const defaultRoom: Room = {
@@ -59,15 +70,30 @@ export const useRoomStore = create<RoomState>()(
     currentWallStart: null,
     editMode: "select",
     
+    // Undo/Redo state
+    history: [JSON.parse(JSON.stringify(defaultRoom))],
+    historyIndex: 0,
+    canUndo: false,
+    canRedo: false,
+    
     setViewMode: (mode) => set({ viewMode: mode }),
     setEditMode: (mode) => set({ editMode: mode }),
     
-    addWall: (wall) => set((state) => ({
-      currentRoom: {
+    addWall: (wall) => set((state) => {
+      const newRoom = {
         ...state.currentRoom,
         walls: [...state.currentRoom.walls, wall]
-      }
-    })),
+      };
+      const newHistory = state.history.slice(0, state.historyIndex + 1);
+      newHistory.push(JSON.parse(JSON.stringify(newRoom)));
+      return {
+        currentRoom: newRoom,
+        history: newHistory,
+        historyIndex: newHistory.length - 1,
+        canUndo: true,
+        canRedo: false
+      };
+    }),
     
     removeWall: (index) => set((state) => ({
       currentRoom: {
@@ -166,6 +192,48 @@ export const useRoomStore = create<RoomState>()(
         width,
         height
       }
-    }))
+    })),
+    
+    // Undo/Redo Actions
+    saveToHistory: () => set((state) => {
+      const newHistory = state.history.slice(0, state.historyIndex + 1);
+      newHistory.push(JSON.parse(JSON.stringify(state.currentRoom)));
+      return {
+        history: newHistory,
+        historyIndex: newHistory.length - 1,
+        canUndo: true,
+        canRedo: false
+      };
+    }),
+    
+    undo: () => set((state) => {
+      if (state.historyIndex > 0) {
+        const newIndex = state.historyIndex - 1;
+        return {
+          currentRoom: JSON.parse(JSON.stringify(state.history[newIndex])),
+          historyIndex: newIndex,
+          canUndo: newIndex > 0,
+          canRedo: true,
+          selectedFurniture: null,
+          selectedDoorWindow: null
+        };
+      }
+      return state;
+    }),
+    
+    redo: () => set((state) => {
+      if (state.historyIndex < state.history.length - 1) {
+        const newIndex = state.historyIndex + 1;
+        return {
+          currentRoom: JSON.parse(JSON.stringify(state.history[newIndex])),
+          historyIndex: newIndex,
+          canUndo: true,
+          canRedo: newIndex < state.history.length - 1,
+          selectedFurniture: null,
+          selectedDoorWindow: null
+        };
+      }
+      return state;
+    })
   }))
 );
