@@ -36,11 +36,18 @@ This is a full-stack web application that allows users to design rooms in 2D and
 - **Lighting**: Ambient and directional lighting setup
 - **Camera**: Perspective camera with smooth controls
 
+#### Augmented Reality Preview
+- **ARPreview**: Real-time camera overlay with 3D room visualization
+- **Camera Access**: Device camera integration using MediaDevices API
+- **AR Controls**: Scale, position, and rotation controls for room placement
+- **Cross-Platform**: Works on mobile and desktop devices with camera access
+
 #### UI System
-- **View Toggle**: Seamless switching between 2D and 3D modes
+- **View Toggle**: Seamless switching between 2D, 3D, and AR modes
 - **Furniture Library**: Categorized furniture templates with icons
 - **Control Panel**: Room management and selected item controls
-- **Real-time Updates**: State synchronization between 2D and 3D views
+- **Undo/Redo**: Complete history tracking with undo/redo buttons
+- **Real-time Updates**: State synchronization across all view modes
 
 ## Data Flow
 
@@ -99,6 +106,13 @@ Changelog:
   * Complete doors and windows system with movable positioning along walls
   * 2D and 3D door/window rendering with realistic materials and customization
   * Interactive door/window controls with size, position, and color options
+- June 21, 2025. Major feature additions:
+  * Implemented augmented reality (AR) room preview using device camera
+  * Added undo/redo functionality with complete history tracking
+  * Enhanced door 3D models with realistic wooden frames and handles
+  * Applied consistent white, beige/light brown, and black color theme
+  * Integrated AR controls for room scaling, positioning, and rotation
+  * Cross-platform camera access with mobile and desktop support
 ```
 
 ## User Preferences
