@@ -14,7 +14,7 @@ export function RoomDesigner() {
   const { viewMode, selectedFurniture, selectedDoorWindow, editMode } = useRoomStore();
   
   return (
-    <div className="w-full bg-gradient-to-br from-stone-50 to-amber-50" style={{ minHeight: '200vh' }}>
+    <div className="w-full h-screen relative overflow-hidden bg-gradient-to-br from-stone-50 to-amber-50">
       {/* Undo/Redo Controls */}
       <UndoRedo />
       
@@ -22,7 +22,7 @@ export function RoomDesigner() {
       <ViewToggle />
       
       {/* Main Canvas Area - Full size with minimal padding */}
-      <div className="w-full flex items-center justify-center p-1" style={{ minHeight: '100vh' }}>
+      <div className="w-full h-full flex items-center justify-center p-1">
         {viewMode === '2d' ? (
           <>
             <Canvas2D />

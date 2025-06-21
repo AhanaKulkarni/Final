@@ -22,8 +22,8 @@ export function GamePanel() {
   };
 
   return (
-    <div className="fixed top-4 right-4 w-96 z-50">
-      <Card className="bg-white/90 backdrop-blur-sm shadow-lg border-0">
+    <div className="fixed top-4 right-4 w-80 max-h-[calc(100vh-2rem)] overflow-y-auto z-40">
+      <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-stone-200">
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl font-bold text-stone-700 flex items-center gap-2">

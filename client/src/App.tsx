@@ -16,12 +16,10 @@ function App() {
   const allObjectivesCompleted = objectives.every(obj => obj.completed);
 
   return (
-    <div style={{ height: '2000px', background: 'linear-gradient(to bottom, orange, purple)', padding: '50px', color: 'white' }}>
-      <h1>REACT APP SCROLL TEST</h1>
-      <p>If you can scroll down and see the bottom message, React scrolling works!</p>
-      <div style={{ marginTop: '1500px' }}>
-        <h2>BOTTOM OF REACT APP - SCROLLING WORKS!</h2>
-      </div>
+    <div className="w-full h-screen relative overflow-hidden">
+      <RoomDesigner />
+      <GamePanel />
+      {allObjectivesCompleted && <GameComplete />}
     </div>
   );
 }

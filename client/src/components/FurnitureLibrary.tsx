@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { furnitureTemplates, createFurnitureItem } from '../lib/furniture-models';
 import { useRoomStore } from '../lib/stores/useRoomStore';
-import { Package, Plus } from 'lucide-react';
+import { Package, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 
 export function FurnitureLibrary() {
   const { addFurniture, editMode } = useRoomStore();
+  const [isCollapsed, setIsCollapsed] = useState(false);
   
   const handleDragStart = (e: React.DragEvent, furnitureType: any) => {
     e.dataTransfer.setData('application/json', JSON.stringify({
@@ -22,14 +24,25 @@ export function FurnitureLibrary() {
   
   return (
     <div className="fixed top-4 left-4 z-50">
-      <Card className="w-96 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200">
-        <CardHeader className="pb-4 border-b border-stone-100">
-          <CardTitle className="text-xl flex items-center gap-3 text-stone-800">
-            <Package size={24} className="text-stone-600" />
-            Furniture Library
-          </CardTitle>
+      <Card className="w-80 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200">
+        <CardHeader className="pb-2 border-b border-stone-100">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg flex items-center gap-2 text-stone-800">
+              <Package size={20} className="text-stone-600" />
+              Furniture Library
+            </CardTitle>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="h-8 w-8 p-0"
+            >
+              {isCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent>
+        {!isCollapsed && (
+          <CardContent className="p-3">
           <div className="grid grid-cols-2 gap-3">
             {furnitureTemplates.map((template) => (
               <div
@@ -64,7 +77,8 @@ export function FurnitureLibrary() {
               <p>• Switch to Select mode to edit items</p>
             </div>
           </div>
-        </CardContent>
+          </CardContent>
+        )}
       </Card>
     </div>
   );
