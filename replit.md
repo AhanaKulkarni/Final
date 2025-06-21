@@ -126,6 +126,12 @@ Changelog:
     - Game completion screen with performance ratings and stats
     - Automatic objective tracking integrated into all room actions
     - Sound effects and visual feedback for achievements
+  * Enhanced full-sized interface design:
+    - Expanded all panels to larger widths (w-96) for better screen utilization
+    - Increased button sizes, typography, and spacing throughout interface
+    - Enlarged view toggle and undo/redo controls with larger icons
+    - Fixed critical scrolling issue by enabling vertical page scrolling
+    - Optimized interface for immersive full-screen gaming experience
 ```
 
 ## User Preferences

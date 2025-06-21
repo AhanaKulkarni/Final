@@ -24,9 +24,10 @@ input, textarea, .selectable {
 
 /* Mobile viewport fixes */
 html, body {
-  height: 100vh;
-  height: 100dvh; /* Dynamic viewport height for mobile */
-  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  overflow-x: hidden;
+  overflow-y: auto;
   touch-action: manipulation;
 }
 
