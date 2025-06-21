@@ -111,12 +111,21 @@ export const useRoomStore = create<RoomState>()(
       }
     })),
     
-    addFurniture: (furniture) => set((state) => ({
-      currentRoom: {
+    addFurniture: (furniture) => set((state) => {
+      const newRoom = {
         ...state.currentRoom,
         furniture: [...state.currentRoom.furniture, furniture]
-      }
-    })),
+      };
+      const newHistory = state.history.slice(0, state.historyIndex + 1);
+      newHistory.push(JSON.parse(JSON.stringify(newRoom)));
+      return {
+        currentRoom: newRoom,
+        history: newHistory,
+        historyIndex: newHistory.length - 1,
+        canUndo: true,
+        canRedo: false
+      };
+    }),
     
     updateFurniture: (id, updates) => set((state) => ({
       currentRoom: {
@@ -137,19 +146,37 @@ export const useRoomStore = create<RoomState>()(
     
     selectFurniture: (id) => set({ selectedFurniture: id }),
     
-    addDoor: (door) => set((state) => ({
-      currentRoom: {
+    addDoor: (door) => set((state) => {
+      const newRoom = {
         ...state.currentRoom,
         doors: [...state.currentRoom.doors, door]
-      }
-    })),
+      };
+      const newHistory = state.history.slice(0, state.historyIndex + 1);
+      newHistory.push(JSON.parse(JSON.stringify(newRoom)));
+      return {
+        currentRoom: newRoom,
+        history: newHistory,
+        historyIndex: newHistory.length - 1,
+        canUndo: true,
+        canRedo: false
+      };
+    }),
     
-    addWindow: (window) => set((state) => ({
-      currentRoom: {
+    addWindow: (window) => set((state) => {
+      const newRoom = {
         ...state.currentRoom,
         windows: [...state.currentRoom.windows, window]
-      }
-    })),
+      };
+      const newHistory = state.history.slice(0, state.historyIndex + 1);
+      newHistory.push(JSON.parse(JSON.stringify(newRoom)));
+      return {
+        currentRoom: newRoom,
+        history: newHistory,
+        historyIndex: newHistory.length - 1,
+        canUndo: true,
+        canRedo: false
+      };
+    }),
     
     updateDoorWindow: (id, updates) => set((state) => ({
       currentRoom: {

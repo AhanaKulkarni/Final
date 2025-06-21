@@ -7,6 +7,7 @@ import { WallControls } from './WallControls';
 import { DoorWindowControls } from './DoorWindowControls';
 import { Controls } from './Controls';
 import { ViewToggle } from './ViewToggle';
+import { UndoRedo } from './UndoRedo';
 import { useRoomStore } from '../lib/stores/useRoomStore';
 
 export function RoomDesigner() {
@@ -14,6 +15,9 @@ export function RoomDesigner() {
   
   return (
     <div className="w-full h-screen relative overflow-hidden bg-gradient-to-br from-stone-50 to-amber-50">
+      {/* Undo/Redo Controls */}
+      <UndoRedo />
+      
       {/* View Toggle */}
       <ViewToggle />
       

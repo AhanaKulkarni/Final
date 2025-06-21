@@ -173,8 +173,8 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
         {item.type === 'door' ? (
           <group>
             {/* Door frame */}
-            <mesh position={[0, 1, 0]}>
-              <boxGeometry args={[item.width / 40, 2, 0.15]} />
+            <mesh position={[0, 1.2, 0]}>
+              <boxGeometry args={[item.width / 25, 2.4, 0.2]} />
               <meshStandardMaterial 
                 color={itemColor} 
                 roughness={0.4}
@@ -182,35 +182,53 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
               />
             </mesh>
             {/* Door handle */}
-            <mesh position={[item.width / 80, 1, 0.08]}>
-              <sphereGeometry args={[0.05]} />
+            <mesh position={[item.width / 60, 1.2, 0.12]}>
+              <sphereGeometry args={[0.08]} />
               <meshStandardMaterial 
                 color="#FFD700" 
                 roughness={0.2}
                 metalness={0.8}
               />
             </mesh>
+            {/* Door outline for visibility */}
+            <mesh position={[0, 1.2, 0.01]}>
+              <boxGeometry args={[item.width / 24, 2.5, 0.05]} />
+              <meshStandardMaterial 
+                color="#654321" 
+                roughness={0.6}
+                metalness={0.0}
+              />
+            </mesh>
           </group>
         ) : (
           <group>
             {/* Window frame */}
-            <mesh position={[0, 1.5, 0]}>
-              <boxGeometry args={[item.width / 40, item.height / 40, 0.1]} />
+            <mesh position={[0, 1.8, 0]}>
+              <boxGeometry args={[item.width / 25, item.height / 25, 0.15]} />
               <meshStandardMaterial 
                 color={itemColor} 
                 roughness={0.1}
                 metalness={0.3}
                 transparent
-                opacity={0.8}
+                opacity={0.9}
+              />
+            </mesh>
+            {/* Window outline for visibility */}
+            <mesh position={[0, 1.8, 0.01]}>
+              <boxGeometry args={[item.width / 24, item.height / 24, 0.08]} />
+              <meshStandardMaterial 
+                color="#FFFFFF" 
+                roughness={0.3}
+                metalness={0.2}
               />
             </mesh>
             {/* Window cross bars */}
-            <mesh position={[0, 1.5, 0.02]}>
-              <boxGeometry args={[0.02, item.height / 40, 0.02]} />
+            <mesh position={[0, 1.8, 0.08]}>
+              <boxGeometry args={[0.03, item.height / 25, 0.02]} />
               <meshStandardMaterial color="#FFFFFF" />
             </mesh>
-            <mesh position={[0, 1.5, 0.02]}>
-              <boxGeometry args={[item.width / 40, 0.02, 0.02]} />
+            <mesh position={[0, 1.8, 0.08]}>
+              <boxGeometry args={[item.width / 25, 0.03, 0.02]} />
               <meshStandardMaterial color="#FFFFFF" />
             </mesh>
           </group>
