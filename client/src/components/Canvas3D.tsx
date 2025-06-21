@@ -172,63 +172,106 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
       <group>
         {item.type === 'door' ? (
           <group>
-            {/* Door frame */}
-            <mesh position={[0, 1.2, 0]}>
-              <boxGeometry args={[item.width / 25, 2.4, 0.2]} />
+            {/* Door frame border */}
+            <mesh position={[-item.width / 50, 1.1, -0.1]}>
+              <boxGeometry args={[0.05, 2.2, 0.25]} />
+              <meshStandardMaterial 
+                color="#8B4513" 
+                roughness={0.6}
+                metalness={0.0}
+              />
+            </mesh>
+            <mesh position={[item.width / 50, 1.1, -0.1]}>
+              <boxGeometry args={[0.05, 2.2, 0.25]} />
+              <meshStandardMaterial 
+                color="#8B4513" 
+                roughness={0.6}
+                metalness={0.0}
+              />
+            </mesh>
+            <mesh position={[0, 2.15, -0.1]}>
+              <boxGeometry args={[item.width / 25, 0.05, 0.25]} />
+              <meshStandardMaterial 
+                color="#8B4513" 
+                roughness={0.6}
+                metalness={0.0}
+              />
+            </mesh>
+            
+            {/* Door panel */}
+            <mesh position={[0, 1.1, -0.08]}>
+              <boxGeometry args={[item.width / 25 - 0.1, 2.0, 0.06]} />
               <meshStandardMaterial 
                 color={itemColor} 
                 roughness={0.4}
                 metalness={0.1}
               />
             </mesh>
+            
             {/* Door handle */}
-            <mesh position={[item.width / 60, 1.2, 0.12]}>
-              <sphereGeometry args={[0.08]} />
+            <mesh position={[item.width / 55, 1.0, -0.045]}>
+              <sphereGeometry args={[0.04]} />
               <meshStandardMaterial 
                 color="#FFD700" 
                 roughness={0.2}
                 metalness={0.8}
               />
             </mesh>
-            {/* Door outline for visibility */}
-            <mesh position={[0, 1.2, 0.01]}>
-              <boxGeometry args={[item.width / 24, 2.5, 0.05]} />
+            
+            {/* Door details */}
+            <mesh position={[0, 1.4, -0.075]}>
+              <boxGeometry args={[item.width / 30, 0.8, 0.01]} />
               <meshStandardMaterial 
-                color="#654321" 
-                roughness={0.6}
-                metalness={0.0}
+                color={new THREE.Color(itemColor).multiplyScalar(0.8)}
+                roughness={0.5}
+              />
+            </mesh>
+            <mesh position={[0, 0.8, -0.075]}>
+              <boxGeometry args={[item.width / 30, 0.8, 0.01]} />
+              <meshStandardMaterial 
+                color={new THREE.Color(itemColor).multiplyScalar(0.8)}
+                roughness={0.5}
               />
             </mesh>
           </group>
         ) : (
           <group>
-            {/* Window frame */}
+            {/* Window opening */}
             <mesh position={[0, 1.8, 0]}>
-              <boxGeometry args={[item.width / 25, item.height / 25, 0.15]} />
+              <boxGeometry args={[item.width / 25 + 0.1, item.height / 25 + 0.1, 0.35]} />
               <meshStandardMaterial 
-                color={itemColor} 
-                roughness={0.1}
-                metalness={0.3}
+                color="#000000" 
                 transparent
-                opacity={0.9}
+                opacity={0}
               />
             </mesh>
-            {/* Window outline for visibility */}
-            <mesh position={[0, 1.8, 0.01]}>
-              <boxGeometry args={[item.width / 24, item.height / 24, 0.08]} />
+            {/* Window frame */}
+            <mesh position={[0, 1.8, -0.02]}>
+              <boxGeometry args={[item.width / 25, item.height / 25, 0.05]} />
               <meshStandardMaterial 
                 color="#FFFFFF" 
                 roughness={0.3}
                 metalness={0.2}
               />
             </mesh>
+            {/* Window glass */}
+            <mesh position={[0, 1.8, 0.01]}>
+              <boxGeometry args={[item.width / 25 - 0.05, item.height / 25 - 0.05, 0.02]} />
+              <meshStandardMaterial 
+                color={itemColor} 
+                roughness={0.0}
+                metalness={0.1}
+                transparent
+                opacity={0.7}
+              />
+            </mesh>
             {/* Window cross bars */}
-            <mesh position={[0, 1.8, 0.08]}>
-              <boxGeometry args={[0.03, item.height / 25, 0.02]} />
+            <mesh position={[0, 1.8, 0.02]}>
+              <boxGeometry args={[0.02, item.height / 25, 0.01]} />
               <meshStandardMaterial color="#FFFFFF" />
             </mesh>
-            <mesh position={[0, 1.8, 0.08]}>
-              <boxGeometry args={[item.width / 25, 0.03, 0.02]} />
+            <mesh position={[0, 1.8, 0.02]}>
+              <boxGeometry args={[item.width / 25, 0.02, 0.01]} />
               <meshStandardMaterial color="#FFFFFF" />
             </mesh>
           </group>
@@ -239,7 +282,9 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
 }
 
 // Enhanced 3D Wall Component
-function Wall3D({ wall }: { wall: Wall }) {
+function Wall3D({ wall, wallIndex }: { wall: Wall; wallIndex: number }) {
+  const { currentRoom } = useRoomStore();
+  
   const length = Math.sqrt(
     Math.pow(wall.end.x - wall.start.x, 2) + 
     Math.pow(wall.end.y - wall.start.y, 2)
@@ -254,6 +299,10 @@ function Wall3D({ wall }: { wall: Wall }) {
   );
   
   const wallColor = wall.color || "#f5f5f5";
+  
+  // Find doors and windows on this wall
+  const doorsOnWall = currentRoom.doors.filter(door => door.wallIndex === wallIndex);
+  const windowsOnWall = currentRoom.windows.filter(window => window.wallIndex === wallIndex);
   
   return (
     <group>
@@ -359,7 +408,7 @@ function Scene3D() {
       
       {/* Render walls */}
       {currentRoom.walls.map((wall, index) => (
-        <Wall3D key={index} wall={wall} />
+        <Wall3D key={index} wall={wall} wallIndex={index} />
       ))}
       
       {/* Render furniture */}
