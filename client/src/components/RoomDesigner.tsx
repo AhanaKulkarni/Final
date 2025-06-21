@@ -13,7 +13,7 @@ export function RoomDesigner() {
   const { viewMode, selectedFurniture, selectedDoorWindow, editMode } = useRoomStore();
   
   return (
-    <div className="w-full h-screen relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-200">
+    <div className="w-full h-screen relative overflow-hidden bg-gradient-to-br from-stone-50 to-amber-50">
       {/* View Toggle */}
       <ViewToggle />
       

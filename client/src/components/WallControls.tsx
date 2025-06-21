@@ -74,8 +74,8 @@ export function WallControls() {
                     key={color}
                     className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 ${
                       selectedWall.color === color || (!selectedWall.color && color === '#f5f5f5') 
-                        ? 'border-gray-800 scale-110' 
-                        : 'border-gray-300'
+                        ? 'border-black scale-110' 
+                        : 'border-stone-300'
                     }`}
                     style={{ backgroundColor: color }}
                     onClick={() => updateWallColor(color)}
@@ -101,7 +101,7 @@ export function WallControls() {
           </>
         )}
         
-        <div className="text-xs text-gray-600 bg-gray-50 p-3 rounded-lg">
+        <div className="text-xs text-stone-600 bg-amber-50 p-3 rounded-lg border border-amber-100">
           <p className="font-medium mb-1">Wall Customization:</p>
           <p>• Select a wall to change its color</p>
           <p>• Changes appear in both 2D and 3D views</p>

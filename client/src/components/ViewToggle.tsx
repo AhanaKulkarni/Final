@@ -7,7 +7,7 @@ export function ViewToggle() {
   const { viewMode, setViewMode } = useRoomStore();
   
   return (
-    <div className="fixed top-4 right-4 z-50 bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/20">
+    <div className="fixed top-4 right-4 z-50 bg-gradient-to-br from-white/98 to-amber-50/95 backdrop-blur-md rounded-xl p-3 shadow-xl border border-stone-200">
       <div className="flex gap-2">
         <Button
           variant={viewMode === '2d' ? 'default' : 'outline'}
