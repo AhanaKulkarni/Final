@@ -14,6 +14,15 @@
   user-select: none;
 }
 
+/* Ensure scrolling works on all elements */
+* {
+  scroll-behavior: smooth;
+}
+
+#root {
+  overflow-y: visible;
+}
+
 /* Allow text selection in specific areas */
 input, textarea, .selectable {
   -webkit-user-select: text;
@@ -22,13 +31,12 @@ input, textarea, .selectable {
   user-select: text;
 }
 
-/* Mobile viewport fixes */
+/* Enable proper scrolling */
 html, body {
+  height: auto;
   min-height: 100vh;
-  min-height: 100dvh; /* Dynamic viewport height for mobile */
-  overflow-x: hidden;
-  overflow-y: auto;
-  touch-action: manipulation;
+  overflow: visible;
+  position: static;
 }
 
 /* Smooth scrolling for mobile */
