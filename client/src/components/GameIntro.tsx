@@ -28,18 +28,18 @@ export function GameIntro() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-stone-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl bg-white/80 backdrop-blur-sm shadow-2xl border-0">
-        <CardHeader className="text-center space-y-4 pb-6">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-stone-100 flex items-center justify-center p-6">
+      <Card className="w-full max-w-4xl bg-white/80 backdrop-blur-sm shadow-2xl border-0">
+        <CardHeader className="text-center space-y-6 pb-8">
           <div className="flex justify-center">
-            <div className="p-4 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full">
-              <Home size={48} className="text-white" />
+            <div className="p-6 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full">
+              <Home size={64} className="text-white" />
             </div>
           </div>
-          <CardTitle className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-stone-700 bg-clip-text text-transparent">
+          <CardTitle className="text-5xl font-bold bg-gradient-to-r from-amber-600 to-stone-700 bg-clip-text text-transparent">
             Room Designer Challenge
           </CardTitle>
-          <p className="text-lg text-stone-600 max-w-md mx-auto leading-relaxed">
+          <p className="text-xl text-stone-600 max-w-2xl mx-auto leading-relaxed">
             Design your perfect room by creating walls, placing furniture, and adding doors and windows. 
             Challenge yourself to create functional and beautiful spaces!
           </p>

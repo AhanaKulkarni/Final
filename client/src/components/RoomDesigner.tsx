@@ -21,8 +21,8 @@ export function RoomDesigner() {
       {/* View Toggle */}
       <ViewToggle />
       
-      {/* Main Canvas Area */}
-      <div className="w-full h-full flex items-center justify-center p-4">
+      {/* Main Canvas Area - Full size with minimal padding */}
+      <div className="w-full h-full flex items-center justify-center p-1">
         {viewMode === '2d' ? (
           <>
             <Canvas2D />

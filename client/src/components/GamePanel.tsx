@@ -22,20 +22,20 @@ export function GamePanel() {
   };
 
   return (
-    <div className="fixed top-4 right-4 w-80 z-50">
+    <div className="fixed top-4 right-4 w-96 z-50">
       <Card className="bg-white/90 backdrop-blur-sm shadow-lg border-0">
-        <CardHeader className="pb-3">
+        <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-bold text-stone-700 flex items-center gap-2">
-              <Trophy className="text-amber-600" size={20} />
+            <CardTitle className="text-xl font-bold text-stone-700 flex items-center gap-2">
+              <Trophy className="text-amber-600" size={24} />
               Game Progress
             </CardTitle>
-            <Badge variant="secondary" className="bg-amber-100 text-amber-800">
+            <Badge variant="secondary" className="bg-amber-100 text-amber-800 text-base px-3 py-1">
               {stats.score} pts
             </Badge>
           </div>
           {playerName && (
-            <p className="text-sm text-stone-600">Designer: {playerName}</p>
+            <p className="text-base text-stone-600">Designer: {playerName}</p>
           )}
         </CardHeader>
         
