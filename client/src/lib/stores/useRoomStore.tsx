@@ -86,6 +86,20 @@ export const useRoomStore = create<RoomState>()(
       };
       const newHistory = state.history.slice(0, state.historyIndex + 1);
       newHistory.push(JSON.parse(JSON.stringify(newRoom)));
+      
+      // Game objective tracking
+      try {
+        const { useGame } = require('./useGame');
+        const gameStore = useGame.getState();
+        if (gameStore.phase === 'playing') {
+          if (newRoom.walls.length >= 4) {
+            gameStore.completeObjective('create-walls');
+          }
+        }
+      } catch (e) {
+        // Silently handle if game store not available
+      }
+      
       return {
         currentRoom: newRoom,
         history: newHistory,
@@ -118,6 +132,32 @@ export const useRoomStore = create<RoomState>()(
       };
       const newHistory = state.history.slice(0, state.historyIndex + 1);
       newHistory.push(JSON.parse(JSON.stringify(newRoom)));
+      
+      // Game objective tracking
+      try {
+        const { useGame } = require('./useGame');
+        const gameStore = useGame.getState();
+        if (gameStore.phase === 'playing') {
+          gameStore.incrementStat('furnitureAdded');
+          
+          if (newRoom.furniture.length >= 3) {
+            gameStore.completeObjective('place-furniture');
+          }
+          
+          // Check complete room objective
+          const hasWalls = newRoom.walls.length >= 4;
+          const hasDoor = newRoom.doors.length > 0;
+          const hasWindow = newRoom.windows.length > 0;
+          const hasFurniture = newRoom.furniture.length >= 5;
+          
+          if (hasWalls && hasDoor && hasWindow && hasFurniture) {
+            gameStore.completeObjective('complete-room');
+          }
+        }
+      } catch (e) {
+        // Silently handle if game store not available
+      }
+      
       return {
         currentRoom: newRoom,
         history: newHistory,
@@ -127,14 +167,29 @@ export const useRoomStore = create<RoomState>()(
       };
     }),
     
-    updateFurniture: (id, updates) => set((state) => ({
-      currentRoom: {
-        ...state.currentRoom,
-        furniture: state.currentRoom.furniture.map(item =>
-          item.id === id ? { ...item, ...updates } : item
-        )
+    updateFurniture: (id, updates) => set((state) => {
+      // Game objective tracking for color customization
+      if (updates.color) {
+        try {
+          const { useGame } = require('./useGame');
+          const gameStore = useGame.getState();
+          if (gameStore.phase === 'playing') {
+            gameStore.completeObjective('customize-colors');
+          }
+        } catch (e) {
+          // Silently handle if game store not available
+        }
       }
-    })),
+      
+      return {
+        currentRoom: {
+          ...state.currentRoom,
+          furniture: state.currentRoom.furniture.map(item =>
+            item.id === id ? { ...item, ...updates } : item
+          )
+        }
+      };
+    }),
     
     removeFurniture: (id) => set((state) => ({
       currentRoom: {
@@ -153,6 +208,19 @@ export const useRoomStore = create<RoomState>()(
       };
       const newHistory = state.history.slice(0, state.historyIndex + 1);
       newHistory.push(JSON.parse(JSON.stringify(newRoom)));
+      
+      // Game objective tracking
+      try {
+        const { useGame } = require('./useGame');
+        const gameStore = useGame.getState();
+        if (gameStore.phase === 'playing') {
+          gameStore.incrementStat('doorsAdded');
+          gameStore.completeObjective('add-door');
+        }
+      } catch (e) {
+        // Silently handle if game store not available
+      }
+      
       return {
         currentRoom: newRoom,
         history: newHistory,
@@ -169,6 +237,19 @@ export const useRoomStore = create<RoomState>()(
       };
       const newHistory = state.history.slice(0, state.historyIndex + 1);
       newHistory.push(JSON.parse(JSON.stringify(newRoom)));
+      
+      // Game objective tracking
+      try {
+        const { useGame } = require('./useGame');
+        const gameStore = useGame.getState();
+        if (gameStore.phase === 'playing') {
+          gameStore.incrementStat('windowsAdded');
+          gameStore.completeObjective('add-window');
+        }
+      } catch (e) {
+        // Silently handle if game store not available
+      }
+      
       return {
         currentRoom: newRoom,
         history: newHistory,
