@@ -273,34 +273,55 @@ function DoorWindow3D({ item, wall }: { item: DoorWindow; wall: Wall }) {
           </group>
         ) : (
           <group>
-            {/* Window frame - realistic proportions */}
+            {/* Window opening (cuts through wall) */}
+            <mesh position={[0, 1.5, 0]}>
+              <boxGeometry args={[width3D + 0.02, height3D + 0.02, 0.3]} />
+              <meshStandardMaterial 
+                color="#000000" 
+                transparent
+                opacity={0}
+              />
+            </mesh>
+            
+            {/* Window frame */}
             <mesh position={[0, 1.5, 0]} castShadow>
-              <boxGeometry args={[width3D, height3D, 0.2]} />
+              <boxGeometry args={[width3D + 0.06, height3D + 0.06, 0.25]} />
               <meshStandardMaterial 
                 color="#FFFFFF" 
                 roughness={0.3}
                 metalness={0.2}
               />
             </mesh>
+            
             {/* Window glass */}
-            <mesh position={[0, 1.5, 0.02]} castShadow>
-              <boxGeometry args={[width3D - 0.05, height3D - 0.05, 0.015]} />
+            <mesh position={[0, 1.5, 0.05]} castShadow>
+              <boxGeometry args={[width3D - 0.05, height3D - 0.05, 0.02]} />
               <meshStandardMaterial 
                 color={itemColor} 
                 roughness={0.0}
                 metalness={0.1}
                 transparent
-                opacity={0.7}
+                opacity={0.6}
               />
             </mesh>
-            {/* Window cross bars - realistic sizing */}
-            <mesh position={[0, 1.5, 0.025]} castShadow>
-              <boxGeometry args={[0.015, height3D - 0.05, 0.008]} />
-              <meshStandardMaterial color="#FFFFFF" />
+            
+            {/* Window cross bars */}
+            <mesh position={[0, 1.5, 0.06]} castShadow>
+              <boxGeometry args={[0.02, height3D - 0.05, 0.01]} />
+              <meshStandardMaterial color="#FFFFFF" roughness={0.4} />
             </mesh>
-            <mesh position={[0, 1.5, 0.025]} castShadow>
-              <boxGeometry args={[width3D - 0.05, 0.015, 0.008]} />
-              <meshStandardMaterial color="#FFFFFF" />
+            <mesh position={[0, 1.5, 0.06]} castShadow>
+              <boxGeometry args={[width3D - 0.05, 0.02, 0.01]} />
+              <meshStandardMaterial color="#FFFFFF" roughness={0.4} />
+            </mesh>
+            
+            {/* Window sill */}
+            <mesh position={[0, 1.5 - height3D/2 - 0.05, 0.08]} castShadow>
+              <boxGeometry args={[width3D + 0.1, 0.04, 0.08]} />
+              <meshStandardMaterial 
+                color="#F5F5F5" 
+                roughness={0.6}
+              />
             </mesh>
           </group>
         )}
