@@ -34,17 +34,17 @@ export function WallControls() {
   }
   
   return (
-    <Card className="fixed top-20 left-4 w-72 bg-white/95 backdrop-blur-sm shadow-xl border-0 z-40">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Home size={20} />
+    <Card className="fixed top-20 left-4 w-72 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200 z-40">
+      <CardHeader className="pb-3 border-b border-stone-100">
+        <CardTitle className="text-lg flex items-center gap-2 text-stone-800">
+          <Home size={20} className="text-stone-600" />
           Wall Customization
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Wall Selection */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">Select Wall</label>
+          <label className="text-sm font-medium text-stone-700">Select Wall</label>
           <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
             {currentRoom.walls.map((wall, index) => (
               <Button

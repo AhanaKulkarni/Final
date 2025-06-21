@@ -73,13 +73,13 @@ export function DoorWindowControls() {
   const colors = selectedItem.type === 'door' ? doorColors : windowColors;
   
   return (
-    <Card className="fixed top-20 right-4 w-72 bg-white/95 backdrop-blur-sm shadow-xl border-0 z-40">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center gap-2">
+    <Card className="fixed top-20 right-4 w-72 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200 z-40">
+      <CardHeader className="pb-3 border-b border-stone-100">
+        <CardTitle className="text-lg flex items-center gap-2 text-stone-800">
           {selectedItem.type === 'door' ? (
-            <DoorOpen size={20} />
+            <DoorOpen size={20} className="text-stone-600" />
           ) : (
-            <RectangleHorizontal size={20} />
+            <RectangleHorizontal size={20} className="text-stone-600" />
           )}
           {selectedItem.type === 'door' ? 'Door' : 'Window'} Settings
         </CardTitle>
@@ -138,8 +138,8 @@ export function DoorWindowControls() {
                 key={color}
                 className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 ${
                   selectedItem.color === color || (!selectedItem.color && color === colors[0])
-                    ? 'border-gray-800 scale-110' 
-                    : 'border-gray-300'
+                    ? 'border-black scale-110' 
+                    : 'border-stone-300'
                 }`}
                 style={{ backgroundColor: color }}
                 onClick={() => updateColor(color)}
@@ -151,16 +151,16 @@ export function DoorWindowControls() {
         
         {/* Delete Button */}
         <Button
-          variant="destructive"
+          variant="outline"
           size="sm"
           onClick={() => removeDoorWindow(selectedItem.id)}
-          className="w-full flex items-center gap-2"
+          className="w-full flex items-center gap-2 border-stone-400 text-stone-700 hover:bg-stone-100 hover:text-black"
         >
           <Trash2 size={14} />
           Delete {selectedItem.type === 'door' ? 'Door' : 'Window'}
         </Button>
         
-        <div className="text-xs text-gray-600 bg-gray-50 p-3 rounded-lg">
+        <div className="text-xs text-stone-600 bg-amber-50 p-3 rounded-lg border border-amber-100">
           <p className="font-medium mb-1">Instructions:</p>
           <p>• Drag position slider to move along wall</p>
           <p>• Adjust width and height as needed</p>

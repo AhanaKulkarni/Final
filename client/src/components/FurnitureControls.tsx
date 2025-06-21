@@ -68,10 +68,10 @@ export function FurnitureControls() {
             Rotate 15°
           </Button>
           <Button
-            variant="destructive"
+            variant="outline"
             size="sm"
             onClick={() => removeFurniture(selectedItem.id)}
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 border-stone-400 text-stone-700 hover:bg-stone-100 hover:text-black"
           >
             <Trash2 size={14} />
             Delete
@@ -154,7 +154,7 @@ export function FurnitureControls() {
               <button
                 key={color}
                 className={`w-8 h-8 rounded-full border-2 transition-all ${
-                  selectedItem.color === color ? 'border-gray-800 scale-110' : 'border-gray-300'
+                  selectedItem.color === color ? 'border-black scale-110' : 'border-stone-300'
                 }`}
                 style={{ backgroundColor: color }}
                 onClick={() => updateFurniture(selectedItem.id, { color })}
@@ -164,7 +164,7 @@ export function FurnitureControls() {
         </div>
         
         {/* Position Info */}
-        <div className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
+        <div className="text-xs text-stone-600 bg-amber-50 p-2 rounded border border-amber-100">
           <div>Position: ({Math.round(selectedItem.position.x)}, {Math.round(selectedItem.position.y)})</div>
           <div>Rotation: {selectedItem.rotation}°</div>
         </div>
