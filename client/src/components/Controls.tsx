@@ -15,10 +15,10 @@ export function Controls() {
   
   return (
     <div className="fixed bottom-4 left-4 z-50">
-      <Card className="w-80 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200">
-        <CardHeader className="pb-3 border-b border-stone-100">
-          <CardTitle className="text-lg flex items-center gap-2 text-stone-800">
-            <Home size={20} className="text-stone-600" />
+      <Card className="w-96 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200">
+        <CardHeader className="pb-4 border-b border-stone-100">
+          <CardTitle className="text-xl flex items-center gap-3 text-stone-800">
+            <Home size={24} className="text-stone-600" />
             Room Designer
           </CardTitle>
         </CardHeader>
