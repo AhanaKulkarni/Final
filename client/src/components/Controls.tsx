@@ -15,18 +15,18 @@ export function Controls() {
   
   return (
     <div className="fixed bottom-4 left-4 z-50">
-      <Card className="w-80 bg-white/95 backdrop-blur-sm shadow-xl border-0">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Home size={20} />
+      <Card className="w-80 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200">
+        <CardHeader className="pb-3 border-b border-stone-100">
+          <CardTitle className="text-lg flex items-center gap-2 text-stone-800">
+            <Home size={20} className="text-stone-600" />
             Room Designer
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Edit Mode Selector */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Edit Mode</label>
-            <div className="grid grid-cols-3 gap-1 p-1 bg-gray-100 rounded-lg">
+            <label className="text-sm font-medium text-stone-700">Edit Mode</label>
+            <div className="grid grid-cols-3 gap-1 p-1 bg-stone-50 rounded-lg border border-stone-200">
               <Button
                 variant={editMode === 'select' ? 'default' : 'ghost'}
                 size="sm"
