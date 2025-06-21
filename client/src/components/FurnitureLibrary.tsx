@@ -1,7 +1,6 @@
 import React from 'react';
 import { furnitureTemplates, createFurnitureItem } from '../lib/furniture-models';
 import { useRoomStore } from '../lib/stores/useRoomStore';
-import { Package } from 'lucide-react';
 
 export function FurnitureLibrary() {
   const { addFurniture, editMode } = useRoomStore();
@@ -14,45 +13,29 @@ export function FurnitureLibrary() {
   };
   
   return (
-    <div className="fixed top-6 left-6 z-50 w-80">
-      <div className="glass-ultra p-6 rounded-2xl">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-blue-500/20">
-            <Package size={20} className="text-white" />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-white">Furniture Library</h2>
-            <p className="text-xs text-white/60">Select items to add</p>
-          </div>
-        </div>
+    <div className="fixed top-6 left-6 z-50 w-72">
+      <div className="glass-ultra p-4">
+        <h3 className="text-white font-medium mb-3">Furniture Library</h3>
         
-        <div className="grid grid-cols-2 gap-3 max-h-80 overflow-y-auto custom-scrollbar">
+        <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto custom-scrollbar">
           {furnitureTemplates.map((template) => (
             <button
               key={template.type}
               onClick={() => handleClick(template.type)}
-              className="p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10
-                       hover:bg-white/10 hover:border-white/20 transition-all duration-200
-                       text-center"
+              className="p-3 bg-gray-700 hover:bg-gray-600 border border-gray-600 
+                       rounded text-center text-white text-sm"
             >
-              <div className="text-3xl mb-2">
-                {template.icon}
-              </div>
-              <div className="text-sm font-semibold text-white capitalize mb-1">
-                {template.name}
-              </div>
-              <div className="text-xs text-white/60">
+              <div className="text-2xl mb-1">{template.icon}</div>
+              <div className="font-medium capitalize">{template.name}</div>
+              <div className="text-xs text-gray-400">
                 {template.defaultWidth}×{template.defaultHeight}
               </div>
             </button>
           ))}
         </div>
         
-        <div className="text-xs text-white/60 mt-6 p-4 bg-black/20 rounded-xl backdrop-blur-sm space-y-2">
-          <p className="font-semibold text-white/80">Furniture Library:</p>
-          <p>• Click any item to add to your room</p>
-          <p>• Switch to Select mode to customize</p>
-          <p>• Full control over size, position & color</p>
+        <div className="text-xs text-gray-400 mt-3 p-2 bg-gray-800 rounded">
+          Click any item to add to your room
         </div>
       </div>
     </div>

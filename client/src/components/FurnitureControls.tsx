@@ -1,16 +1,13 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { useRoomStore } from '../lib/stores/useRoomStore';
-import { Settings, RotateCw, Trash2, Palette, Sparkles } from 'lucide-react';
 
 export function FurnitureControls() {
   const { 
     currentRoom, 
     selectedFurniture, 
     updateFurniture, 
-    removeFurniture,
-    selectFurniture 
+    removeFurniture 
   } = useRoomStore();
   
   const selectedItem = selectedFurniture 
@@ -51,145 +48,112 @@ export function FurnitureControls() {
   ];
 
   return (
-    <div className="fixed top-20 right-6 w-80 z-40">
-      <div className="glass-ultra p-6 rounded-2xl card-interactive">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-green-500/20">
-            <Settings size={20} className="text-white" />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-white">Furniture Settings</h2>
-            <p className="text-xs text-white/60">Customize Selected Item</p>
-          </div>
-        </div>
+    <div className="fixed top-20 right-6 w-72 z-40">
+      <div className="glass-ultra p-4">
+        <h3 className="text-white font-medium mb-3">Furniture Settings</h3>
         
-        <div className="space-y-6">
-          {/* Action Buttons */}
+        <div className="space-y-4">
           <div className="flex gap-2">
             <button
               onClick={() => updateFurniture(selectedItem.id, { rotation: (selectedItem.rotation + 15) % 360 })}
-              className="btn-secondary flex items-center gap-2 flex-1 px-4 py-3 rounded-xl text-sm font-semibold"
+              className="btn-secondary flex-1"
             >
-              <RotateCw size={14} />
               Rotate 15°
             </button>
             <button
               onClick={() => removeFurniture(selectedItem.id)}
-              className="px-4 py-3 rounded-xl bg-gradient-to-r from-red-500/20 to-pink-500/20 
-                       border border-red-500/30 text-white font-semibold text-sm
-                       hover:from-red-500/30 hover:to-pink-500/30 hover:border-red-500/50
-                       transition-all duration-300 group flex items-center gap-2"
+              className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
             >
-              <Trash2 size={14} className="transition-transform group-hover:scale-110" />
               Delete
             </button>
           </div>
 
-          {/* Rotation Control */}
-          <div className="space-y-3">
-            <label className="text-sm font-semibold text-white/80">
+          <div>
+            <label className="text-sm text-gray-300 block mb-1">
               Rotation: {selectedItem.rotation}°
             </label>
-            <div className="relative">
-              <Slider
-                value={[selectedItem.rotation]}
-                onValueChange={updateRotation}
-                min={0}
-                max={360}
-                step={15}
-                className="w-full"
-              />
-
-            </div>
+            <Slider
+              value={[selectedItem.rotation]}
+              onValueChange={updateRotation}
+              min={0}
+              max={360}
+              step={15}
+              className="w-full"
+            />
           </div>
 
-          {/* Scale Control */}
-          <div className="space-y-3">
-            <label className="text-sm font-semibold text-white/80">
-              Overall Size: {selectedItem.scale.toFixed(1)}x
+          <div>
+            <label className="text-sm text-gray-300 block mb-1">
+              Size: {selectedItem.scale.toFixed(1)}x
             </label>
-            <div className="relative">
-              <Slider
-                value={[selectedItem.scale]}
-                onValueChange={updateScale}
-                min={0.3}
-                max={3.0}
-                step={0.1}
-                className="w-full"
-              />
-
+            <Slider
+              value={[selectedItem.scale]}
+              onValueChange={updateScale}
+              min={0.3}
+              max={3.0}
+              step={0.1}
+              className="w-full"
+            />
+          </div>
+          
+          <div>
+            <label className="text-sm text-gray-300 block mb-1">Dimensions</label>
+            
+            <div className="space-y-2">
+              <div>
+                <label className="text-xs text-gray-400">Width: {selectedItem.width}px</label>
+                <Slider
+                  value={[selectedItem.width]}
+                  onValueChange={updateWidth}
+                  min={20}
+                  max={300}
+                  step={5}
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="text-xs text-gray-400">Height: {selectedItem.height}px</label>
+                <Slider
+                  value={[selectedItem.height]}
+                  onValueChange={updateHeight}
+                  min={20}
+                  max={300}
+                  step={5}
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="text-xs text-gray-400">Depth: {selectedItem.depth}px</label>
+                <Slider
+                  value={[selectedItem.depth]}
+                  onValueChange={updateDepth}
+                  min={20}
+                  max={300}
+                  step={5}
+                  className="w-full"
+                />
+              </div>
             </div>
           </div>
           
-          {/* Dimension Controls */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-white/80">Dimensions</h3>
-            
-            <div className="space-y-3">
-              <label className="text-xs text-white/60">Width: {selectedItem.width}px</label>
-              <Slider
-                value={[selectedItem.width]}
-                onValueChange={updateWidth}
-                min={20}
-                max={300}
-                step={5}
-                className="w-full"
-              />
-            </div>
-            
-            <div className="space-y-3">
-              <label className="text-xs text-white/60">Height: {selectedItem.height}px</label>
-              <Slider
-                value={[selectedItem.height]}
-                onValueChange={updateHeight}
-                min={20}
-                max={300}
-                step={5}
-                className="w-full"
-              />
-            </div>
-            
-            <div className="space-y-3">
-              <label className="text-xs text-white/60">Depth: {selectedItem.depth}px</label>
-              <Slider
-                value={[selectedItem.depth]}
-                onValueChange={updateDepth}
-                min={20}
-                max={300}
-                step={5}
-                className="w-full"
-              />
-            </div>
-          </div>
-          
-          {/* Color Picker */}
-          <div className="space-y-3">
-            <label className="text-sm font-semibold text-white/80 flex items-center gap-2">
-              <Palette size={14} />
-              Color
-            </label>
-            <div className="grid grid-cols-4 gap-2">
+          <div>
+            <label className="text-sm text-gray-300 block mb-2">Color</label>
+            <div className="grid grid-cols-4 gap-1">
               {furnitureColors.map((color) => (
                 <button
                   key={color}
-                  className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 ${
+                  className={`w-6 h-6 rounded border-2 ${
                     selectedItem.color === color || (!selectedItem.color && color === '#8B4513') 
-                      ? 'border-cyan-400 scale-110 shadow-lg' 
-                      : 'border-white/20 hover:border-white/40'
+                      ? 'border-blue-400' 
+                      : 'border-gray-500'
                   }`}
                   style={{ backgroundColor: color }}
                   onClick={() => updateColor(color)}
-                  title={`Furniture color: ${color}`}
                 />
               ))}
             </div>
-          </div>
-          
-          <div className="text-xs text-white/60 bg-black/20 p-4 rounded-xl backdrop-blur-sm space-y-2">
-            <p className="font-semibold text-white/80">Furniture Controls:</p>
-            <p>• Drag sliders to adjust size and rotation</p>
-            <p>• Click colors to change appearance</p>
-            <p>• Changes apply immediately in 3D view</p>
           </div>
         </div>
       </div>

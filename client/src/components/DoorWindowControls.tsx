@@ -1,7 +1,6 @@
 import React from 'react';
 import { Slider } from '@/components/ui/slider';
 import { useRoomStore } from '../lib/stores/useRoomStore';
-import { DoorOpen, RectangleHorizontal, Trash2, Palette, Sparkles } from 'lucide-react';
 import { DoorWindow } from '../types/room';
 
 export function DoorWindowControls() {
@@ -59,117 +58,75 @@ export function DoorWindowControls() {
   const colors = selectedItem.type === 'door' ? doorColors : windowColors;
   
   return (
-    <div className="fixed top-20 right-6 w-80 z-40">
-      <div className="glass-ultra p-6 rounded-2xl card-interactive">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-orange-500/20">
-            {selectedItem.type === 'door' ? (
-              <DoorOpen size={20} className="text-white" />
-            ) : (
-              <RectangleHorizontal size={20} className="text-white" />
-            )}
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-white">
-              {selectedItem.type === 'door' ? 'Door' : 'Window'} Settings
-            </h2>
-            <p className="text-xs text-white/60">Customize Selected Item</p>
-          </div>
-        </div>
+    <div className="fixed top-20 right-6 w-72 z-40">
+      <div className="glass-ultra p-4">
+        <h3 className="text-white font-medium mb-3">
+          {selectedItem.type === 'door' ? 'Door' : 'Window'} Settings
+        </h3>
         
-        <div className="space-y-6">
-          {/* Position Control */}
-          <div className="space-y-3">
-            <label className="text-sm font-semibold text-white/80">
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm text-gray-300 block mb-1">
               Position on Wall: {Math.round(selectedItem.position * 100)}%
             </label>
-            <div className="relative">
-              <Slider
-                value={[selectedItem.position * 100]}
-                onValueChange={updatePosition}
-                min={5}
-                max={95}
-                step={1}
-                className="w-full"
-              />
-
-            </div>
+            <Slider
+              value={[selectedItem.position * 100]}
+              onValueChange={updatePosition}
+              min={5}
+              max={95}
+              step={1}
+              className="w-full"
+            />
           </div>
           
-          {/* Width Control */}
-          <div className="space-y-3">
-            <label className="text-sm font-semibold text-white/80">Width: {selectedItem.width}px</label>
-            <div className="relative">
-              <Slider
-                value={[selectedItem.width]}
-                onValueChange={updateWidth}
-                min={selectedItem.type === 'door' ? 60 : 40}
-                max={selectedItem.type === 'door' ? 120 : 200}
-                step={5}
-                className="w-full"
-              />
-
-            </div>
+          <div>
+            <label className="text-sm text-gray-300 block mb-1">Width: {selectedItem.width}px</label>
+            <Slider
+              value={[selectedItem.width]}
+              onValueChange={updateWidth}
+              min={selectedItem.type === 'door' ? 60 : 40}
+              max={selectedItem.type === 'door' ? 120 : 200}
+              step={5}
+              className="w-full"
+            />
           </div>
           
-          {/* Height Control */}
-          <div className="space-y-3">
-            <label className="text-sm font-semibold text-white/80">Height: {selectedItem.height}px</label>
-            <div className="relative">
-              <Slider
-                value={[selectedItem.height]}
-                onValueChange={updateHeight}
-                min={selectedItem.type === 'door' ? 160 : 60}
-                max={selectedItem.type === 'door' ? 220 : 140}
-                step={5}
-                className="w-full"
-              />
-
-            </div>
+          <div>
+            <label className="text-sm text-gray-300 block mb-1">Height: {selectedItem.height}px</label>
+            <Slider
+              value={[selectedItem.height]}
+              onValueChange={updateHeight}
+              min={selectedItem.type === 'door' ? 160 : 60}
+              max={selectedItem.type === 'door' ? 220 : 140}
+              step={5}
+              className="w-full"
+            />
           </div>
           
-          {/* Color Picker */}
-          <div className="space-y-3">
-            <label className="text-sm font-semibold text-white/80 flex items-center gap-2">
-              <Palette size={14} />
-              Color
-            </label>
-            <div className="grid grid-cols-4 gap-2">
+          <div>
+            <label className="text-sm text-gray-300 block mb-2">Color</label>
+            <div className="grid grid-cols-4 gap-1">
               {colors.map((color) => (
                 <button
                   key={color}
-                  className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 ${
+                  className={`w-6 h-6 rounded border-2 ${
                     selectedItem.color === color || (!selectedItem.color && color === colors[0])
-                      ? 'border-cyan-400 scale-110 shadow-lg' 
-                      : 'border-white/20 hover:border-white/40'
+                      ? 'border-blue-400' 
+                      : 'border-gray-500'
                   }`}
                   style={{ backgroundColor: color }}
                   onClick={() => updateColor(color)}
-                  title={`${selectedItem.type} color: ${color}`}
                 />
               ))}
             </div>
           </div>
           
-          {/* Delete Button */}
           <button
             onClick={() => removeDoorWindow(selectedItem.id)}
-            className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-red-500/20 to-pink-500/20 
-                     border border-red-500/30 text-white font-medium text-sm
-                     hover:from-red-500/30 hover:to-pink-500/30 hover:border-red-500/50
-                     transition-all duration-300 group flex items-center justify-center gap-2"
+            className="w-full px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
           >
-            <Trash2 size={14} className="transition-transform group-hover:scale-110" />
             Delete {selectedItem.type === 'door' ? 'Door' : 'Window'}
           </button>
-          
-          <div className="text-xs text-white/60 bg-black/20 p-4 rounded-xl backdrop-blur-sm space-y-2">
-            <p className="font-semibold text-white/80">Instructions:</p>
-            <p>• Drag position slider to move along wall</p>
-            <p>• Adjust width and height as needed</p>
-            <p>• Choose from preset colors</p>
-            <p>• Changes appear in both 2D and 3D views</p>
-          </div>
         </div>
       </div>
     </div>

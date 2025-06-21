@@ -162,7 +162,7 @@
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    background: #1e1e1e;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 }
@@ -179,23 +179,54 @@ canvas {
   touch-action: none;
 }
 
-/* Premium Glass Morphism Components */
+/* Minimal Professional Components */
 .glass-ultra {
-  background: var(--glass-bg);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-glass);
-  border-radius: 20px;
+  background: #2a2a2a;
+  border: 1px solid #404040;
+  border-radius: 6px;
 }
 
-.glass-dark {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: var(--shadow-glass);
-  border-radius: 20px;
+.card-interactive {
+  transition: none;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.btn-secondary {
+  background: #374151;
+  color: white;
+  border: 1px solid #4b5563;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.btn-secondary:hover {
+  background: #4b5563;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1f1f1f;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #404040;
+  border-radius: 2px;
 }
 
 /* Premium Button Styles */
