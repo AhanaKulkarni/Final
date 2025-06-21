@@ -43,7 +43,7 @@ export function FurnitureLibrary() {
         </CardHeader>
         {!isCollapsed && (
           <CardContent className="p-3">
-          <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3">
             {furnitureTemplates.map((template) => (
               <div
                 key={template.type}
