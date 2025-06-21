@@ -62,7 +62,7 @@ export function DoorWindowControls() {
     <div className="fixed top-20 right-6 w-80 z-40">
       <div className="glass-ultra p-6 rounded-2xl card-interactive">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 neon-glow">
+          <div className="p-2 rounded-xl bg-orange-500/20">
             {selectedItem.type === 'door' ? (
               <DoorOpen size={20} className="text-white" />
             ) : (
@@ -70,13 +70,10 @@ export function DoorWindowControls() {
             )}
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white gradient-text">
+            <h2 className="text-lg font-semibold text-white">
               {selectedItem.type === 'door' ? 'Door' : 'Window'} Settings
             </h2>
-            <p className="text-xs text-white/60 flex items-center gap-1">
-              <Sparkles size={10} className="animate-pulse" />
-              Premium Customization
-            </p>
+            <p className="text-xs text-white/60">Customize Selected Item</p>
           </div>
         </div>
         
@@ -95,9 +92,7 @@ export function DoorWindowControls() {
                 step={1}
                 className="w-full"
               />
-              <div className="absolute -top-1 left-0 w-full h-full pointer-events-none">
-                <div className="w-full h-full bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-full blur-sm"></div>
-              </div>
+
             </div>
           </div>
           
@@ -113,9 +108,7 @@ export function DoorWindowControls() {
                 step={5}
                 className="w-full"
               />
-              <div className="absolute -top-1 left-0 w-full h-full pointer-events-none">
-                <div className="w-full h-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-sm"></div>
-              </div>
+
             </div>
           </div>
           
@@ -131,9 +124,7 @@ export function DoorWindowControls() {
                 step={5}
                 className="w-full"
               />
-              <div className="absolute -top-1 left-0 w-full h-full pointer-events-none">
-                <div className="w-full h-full bg-gradient-to-r from-green-500/20 to-cyan-500/20 rounded-full blur-sm"></div>
-              </div>
+
             </div>
           </div>
           
@@ -173,10 +164,7 @@ export function DoorWindowControls() {
           </button>
           
           <div className="text-xs text-white/60 bg-black/20 p-4 rounded-xl backdrop-blur-sm space-y-2">
-            <p className="font-semibold text-white/80 flex items-center gap-1">
-              <Sparkles size={12} className="animate-pulse" />
-              Instructions:
-            </p>
+            <p className="font-semibold text-white/80">Instructions:</p>
             <p>• Drag position slider to move along wall</p>
             <p>• Adjust width and height as needed</p>
             <p>• Choose from preset colors</p>
