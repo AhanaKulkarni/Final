@@ -32,15 +32,12 @@ export function WallControls() {
     <div className="fixed top-20 left-6 w-80 z-40">
       <div className="glass-ultra p-6 rounded-2xl card-interactive">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20 neon-glow">
+          <div className="p-2 rounded-xl bg-yellow-500/20">
             <Home size={20} className="text-white" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white gradient-text">Wall Customization</h2>
-            <p className="text-xs text-white/60 flex items-center gap-1">
-              <Sparkles size={10} className="animate-pulse" />
-              Premium Styling
-            </p>
+            <h2 className="text-lg font-semibold text-white">Wall Customization</h2>
+            <p className="text-xs text-white/60">Customize wall appearance</p>
           </div>
         </div>
         
@@ -97,17 +94,12 @@ export function WallControls() {
                 step={1}
                 className="w-full"
               />
-              <div className="absolute -top-1 left-0 w-full h-full pointer-events-none">
-                <div className="w-full h-full bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-full blur-sm"></div>
-              </div>
+
             </div>
           </div>
           
           <div className="text-xs text-white/60 bg-black/20 p-4 rounded-xl backdrop-blur-sm space-y-2">
-            <p className="font-semibold text-white/80 flex items-center gap-1">
-              <Sparkles size={12} className="animate-pulse" />
-              Wall Customization:
-            </p>
+            <p className="font-semibold text-white/80">Wall Customization:</p>
             <p>• Select different walls to customize</p>
             <p>• Choose colors and adjust thickness</p>
             <p>• Changes apply immediately in 3D view</p>
