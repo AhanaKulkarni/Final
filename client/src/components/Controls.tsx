@@ -66,7 +66,7 @@ export function Controls() {
             </div>
             
             {/* Secondary mode row for doors and windows */}
-            <div className="grid grid-cols-2 gap-1 p-1 bg-gray-50 rounded-lg">
+            <div className="grid grid-cols-2 gap-1 p-1 bg-amber-50 rounded-lg border border-amber-100">
               <Button
                 variant={editMode === 'door' ? 'default' : 'ghost'}
                 size="sm"
@@ -96,17 +96,17 @@ export function Controls() {
           
           {/* Clear Room Button */}
           <Button
-            variant="destructive"
+            variant="outline"
             size="sm"
             onClick={clearRoom}
-            className="w-full text-sm"
+            className="w-full text-sm border-stone-300 text-stone-700 hover:bg-stone-50 hover:text-stone-800"
           >
             <Trash2 size={14} className="mr-2" />
             Clear Room
           </Button>
           
           {/* Instructions based on mode */}
-          <div className="text-xs text-gray-600 bg-gray-50 p-3 rounded-lg space-y-1">
+          <div className="text-xs text-stone-600 bg-amber-50 p-3 rounded-lg border border-amber-100 space-y-1">
             {editMode === 'select' && (
               <>
                 <p className="font-medium">Select Mode:</p>

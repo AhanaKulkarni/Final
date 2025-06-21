@@ -48,10 +48,10 @@ export function FurnitureControls() {
   const colors = ['#8B4513', '#D2B48C', '#F5F5DC', '#4682B4', '#654321', '#ff6b6b', '#4ecdc4', '#45b7d1'];
   
   return (
-    <Card className="fixed top-20 right-4 w-80 bg-white/95 backdrop-blur-sm shadow-xl border-0 z-50">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Move3D size={20} />
+    <Card className="fixed top-20 right-4 w-80 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200 z-50">
+      <CardHeader className="pb-3 border-b border-stone-100">
+        <CardTitle className="text-lg flex items-center gap-2 text-stone-800">
+          <Move3D size={20} className="text-stone-600" />
           {selectedItem.type.charAt(0).toUpperCase() + selectedItem.type.slice(1)} Controls
         </CardTitle>
       </CardHeader>

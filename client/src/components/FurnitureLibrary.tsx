@@ -22,10 +22,10 @@ export function FurnitureLibrary() {
   
   return (
     <div className="fixed top-4 left-4 z-50">
-      <Card className="w-72 bg-white/95 backdrop-blur-sm shadow-xl border-0">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Package size={20} />
+      <Card className="w-72 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200">
+        <CardHeader className="pb-3 border-b border-stone-100">
+          <CardTitle className="text-lg flex items-center gap-2 text-stone-800">
+            <Package size={20} className="text-stone-600" />
             Furniture Library
           </CardTitle>
         </CardHeader>
@@ -37,17 +37,17 @@ export function FurnitureLibrary() {
                 draggable
                 onDragStart={(e) => handleDragStart(e, template.type)}
                 onClick={() => handleClick(template.type)}
-                className="group relative p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-dashed border-gray-300 hover:border-blue-400 hover:from-blue-50 hover:to-blue-100 cursor-pointer transition-all duration-200 text-center transform hover:scale-105"
+                className="group relative p-4 bg-gradient-to-br from-stone-50 to-amber-50 rounded-xl border-2 border-dashed border-stone-300 hover:border-amber-400 hover:from-amber-50 hover:to-amber-100 cursor-pointer transition-all duration-200 text-center transform hover:scale-105"
               >
                 <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-200">
                   {template.icon}
                 </div>
-                <div className="text-xs font-semibold text-gray-700 group-hover:text-blue-700">
+                <div className="text-xs font-semibold text-stone-700 group-hover:text-amber-700">
                   {template.name}
                 </div>
                 
                 {/* Add indicator */}
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <Plus size={12} className="text-white" />
                 </div>
               </div>
