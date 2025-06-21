@@ -16,20 +16,13 @@ function App() {
   const allObjectivesCompleted = objectives.every(obj => obj.completed);
 
   return (
-    <>
-      <div className="w-full" style={{ height: '100vh', backgroundColor: 'red' }}>
-        <p style={{ padding: '20px', color: 'white' }}>TOP SECTION - Try scrolling down!</p>
+    <div style={{ height: '2000px', background: 'linear-gradient(to bottom, orange, purple)', padding: '50px', color: 'white' }}>
+      <h1>REACT APP SCROLL TEST</h1>
+      <p>If you can scroll down and see the bottom message, React scrolling works!</p>
+      <div style={{ marginTop: '1500px' }}>
+        <h2>BOTTOM OF REACT APP - SCROLLING WORKS!</h2>
       </div>
-      <div className="w-full" style={{ height: '100vh', backgroundColor: 'blue' }}>
-        <p style={{ padding: '20px', color: 'white' }}>MIDDLE SECTION</p>
-        <RoomDesigner />
-        <GamePanel />
-        {allObjectivesCompleted && <GameComplete />}
-      </div>
-      <div className="w-full" style={{ height: '100vh', backgroundColor: 'green' }}>
-        <p style={{ padding: '20px', color: 'white' }}>BOTTOM SECTION - If you can see this, scrolling works!</p>
-      </div>
-    </>
+    </div>
   );
 }
 
