@@ -210,13 +210,33 @@ export function ARPreview() {
 
   const startAR = useCallback(async () => {
     try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
+      // Check if camera is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setError('Camera not supported on this device or browser.');
+        return;
+      }
+
+      // Request camera permissions with fallback options
+      let constraints: MediaStreamConstraints = {
         video: {
-          facingMode: { ideal: 'environment' }, // Use back camera if available
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
+          facingMode: { ideal: 'environment' },
+          width: { ideal: window.innerWidth },
+          height: { ideal: window.innerHeight }
         }
-      });
+      };
+
+      // Try with environment camera first (back camera)
+      let mediaStream;
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch (envError) {
+        // Fallback to any available camera
+        console.log('Environment camera not available, trying any camera');
+        constraints = {
+          video: true
+        };
+        mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      }
       
       setStream(mediaStream);
       setIsARActive(true);
@@ -224,11 +244,19 @@ export function ARPreview() {
       
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
-        videoRef.current.play();
+        await videoRef.current.play();
       }
-    } catch (err) {
-      setError('Camera access denied or not available. Please allow camera permissions.');
+    } catch (err: any) {
       console.error('Error accessing camera:', err);
+      if (err.name === 'NotAllowedError') {
+        setError('Camera permission denied. Please allow camera access and try again.');
+      } else if (err.name === 'NotFoundError') {
+        setError('No camera found on this device.');
+      } else if (err.name === 'NotSupportedError') {
+        setError('Camera not supported on this browser.');
+      } else {
+        setError('Camera access failed. Please check permissions and try again.');
+      }
     }
   }, []);
 
