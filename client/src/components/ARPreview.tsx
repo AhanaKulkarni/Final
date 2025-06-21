@@ -204,15 +204,32 @@ export function ARPreview() {
   const [isARActive, setIsARActive] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
   const [roomScale, setRoomScale] = useState(1);
   const [roomPosition, setRoomPosition] = useState({ x: 0, y: 0, z: -3 });
   const [roomRotation, setRoomRotation] = useState({ x: 0, y: 0, z: 0 });
 
   const startAR = useCallback(async () => {
+    setIsLoading(true);
+    setError('');
+    
     try {
+      console.log('Starting AR camera access...');
+      
       // Check if camera is available
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         setError('Camera not supported on this device or browser.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Check available devices first
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter(device => device.kind === 'videoinput');
+      console.log('Available video devices:', videoDevices.length);
+
+      if (videoDevices.length === 0) {
+        setError('No camera found on this device.');
         return;
       }
 
@@ -220,34 +237,47 @@ export function ARPreview() {
       let constraints: MediaStreamConstraints = {
         video: {
           facingMode: { ideal: 'environment' },
-          width: { ideal: window.innerWidth },
-          height: { ideal: window.innerHeight }
+          width: { ideal: Math.min(window.innerWidth, 1280) },
+          height: { ideal: Math.min(window.innerHeight, 720) }
         }
       };
 
-      // Try with environment camera first (back camera)
+      console.log('Trying environment camera...');
       let mediaStream;
       try {
         mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+        console.log('Environment camera success');
       } catch (envError) {
+        console.log('Environment camera failed, trying any camera:', envError);
         // Fallback to any available camera
-        console.log('Environment camera not available, trying any camera');
         constraints = {
-          video: true
+          video: {
+            width: { ideal: Math.min(window.innerWidth, 1280) },
+            height: { ideal: Math.min(window.innerHeight, 720) }
+          }
         };
         mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+        console.log('Fallback camera success');
       }
       
       setStream(mediaStream);
       setIsARActive(true);
       setError('');
+      setIsLoading(false);
       
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
-        await videoRef.current.play();
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current?.play().catch(playError => {
+            console.error('Video play error:', playError);
+            setError('Failed to start video. Please try again.');
+            setIsLoading(false);
+          });
+        };
       }
     } catch (err: any) {
       console.error('Error accessing camera:', err);
+      setIsLoading(false);
       if (err.name === 'NotAllowedError') {
         setError('Camera permission denied. Please allow camera access and try again.');
       } else if (err.name === 'NotFoundError') {
@@ -255,7 +285,7 @@ export function ARPreview() {
       } else if (err.name === 'NotSupportedError') {
         setError('Camera not supported on this browser.');
       } else {
-        setError('Camera access failed. Please check permissions and try again.');
+        setError(`Camera access failed: ${err.message}. Please check permissions and try again.`);
       }
     }
   }, []);
@@ -310,18 +340,48 @@ export function ARPreview() {
             <div className="space-y-3">
               <Button
                 onClick={startAR}
+                disabled={isLoading}
                 className="w-full flex items-center gap-2"
                 size="lg"
               >
-                <Camera size={20} />
-                Start AR Preview
+                {isLoading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Accessing Camera...
+                  </>
+                ) : (
+                  <>
+                    <Camera size={20} />
+                    Start AR Preview
+                  </>
+                )}
               </Button>
               
               <div className="text-xs text-stone-500 space-y-1">
                 <p>• Point your camera at a flat surface</p>
                 <p>• Allow camera permissions when prompted</p>
                 <p>• Works best in good lighting conditions</p>
+                <p>• Requires HTTPS or localhost for camera access</p>
               </div>
+              
+              {/* Debug button for testing camera access */}
+              <Button
+                onClick={async () => {
+                  try {
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    const cameras = devices.filter(d => d.kind === 'videoinput');
+                    console.log('Camera devices found:', cameras.length);
+                    console.log('Camera devices:', cameras);
+                  } catch (err) {
+                    console.error('Camera enumeration failed:', err);
+                  }
+                }}
+                variant="outline"
+                size="sm"
+                className="w-full text-xs"
+              >
+                Test Camera Access
+              </Button>
             </div>
           </div>
         </div>
@@ -382,73 +442,74 @@ export function ARPreview() {
         </div>
       </div>
 
-      {/* Room Controls */}
-      <div className="absolute bottom-4 left-4 right-4 pointer-events-auto">
-        <div className="bg-black/60 backdrop-blur-md rounded-xl p-4">
-          <div className="grid grid-cols-2 gap-3">
+      {/* Room Controls - Mobile Optimized */}
+      <div className="absolute bottom-2 left-2 right-2 md:bottom-4 md:left-4 md:right-4 pointer-events-auto">
+        <div className="bg-black/70 backdrop-blur-md rounded-xl p-3 md:p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <div className="space-y-2">
-              <label className="text-white text-xs font-medium">Scale</label>
-              <div className="flex gap-2">
+              <label className="text-white text-xs md:text-sm font-medium">Scale</label>
+              <div className="flex gap-2 items-center justify-center">
                 <Button
                   onClick={() => setRoomScale(prev => Math.max(0.1, prev - 0.1))}
                   size="sm"
                   variant="outline"
-                  className="bg-white/20 text-white border-white/30"
+                  className="bg-white/20 text-white border-white/30 min-h-[44px] min-w-[44px] touch-target"
                 >
-                  <ZoomOut size={14} />
+                  <ZoomOut size={18} />
                 </Button>
-                <span className="text-white text-sm px-2 py-1">
+                <span className="text-white text-sm md:text-base px-3 py-2 bg-white/10 rounded min-w-[60px] text-center">
                   {roomScale.toFixed(1)}x
                 </span>
                 <Button
                   onClick={() => setRoomScale(prev => Math.min(3, prev + 0.1))}
                   size="sm"
                   variant="outline"
-                  className="bg-white/20 text-white border-white/30"
+                  className="bg-white/20 text-white border-white/30 min-h-[44px] min-w-[44px] touch-target"
                 >
-                  <ZoomIn size={14} />
+                  <ZoomIn size={18} />
                 </Button>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-white text-xs font-medium">Position</label>
-              <div className="flex gap-2">
+              <label className="text-white text-xs md:text-sm font-medium">Rotation</label>
+              <div className="flex gap-2 items-center justify-center">
                 <Button
                   onClick={() => setRoomRotation(prev => ({ ...prev, y: prev.y - 0.2 }))}
                   size="sm"
                   variant="outline"
-                  className="bg-white/20 text-white border-white/30"
+                  className="bg-white/20 text-white border-white/30 min-h-[44px] min-w-[44px] touch-target"
                 >
-                  <RotateCcw size={14} />
+                  <RotateCcw size={18} />
                 </Button>
                 <Button
                   onClick={resetRoomPosition}
                   size="sm"
                   variant="outline"
-                  className="bg-white/20 text-white border-white/30"
+                  className="bg-white/20 text-white border-white/30 min-h-[44px] px-4 touch-target"
                 >
-                  <Move3D size={14} />
+                  <Move3D size={18} />
                 </Button>
                 <Button
                   onClick={() => setRoomRotation(prev => ({ ...prev, y: prev.y + 0.2 }))}
                   size="sm"
                   variant="outline"
-                  className="bg-white/20 text-white border-white/30"
+                  className="bg-white/20 text-white border-white/30 min-h-[44px] min-w-[44px] touch-target"
                 >
-                  <RotateCcw size={14} style={{ transform: 'scaleX(-1)' }} />
+                  <RotateCcw size={18} style={{ transform: 'scaleX(-1)' }} />
                 </Button>
               </div>
             </div>
           </div>
 
           <div className="mt-3 pt-3 border-t border-white/20">
-            <div className="grid grid-cols-4 gap-2">
+            <label className="text-white text-xs md:text-sm font-medium block mb-2">Position</label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               <Button
                 onClick={() => setRoomPosition(prev => ({ ...prev, x: prev.x - 0.2 }))}
                 size="sm"
                 variant="outline"
-                className="bg-white/20 text-white border-white/30 text-xs"
+                className="bg-white/20 text-white border-white/30 text-xs md:text-sm min-h-[44px] touch-target"
               >
                 ← Left
               </Button>
@@ -456,7 +517,7 @@ export function ARPreview() {
                 onClick={() => setRoomPosition(prev => ({ ...prev, x: prev.x + 0.2 }))}
                 size="sm"
                 variant="outline"
-                className="bg-white/20 text-white border-white/30 text-xs"
+                className="bg-white/20 text-white border-white/30 text-xs md:text-sm min-h-[44px] touch-target"
               >
                 Right →
               </Button>
@@ -464,7 +525,7 @@ export function ARPreview() {
                 onClick={() => setRoomPosition(prev => ({ ...prev, z: prev.z + 0.2 }))}
                 size="sm"
                 variant="outline"
-                className="bg-white/20 text-white border-white/30 text-xs"
+                className="bg-white/20 text-white border-white/30 text-xs md:text-sm min-h-[44px] touch-target"
               >
                 Closer
               </Button>
@@ -472,7 +533,7 @@ export function ARPreview() {
                 onClick={() => setRoomPosition(prev => ({ ...prev, z: prev.z - 0.2 }))}
                 size="sm"
                 variant="outline"
-                className="bg-white/20 text-white border-white/30 text-xs"
+                className="bg-white/20 text-white border-white/30 text-xs md:text-sm min-h-[44px] touch-target"
               >
                 Further
               </Button>
