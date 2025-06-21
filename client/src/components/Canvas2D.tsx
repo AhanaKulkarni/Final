@@ -14,7 +14,6 @@ export function Canvas2D() {
   const [isPanning, setIsPanning] = useState(false);
   const [panOffset, setPanOffset] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [hoverEffect, setHoverEffect] = useState<Point | null>(null);
   
   const {
     currentRoom,

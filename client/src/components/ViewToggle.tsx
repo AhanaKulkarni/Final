@@ -1,42 +1,37 @@
 import React from 'react';
+import { Button } from '@/components/ui/button';
 import { useRoomStore } from '../lib/stores/useRoomStore';
+import { Edit3, Eye, Layers3 } from 'lucide-react';
 
 export function ViewToggle() {
   const { viewMode, setViewMode } = useRoomStore();
   
   return (
-    <div className="fixed top-20 right-20 z-50">
-      <div className="glass-ultra p-3">
-        <div className="text-xs font-medium text-black mb-3 uppercase tracking-widest">
-          View
-        </div>
-        <div className="flex gap-1">
-          <button
-            onClick={() => setViewMode('2d')}
-            className={`
-              px-4 py-2 text-xs font-medium uppercase tracking-wide
-              ${viewMode === '2d' 
-                ? 'bg-black text-white' 
-                : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
-              }
-            `}
-          >
-            2D
-          </button>
-          
-          <button
-            onClick={() => setViewMode('3d')}
-            className={`
-              px-4 py-2 text-xs font-medium uppercase tracking-wide
-              ${viewMode === '3d' 
-                ? 'bg-black text-white' 
-                : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
-              }
-            `}
-          >
-            3D
-          </button>
-        </div>
+    <div className="fixed top-4 right-4 z-50 bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/20">
+      <div className="flex gap-2">
+        <Button
+          variant={viewMode === '2d' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setViewMode('2d')}
+          className="text-sm flex items-center gap-2 px-4 py-2 transition-all duration-200"
+        >
+          <Edit3 size={16} />
+          2D Design
+        </Button>
+        <Button
+          variant={viewMode === '3d' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setViewMode('3d')}
+          className="text-sm flex items-center gap-2 px-4 py-2 transition-all duration-200"
+        >
+          <Layers3 size={16} />
+          3D Preview
+        </Button>
+      </div>
+      
+      {/* Status indicator */}
+      <div className="text-xs text-gray-600 mt-2 text-center">
+        {viewMode === '2d' ? 'Design your room layout' : 'Explore in 3D'}
       </div>
     </div>
   );

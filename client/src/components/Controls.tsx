@@ -1,6 +1,8 @@
 import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRoomStore } from '../lib/stores/useRoomStore';
-import { Trash2, Move, Pencil, Hand, Home, DoorOpen, RectangleHorizontal } from 'lucide-react';
+import { Trash2, Move, RotateCw, Pencil, Hand, Home, DoorOpen, RectangleHorizontal } from 'lucide-react';
 
 export function Controls() {
   const { 
@@ -12,109 +14,126 @@ export function Controls() {
   } = useRoomStore();
   
   return (
-    <div className="fixed bottom-20 left-20 z-50">
-      <div className="glass-ultra p-4 w-72">
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-4 h-4 bg-black"></div>
-          <div>
-            <h2 className="text-sm font-medium text-black uppercase tracking-widest">Room Designer</h2>
-          </div>
-        </div>
-        
-        <div className="space-y-4">
-          <div className="space-y-3">
-            <div className="text-xs text-black uppercase tracking-widest font-medium">Mode</div>
-            <div className="grid grid-cols-3 gap-1">
-              <button
+    <div className="fixed bottom-4 left-4 z-50">
+      <Card className="w-80 bg-white/95 backdrop-blur-sm shadow-xl border-0">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Home size={20} />
+            Room Designer
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Edit Mode Selector */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Edit Mode</label>
+            <div className="grid grid-cols-3 gap-1 p-1 bg-gray-100 rounded-lg">
+              <Button
+                variant={editMode === 'select' ? 'default' : 'ghost'}
+                size="sm"
                 onClick={() => {
                   setEditMode('select');
                   setDrawingWall(false);
                 }}
-                className={`
-                  px-2 py-2 text-xs font-medium uppercase tracking-wide
-                  ${editMode === 'select' 
-                    ? 'bg-black text-white' 
-                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
-                  }
-                `}
+                className="flex items-center gap-1 text-xs"
               >
+                <Hand size={12} />
                 Select
-              </button>
-              <button
+              </Button>
+              <Button
+                variant={editMode === 'wall' ? 'default' : 'ghost'}
+                size="sm"
                 onClick={() => {
                   setEditMode('wall');
                   setDrawingWall(true);
                 }}
-                className={`
-                  px-2 py-2 text-xs font-medium uppercase tracking-wide
-                  ${editMode === 'wall' 
-                    ? 'bg-black text-white' 
-                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
-                  }
-                `}
+                className="flex items-center gap-1 text-xs"
               >
+                <Pencil size={12} />
                 Walls
-              </button>
-              <button
+              </Button>
+              <Button
+                variant={editMode === 'furniture' ? 'default' : 'ghost'}
+                size="sm"
                 onClick={() => {
                   setEditMode('furniture');
                   setDrawingWall(false);
                 }}
-                className={`
-                  px-2 py-2 text-xs font-medium uppercase tracking-wide
-                  ${editMode === 'furniture' 
-                    ? 'bg-black text-white' 
-                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
-                  }
-                `}
+                className="flex items-center gap-1 text-xs"
               >
+                <Move size={12} />
                 Items
-              </button>
+              </Button>
             </div>
             
-            <div className="grid grid-cols-2 gap-1">
-              <button
+            {/* Secondary mode row for doors and windows */}
+            <div className="grid grid-cols-2 gap-1 p-1 bg-gray-50 rounded-lg">
+              <Button
+                variant={editMode === 'door' ? 'default' : 'ghost'}
+                size="sm"
                 onClick={() => {
                   setEditMode('door');
                   setDrawingWall(false);
                 }}
-                className={`
-                  px-2 py-2 text-xs font-medium uppercase tracking-wide
-                  ${editMode === 'door' 
-                    ? 'bg-black text-white' 
-                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
-                  }
-                `}
+                className="flex items-center gap-1 text-xs"
               >
+                <DoorOpen size={12} />
                 Doors
-              </button>
-              <button
+              </Button>
+              <Button
+                variant={editMode === 'window' ? 'default' : 'ghost'}
+                size="sm"
                 onClick={() => {
                   setEditMode('window');
                   setDrawingWall(false);
                 }}
-                className={`
-                  px-2 py-2 text-xs font-medium uppercase tracking-wide
-                  ${editMode === 'window' 
-                    ? 'bg-black text-white' 
-                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
-                  }
-                `}
+                className="flex items-center gap-1 text-xs"
               >
+                <RectangleHorizontal size={12} />
                 Windows
-              </button>
+              </Button>
             </div>
           </div>
           
-          <button
+          {/* Clear Room Button */}
+          <Button
+            variant="destructive"
+            size="sm"
             onClick={clearRoom}
-            className="w-full px-3 py-2 bg-white border border-gray-400 text-black text-xs 
-                     font-medium hover:bg-gray-50 uppercase tracking-wide"
+            className="w-full text-sm"
           >
+            <Trash2 size={14} className="mr-2" />
             Clear Room
-          </button>
-        </div>
-      </div>
+          </Button>
+          
+          {/* Instructions based on mode */}
+          <div className="text-xs text-gray-600 bg-gray-50 p-3 rounded-lg space-y-1">
+            {editMode === 'select' && (
+              <>
+                <p className="font-medium">Select Mode:</p>
+                <p>• Click furniture to select and move</p>
+                <p>• Drag corners to resize selected items</p>
+                <p>• Use the detailed controls panel</p>
+              </>
+            )}
+            {editMode === 'wall' && (
+              <>
+                <p className="font-medium">Wall Drawing:</p>
+                <p>• Click to start a wall</p>
+                <p>• Click again to finish the wall</p>
+                <p>• Walls snap to grid for precision</p>
+              </>
+            )}
+            {editMode === 'furniture' && (
+              <>
+                <p className="font-medium">Furniture Mode:</p>
+                <p>• Drag from library to add items</p>
+                <p>• Click items to add at center</p>
+                <p>• Switch to select mode to edit</p>
+              </>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

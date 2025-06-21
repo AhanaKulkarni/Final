@@ -1,13 +1,16 @@
 import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { useRoomStore } from '../lib/stores/useRoomStore';
+import { Trash2, RotateCw, Move3D, Palette } from 'lucide-react';
 
 export function FurnitureControls() {
   const { 
-    currentRoom, 
     selectedFurniture, 
+    removeFurniture, 
     updateFurniture, 
-    removeFurniture 
+    currentRoom 
   } = useRoomStore();
   
   const selectedItem = selectedFurniture 
@@ -15,85 +18,157 @@ export function FurnitureControls() {
     : null;
   
   if (!selectedItem) return null;
+  
+  const rotateFurniture = () => {
+    updateFurniture(selectedItem.id, {
+      rotation: (selectedItem.rotation + 15) % 360
+    });
+  };
 
   const updateRotation = (value: number[]) => {
     updateFurniture(selectedItem.id, { rotation: value[0] });
   };
-
+  
   const updateScale = (value: number[]) => {
     updateFurniture(selectedItem.id, { scale: value[0] });
   };
-
-  const updateColor = (color: string) => {
-    updateFurniture(selectedItem.id, { color });
+  
+  const updateWidth = (value: number[]) => {
+    updateFurniture(selectedItem.id, { width: value[0] });
   };
-
-  const furnitureColors = [
-    '#8B4513', '#D2691E', '#CD853F', '#DEB887',
-    '#FFFFFF', '#F5F5F5', '#DCDCDC', '#C0C0C0',
-    '#000000', '#2F4F4F', '#696969', '#708090'
-  ];
-
+  
+  const updateHeight = (value: number[]) => {
+    updateFurniture(selectedItem.id, { height: value[0] });
+  };
+  
+  const updateDepth = (value: number[]) => {
+    updateFurniture(selectedItem.id, { depth: value[0] });
+  };
+  
+  const colors = ['#8B4513', '#D2B48C', '#F5F5DC', '#4682B4', '#654321', '#ff6b6b', '#4ecdc4', '#45b7d1'];
+  
   return (
-    <div className="fixed top-20 right-20 w-56 z-40">
-      <div className="glass-ultra p-3">
-        <div className="text-xs font-medium text-black mb-4 uppercase tracking-widest">
-          Properties
+    <Card className="fixed top-20 right-4 w-80 bg-white/95 backdrop-blur-sm shadow-xl border-0 z-50">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Move3D size={20} />
+          {selectedItem.type.charAt(0).toUpperCase() + selectedItem.type.slice(1)} Controls
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Action Buttons */}
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={rotateFurniture}
+            className="flex items-center gap-1 flex-1"
+          >
+            <RotateCw size={14} />
+            Rotate 15°
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => removeFurniture(selectedItem.id)}
+            className="flex items-center gap-1"
+          >
+            <Trash2 size={14} />
+            Delete
+          </Button>
         </div>
         
-        <div className="space-y-4">
-          <div>
-            <div className="text-xs text-black mb-2 uppercase tracking-wide">Rotation</div>
-            <Slider
-              value={[selectedItem.rotation]}
-              onValueChange={updateRotation}
-              min={0}
-              max={360}
-              step={15}
-              className="w-full"
-            />
-            <div className="text-xs text-gray-600 mt-1">{selectedItem.rotation}°</div>
-          </div>
+        {/* Rotation Control */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Rotation: {selectedItem.rotation}°</label>
+          <Slider
+            value={[selectedItem.rotation]}
+            onValueChange={updateRotation}
+            min={0}
+            max={360}
+            step={15}
+            className="w-full"
+          />
+        </div>
 
-          <div>
-            <div className="text-xs text-black mb-2 uppercase tracking-wide">Scale</div>
+        {/* Scale Control */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Overall Size: {selectedItem.scale.toFixed(1)}x</label>
+          <Slider
+            value={[selectedItem.scale]}
+            onValueChange={updateScale}
+            min={0.3}
+            max={3.0}
+            step={0.1}
+            className="w-full"
+          />
+        </div>
+        
+        {/* Dimension Controls */}
+        <div className="space-y-3">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Width: {selectedItem.width}px</label>
             <Slider
-              value={[selectedItem.scale]}
-              onValueChange={updateScale}
-              min={0.3}
-              max={3.0}
-              step={0.1}
+              value={[selectedItem.width]}
+              onValueChange={updateWidth}
+              min={20}
+              max={300}
+              step={5}
               className="w-full"
             />
-            <div className="text-xs text-gray-600 mt-1">{selectedItem.scale.toFixed(1)}x</div>
           </div>
           
-          <div>
-            <div className="text-xs text-black mb-2 uppercase tracking-wide">Material</div>
-            <div className="grid grid-cols-4 gap-2">
-              {furnitureColors.map((color) => (
-                <button
-                  key={color}
-                  className={`w-6 h-6 border ${
-                    selectedItem.color === color || (!selectedItem.color && color === '#8B4513') 
-                      ? 'border-black border-2' 
-                      : 'border-gray-400'
-                  }`}
-                  style={{ backgroundColor: color }}
-                  onClick={() => updateColor(color)}
-                />
-              ))}
-            </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Height: {selectedItem.height}px</label>
+            <Slider
+              value={[selectedItem.height]}
+              onValueChange={updateHeight}
+              min={20}
+              max={300}
+              step={5}
+              className="w-full"
+            />
           </div>
-
-          <button
-            onClick={() => removeFurniture(selectedItem.id)}
-            className="w-full text-xs text-black hover:text-gray-600 py-2 border-t border-gray-300 mt-4 pt-3 uppercase tracking-wide"
-          >
-            Remove
-          </button>
+          
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Depth: {selectedItem.depth}px</label>
+            <Slider
+              value={[selectedItem.depth]}
+              onValueChange={updateDepth}
+              min={20}
+              max={300}
+              step={5}
+              className="w-full"
+            />
+          </div>
         </div>
-      </div>
-    </div>
+        
+        {/* Color Picker */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium flex items-center gap-1">
+            <Palette size={14} />
+            Color
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {colors.map((color) => (
+              <button
+                key={color}
+                className={`w-8 h-8 rounded-full border-2 transition-all ${
+                  selectedItem.color === color ? 'border-gray-800 scale-110' : 'border-gray-300'
+                }`}
+                style={{ backgroundColor: color }}
+                onClick={() => updateFurniture(selectedItem.id, { color })}
+              />
+            ))}
+          </div>
+        </div>
+        
+        {/* Position Info */}
+        <div className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
+          <div>Position: ({Math.round(selectedItem.position.x)}, {Math.round(selectedItem.position.y)})</div>
+          <div>Rotation: {selectedItem.rotation}°</div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

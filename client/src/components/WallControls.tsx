@@ -1,86 +1,113 @@
 import React, { useState } from 'react';
-import { Slider } from '@/components/ui/slider';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRoomStore } from '../lib/stores/useRoomStore';
+import { Palette, Home } from 'lucide-react';
 
 export function WallControls() {
-  const { currentRoom, updateWall, editMode } = useRoomStore();
-  const [selectedWallIndex, setSelectedWallIndex] = useState(0);
+  const { currentRoom, updateWall } = useRoomStore();
+  const [selectedWallIndex, setSelectedWallIndex] = useState<number | null>(null);
   
   const wallColors = [
-    '#F5F5F5', '#FFFFFF', '#E5E5E5', '#D3D3D3',
-    '#C0C0C0', '#A9A9A9', '#808080', '#696969',
-    '#F0E68C', '#DDA0DD', '#98FB98', '#87CEEB'
+    '#f5f5f5', // Default light gray
+    '#ffffff', // White
+    '#e8f4f8', // Light blue
+    '#f0f8e8', // Light green
+    '#fff8e8', // Light yellow
+    '#f8e8f0', // Light pink
+    '#e8e8f8', // Light purple
+    '#d4b896', // Beige
+    '#c8a882', // Tan
+    '#b8860b', // Dark goldenrod
   ];
   
-  const updateThickness = (value: number[]) => {
-    updateWall(selectedWallIndex, { thickness: value[0] });
-  };
+  const selectedWall = selectedWallIndex !== null ? currentRoom.walls[selectedWallIndex] : null;
   
   const updateWallColor = (color: string) => {
-    updateWall(selectedWallIndex, { color });
+    if (selectedWallIndex !== null) {
+      updateWall(selectedWallIndex, { color });
+    }
   };
   
-  if (editMode !== 'wall' || currentRoom.walls.length === 0) {
+  if (currentRoom.walls.length === 0) {
     return null;
   }
   
-  const selectedWall = currentRoom.walls[selectedWallIndex] || currentRoom.walls[0];
-  
   return (
-    <div className="fixed top-20 left-20 w-56 z-40">
-      <div className="glass-ultra p-3">
-        <div className="text-xs font-medium text-black mb-4 uppercase tracking-widest">
-          Walls
+    <Card className="fixed top-20 left-4 w-72 bg-white/95 backdrop-blur-sm shadow-xl border-0 z-40">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Home size={20} />
+          Wall Customization
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Wall Selection */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700">Select Wall</label>
+          <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
+            {currentRoom.walls.map((wall, index) => (
+              <Button
+                key={index}
+                variant={selectedWallIndex === index ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedWallIndex(index)}
+                className="text-xs justify-start"
+              >
+                Wall {index + 1}
+              </Button>
+            ))}
+          </div>
         </div>
         
-        <div className="space-y-4">
-          <div>
-            <div className="text-xs text-black mb-2 uppercase tracking-wide">Selection</div>
-            <select 
-              value={selectedWallIndex}
-              onChange={(e) => setSelectedWallIndex(Number(e.target.value))}
-              className="w-full px-3 py-2 bg-white border border-gray-400 text-xs text-black font-medium"
-            >
-              {currentRoom.walls.map((_, index) => (
-                <option key={index} value={index}>
-                  WALL {index + 1}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <div className="text-xs text-black mb-2 uppercase tracking-wide">Material</div>
-            <div className="grid grid-cols-4 gap-2">
-              {wallColors.map((color) => (
-                <button
-                  key={color}
-                  className={`w-6 h-6 border ${
-                    selectedWall.color === color || (!selectedWall.color && color === '#F5F5F5')
-                      ? 'border-black border-2' 
-                      : 'border-gray-400'
-                  }`}
-                  style={{ backgroundColor: color }}
-                  onClick={() => updateWallColor(color)}
-                />
-              ))}
+        {selectedWall && (
+          <>
+            {/* Color Picker */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-1">
+                <Palette size={14} />
+                Wall Color
+              </label>
+              <div className="grid grid-cols-5 gap-2">
+                {wallColors.map((color) => (
+                  <button
+                    key={color}
+                    className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 ${
+                      selectedWall.color === color || (!selectedWall.color && color === '#f5f5f5') 
+                        ? 'border-gray-800 scale-110' 
+                        : 'border-gray-300'
+                    }`}
+                    style={{ backgroundColor: color }}
+                    onClick={() => updateWallColor(color)}
+                    title={`Wall color: ${color}`}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-          
-          <div>
-            <div className="text-xs text-black mb-2 uppercase tracking-wide">Thickness</div>
-            <Slider
-              value={[selectedWall.thickness]}
-              onValueChange={updateThickness}
-              min={5}
-              max={25}
-              step={1}
-              className="w-full"
-            />
-            <div className="text-xs text-gray-600 mt-1">{selectedWall.thickness}px</div>
-          </div>
+            
+            {/* Apply to All Walls */}
+            <Button
+              onClick={() => {
+                const color = selectedWall.color || '#f5f5f5';
+                currentRoom.walls.forEach((_, index) => {
+                  updateWall(index, { color });
+                });
+              }}
+              className="w-full text-sm"
+              variant="outline"
+            >
+              Apply to All Walls
+            </Button>
+          </>
+        )}
+        
+        <div className="text-xs text-gray-600 bg-gray-50 p-3 rounded-lg">
+          <p className="font-medium mb-1">Wall Customization:</p>
+          <p>• Select a wall to change its color</p>
+          <p>• Changes appear in both 2D and 3D views</p>
+          <p>• Apply colors to all walls at once</p>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
