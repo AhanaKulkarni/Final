@@ -148,57 +148,7 @@
   100% { background-position: 200% center; }
 }
 
-@keyframes neon-pulse {
-  0%, 100% { 
-    text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 15px var(--neon-blue);
-  }
-  50% { 
-    text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue);
-  }
-}
-
-@keyframes matrix-rain {
-  0% { transform: translateY(-100%); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(100vh); opacity: 0; }
-}
-
-@keyframes cyber-scan {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.float-animation {
-  animation: float 4s ease-in-out infinite;
-}
-
-.pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-.shimmer-effect {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-}
-
-.neon-text {
-  animation: neon-pulse 2s ease-in-out infinite;
-}
-
-.matrix-effect {
-  animation: matrix-rain 3s linear infinite;
-}
-
-.cyber-scan {
-  animation: cyber-scan 2s ease-in-out infinite;
-}
+/* Removed flashy animations for cleaner look */
 
 @layer base {
   * {
@@ -212,8 +162,7 @@
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-    background: var(--gradient-cyber);
-    background-attachment: fixed;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 }
