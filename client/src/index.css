@@ -162,8 +162,8 @@
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-    background: #1e1e1e;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #fafafa;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
 
@@ -179,11 +179,12 @@ canvas {
   touch-action: none;
 }
 
-/* Minimal Professional Components */
+/* Ultra-Minimal Business Interface */
 .glass-ultra {
-  background: #2a2a2a;
-  border: 1px solid #404040;
-  border-radius: 6px;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .card-interactive {
@@ -191,42 +192,45 @@ canvas {
 }
 
 .btn-primary {
-  background: #3b82f6;
+  background: #000000;
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 1px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 .btn-primary:hover {
-  background: #2563eb;
+  background: #333333;
 }
 
 .btn-secondary {
-  background: #374151;
-  color: white;
-  border: 1px solid #4b5563;
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-size: 14px;
+  background: white;
+  color: #333333;
+  border: 1px solid #e5e5e5;
+  padding: 6px 12px;
+  border-radius: 1px;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .btn-secondary:hover {
-  background: #4b5563;
+  background: #f8f8f8;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 1px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #1f1f1f;
+  background: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #404040;
-  border-radius: 2px;
+  background: #cccccc;
+  border-radius: 0;
 }
 
 /* Premium Button Styles */

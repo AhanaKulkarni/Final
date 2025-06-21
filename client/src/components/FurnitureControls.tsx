@@ -24,54 +24,26 @@ export function FurnitureControls() {
     updateFurniture(selectedItem.id, { scale: value[0] });
   };
 
-  const updateWidth = (value: number[]) => {
-    updateFurniture(selectedItem.id, { width: value[0] });
-  };
-
-  const updateHeight = (value: number[]) => {
-    updateFurniture(selectedItem.id, { height: value[0] });
-  };
-
-  const updateDepth = (value: number[]) => {
-    updateFurniture(selectedItem.id, { depth: value[0] });
-  };
-
   const updateColor = (color: string) => {
     updateFurniture(selectedItem.id, { color });
   };
 
   const furnitureColors = [
     '#8B4513', '#D2691E', '#CD853F', '#DEB887',
-    '#F4A460', '#D2B48C', '#BC8F8F', '#F5DEB3',
     '#FFFFFF', '#F5F5F5', '#DCDCDC', '#C0C0C0',
     '#000000', '#2F4F4F', '#696969', '#708090'
   ];
 
   return (
-    <div className="fixed top-20 right-6 w-72 z-40">
-      <div className="glass-ultra p-4">
-        <h3 className="text-white font-medium mb-3">Furniture Settings</h3>
+    <div className="fixed top-20 right-20 w-56 z-40">
+      <div className="glass-ultra p-3">
+        <div className="text-xs font-medium text-gray-900 mb-3 uppercase tracking-wide">
+          Properties
+        </div>
         
-        <div className="space-y-4">
-          <div className="flex gap-2">
-            <button
-              onClick={() => updateFurniture(selectedItem.id, { rotation: (selectedItem.rotation + 15) % 360 })}
-              className="btn-secondary flex-1"
-            >
-              Rotate 15°
-            </button>
-            <button
-              onClick={() => removeFurniture(selectedItem.id)}
-              className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
-            >
-              Delete
-            </button>
-          </div>
-
+        <div className="space-y-3">
           <div>
-            <label className="text-sm text-gray-300 block mb-1">
-              Rotation: {selectedItem.rotation}°
-            </label>
+            <div className="text-xs text-gray-600 mb-1">Rotation</div>
             <Slider
               value={[selectedItem.rotation]}
               onValueChange={updateRotation}
@@ -80,12 +52,11 @@ export function FurnitureControls() {
               step={15}
               className="w-full"
             />
+            <div className="text-xs text-gray-500 mt-1">{selectedItem.rotation}°</div>
           </div>
 
           <div>
-            <label className="text-sm text-gray-300 block mb-1">
-              Size: {selectedItem.scale.toFixed(1)}x
-            </label>
+            <div className="text-xs text-gray-600 mb-1">Scale</div>
             <Slider
               value={[selectedItem.scale]}
               onValueChange={updateScale}
@@ -94,60 +65,19 @@ export function FurnitureControls() {
               step={0.1}
               className="w-full"
             />
+            <div className="text-xs text-gray-500 mt-1">{selectedItem.scale.toFixed(1)}x</div>
           </div>
           
           <div>
-            <label className="text-sm text-gray-300 block mb-1">Dimensions</label>
-            
-            <div className="space-y-2">
-              <div>
-                <label className="text-xs text-gray-400">Width: {selectedItem.width}px</label>
-                <Slider
-                  value={[selectedItem.width]}
-                  onValueChange={updateWidth}
-                  min={20}
-                  max={300}
-                  step={5}
-                  className="w-full"
-                />
-              </div>
-              
-              <div>
-                <label className="text-xs text-gray-400">Height: {selectedItem.height}px</label>
-                <Slider
-                  value={[selectedItem.height]}
-                  onValueChange={updateHeight}
-                  min={20}
-                  max={300}
-                  step={5}
-                  className="w-full"
-                />
-              </div>
-              
-              <div>
-                <label className="text-xs text-gray-400">Depth: {selectedItem.depth}px</label>
-                <Slider
-                  value={[selectedItem.depth]}
-                  onValueChange={updateDepth}
-                  min={20}
-                  max={300}
-                  step={5}
-                  className="w-full"
-                />
-              </div>
-            </div>
-          </div>
-          
-          <div>
-            <label className="text-sm text-gray-300 block mb-2">Color</label>
+            <div className="text-xs text-gray-600 mb-2">Material</div>
             <div className="grid grid-cols-4 gap-1">
               {furnitureColors.map((color) => (
                 <button
                   key={color}
-                  className={`w-6 h-6 rounded border-2 ${
+                  className={`w-4 h-4 border ${
                     selectedItem.color === color || (!selectedItem.color && color === '#8B4513') 
-                      ? 'border-blue-400' 
-                      : 'border-gray-500'
+                      ? 'border-black border-2' 
+                      : 'border-gray-300'
                   }`}
                   style={{ backgroundColor: color }}
                   onClick={() => updateColor(color)}
@@ -155,6 +85,13 @@ export function FurnitureControls() {
               ))}
             </div>
           </div>
+
+          <button
+            onClick={() => removeFurniture(selectedItem.id)}
+            className="w-full text-xs text-gray-600 hover:text-black py-1 border-t border-gray-200 mt-3 pt-2"
+          >
+            Remove
+          </button>
         </div>
       </div>
     </div>

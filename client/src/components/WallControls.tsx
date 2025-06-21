@@ -9,8 +9,7 @@ export function WallControls() {
   const wallColors = [
     '#F5F5F5', '#FFFFFF', '#E5E5E5', '#D3D3D3',
     '#C0C0C0', '#A9A9A9', '#808080', '#696969',
-    '#F0E68C', '#DDA0DD', '#98FB98', '#87CEEB',
-    '#FFB6C1', '#F0F8FF', '#FDF5E6', '#F5FFFA'
+    '#F0E68C', '#DDA0DD', '#98FB98', '#87CEEB'
   ];
   
   const updateThickness = (value: number[]) => {
@@ -28,17 +27,19 @@ export function WallControls() {
   const selectedWall = currentRoom.walls[selectedWallIndex] || currentRoom.walls[0];
   
   return (
-    <div className="fixed top-20 left-6 w-72 z-40">
-      <div className="glass-ultra p-4">
-        <h3 className="text-white font-medium mb-3">Wall Settings</h3>
+    <div className="fixed top-20 left-20 w-56 z-40">
+      <div className="glass-ultra p-3">
+        <div className="text-xs font-medium text-gray-900 mb-3 uppercase tracking-wide">
+          Walls
+        </div>
         
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div>
-            <label className="text-sm text-gray-300 block mb-1">Select Wall</label>
+            <div className="text-xs text-gray-600 mb-1">Selection</div>
             <select 
               value={selectedWallIndex}
               onChange={(e) => setSelectedWallIndex(Number(e.target.value))}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-sm"
+              className="w-full px-2 py-1 bg-white border border-gray-300 text-xs text-gray-700"
             >
               {currentRoom.walls.map((_, index) => (
                 <option key={index} value={index}>
@@ -49,15 +50,15 @@ export function WallControls() {
           </div>
           
           <div>
-            <label className="text-sm text-gray-300 block mb-2">Wall Color</label>
+            <div className="text-xs text-gray-600 mb-2">Material</div>
             <div className="grid grid-cols-4 gap-1">
               {wallColors.map((color) => (
                 <button
                   key={color}
-                  className={`w-6 h-6 rounded border-2 ${
+                  className={`w-4 h-4 border ${
                     selectedWall.color === color || (!selectedWall.color && color === '#F5F5F5')
-                      ? 'border-blue-400' 
-                      : 'border-gray-500'
+                      ? 'border-black border-2' 
+                      : 'border-gray-300'
                   }`}
                   style={{ backgroundColor: color }}
                   onClick={() => updateWallColor(color)}
@@ -67,9 +68,7 @@ export function WallControls() {
           </div>
           
           <div>
-            <label className="text-sm text-gray-300 block mb-1">
-              Wall Thickness: {selectedWall.thickness}px
-            </label>
+            <div className="text-xs text-gray-600 mb-1">Thickness</div>
             <Slider
               value={[selectedWall.thickness]}
               onValueChange={updateThickness}
@@ -78,6 +77,7 @@ export function WallControls() {
               step={1}
               className="w-full"
             />
+            <div className="text-xs text-gray-500 mt-1">{selectedWall.thickness}px</div>
           </div>
         </div>
       </div>

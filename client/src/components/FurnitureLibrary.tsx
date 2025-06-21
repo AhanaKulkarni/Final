@@ -13,29 +13,23 @@ export function FurnitureLibrary() {
   };
   
   return (
-    <div className="fixed top-6 left-6 z-50 w-72">
-      <div className="glass-ultra p-4">
-        <h3 className="text-white font-medium mb-3">Furniture Library</h3>
+    <div className="fixed top-20 left-20 z-50 w-60">
+      <div className="glass-ultra p-3">
+        <div className="text-xs font-medium text-gray-900 mb-3 uppercase tracking-wide">
+          Objects
+        </div>
         
-        <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto custom-scrollbar">
+        <div className="space-y-1">
           {furnitureTemplates.map((template) => (
             <button
               key={template.type}
               onClick={() => handleClick(template.type)}
-              className="p-3 bg-gray-700 hover:bg-gray-600 border border-gray-600 
-                       rounded text-center text-white text-sm"
+              className="w-full p-2 text-left hover:bg-gray-50 text-xs text-gray-700 
+                       capitalize border-none bg-transparent"
             >
-              <div className="text-2xl mb-1">{template.icon}</div>
-              <div className="font-medium capitalize">{template.name}</div>
-              <div className="text-xs text-gray-400">
-                {template.defaultWidth}×{template.defaultHeight}
-              </div>
+              {template.name}
             </button>
           ))}
-        </div>
-        
-        <div className="text-xs text-gray-400 mt-3 p-2 bg-gray-800 rounded">
-          Click any item to add to your room
         </div>
       </div>
     </div>
