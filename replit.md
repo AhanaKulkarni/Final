@@ -113,6 +113,9 @@ Changelog:
   * Applied consistent white, beige/light brown, and black color theme
   * Integrated AR controls for room scaling, positioning, and rotation
   * Cross-platform camera access with mobile and desktop support
+  * Fixed critical issue: doors and windows now properly render in 3D view
+  * Optimized mobile and tablet interface with touch-friendly controls
+  * Added loading states and improved error handling for AR camera access
 ```
 
 ## User Preferences
