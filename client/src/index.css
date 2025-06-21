@@ -4,23 +4,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile and Touch Optimizations */
+/* Reset and enable scrolling */
 * {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  box-sizing: border-box;
 }
 
-/* Ensure scrolling works on all elements */
-* {
+html {
   scroll-behavior: smooth;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
 #root {
-  overflow-y: visible;
+  width: 100%;
+  min-height: 100vh;
 }
 
 /* Allow text selection in specific areas */
@@ -29,14 +30,6 @@ input, textarea, .selectable {
   -moz-user-select: text;
   -ms-user-select: text;
   user-select: text;
-}
-
-/* Enable proper scrolling */
-html, body {
-  height: auto;
-  min-height: 100vh;
-  overflow: visible;
-  position: static;
 }
 
 /* Smooth scrolling for mobile */

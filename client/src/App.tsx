@@ -16,11 +16,20 @@ function App() {
   const allObjectivesCompleted = objectives.every(obj => obj.completed);
 
   return (
-    <div className="w-full relative" style={{ minHeight: '200vh' }}>
-      <RoomDesigner />
-      <GamePanel />
-      {allObjectivesCompleted && <GameComplete />}
-    </div>
+    <>
+      <div className="w-full" style={{ height: '100vh', backgroundColor: 'red' }}>
+        <p style={{ padding: '20px', color: 'white' }}>TOP SECTION - Try scrolling down!</p>
+      </div>
+      <div className="w-full" style={{ height: '100vh', backgroundColor: 'blue' }}>
+        <p style={{ padding: '20px', color: 'white' }}>MIDDLE SECTION</p>
+        <RoomDesigner />
+        <GamePanel />
+        {allObjectivesCompleted && <GameComplete />}
+      </div>
+      <div className="w-full" style={{ height: '100vh', backgroundColor: 'green' }}>
+        <p style={{ padding: '20px', color: 'white' }}>BOTTOM SECTION - If you can see this, scrolling works!</p>
+      </div>
+    </>
   );
 }
 
