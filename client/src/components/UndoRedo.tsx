@@ -28,9 +28,8 @@ export function UndoRedo() {
           className="text-base flex items-center gap-3 px-6 py-3 transition-all duration-200 disabled:opacity-50"
           title="Redo last undone action"
         >
-          <Redo2 size={14} className="md:hidden" />
-          <Redo2 size={16} className="hidden md:block" />
-          <span className="hidden sm:inline">Redo</span>
+          <Redo2 size={20} />
+          <span>Redo</span>
         </Button>
       </div>
     </div>
