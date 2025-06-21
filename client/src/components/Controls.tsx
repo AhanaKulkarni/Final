@@ -22,26 +22,23 @@ export function Controls() {
         </div>
         
         <div className="space-y-4">
-          {/* Edit Mode Selector */}
           <div className="space-y-3">
-            <label className="text-sm font-semibold text-white/80">Design Tools</label>
-            <div className="grid grid-cols-3 gap-2 p-2 bg-black/20 rounded-xl backdrop-blur-sm">
+            <div className="text-xs text-black uppercase tracking-widest font-medium">Mode</div>
+            <div className="grid grid-cols-3 gap-1">
               <button
                 onClick={() => {
                   setEditMode('select');
                   setDrawingWall(false);
                 }}
                 className={`
-                  relative px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300
-                  flex items-center justify-center gap-1 group
+                  px-2 py-2 text-xs font-medium uppercase tracking-wide
                   ${editMode === 'select' 
-                    ? 'btn-premium text-white' 
-                    : 'text-white/60 hover:text-white hover:bg-white/10'
+                    ? 'bg-black text-white' 
+                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
                   }
                 `}
               >
-                <Hand size={12} className="transition-transform group-hover:scale-110" />
-                <span>Select</span>
+                Select
               </button>
               <button
                 onClick={() => {
@@ -49,16 +46,14 @@ export function Controls() {
                   setDrawingWall(true);
                 }}
                 className={`
-                  relative px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300
-                  flex items-center justify-center gap-1 group
+                  px-2 py-2 text-xs font-medium uppercase tracking-wide
                   ${editMode === 'wall' 
-                    ? 'btn-premium text-white' 
-                    : 'text-white/60 hover:text-white hover:bg-white/10'
+                    ? 'bg-black text-white' 
+                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
                   }
                 `}
               >
-                <Pencil size={12} className="transition-transform group-hover:scale-110" />
-                <span>Walls</span>
+                Walls
               </button>
               <button
                 onClick={() => {
@@ -66,37 +61,32 @@ export function Controls() {
                   setDrawingWall(false);
                 }}
                 className={`
-                  relative px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300
-                  flex items-center justify-center gap-1 group
+                  px-2 py-2 text-xs font-medium uppercase tracking-wide
                   ${editMode === 'furniture' 
-                    ? 'btn-premium text-white' 
-                    : 'text-white/60 hover:text-white hover:bg-white/10'
+                    ? 'bg-black text-white' 
+                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
                   }
                 `}
               >
-                <Move size={12} className="transition-transform group-hover:scale-110" />
-                <span>Items</span>
+                Items
               </button>
             </div>
             
-            {/* Secondary mode row for doors and windows */}
-            <div className="grid grid-cols-2 gap-2 p-2 bg-black/10 rounded-xl backdrop-blur-sm">
+            <div className="grid grid-cols-2 gap-1">
               <button
                 onClick={() => {
                   setEditMode('door');
                   setDrawingWall(false);
                 }}
                 className={`
-                  relative px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300
-                  flex items-center justify-center gap-1 group
+                  px-2 py-2 text-xs font-medium uppercase tracking-wide
                   ${editMode === 'door' 
-                    ? 'btn-secondary text-white' 
-                    : 'text-white/60 hover:text-white hover:bg-white/10'
+                    ? 'bg-black text-white' 
+                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
                   }
                 `}
               >
-                <DoorOpen size={12} className="transition-transform group-hover:scale-110" />
-                <span>Doors</span>
+                Doors
               </button>
               <button
                 onClick={() => {
@@ -104,75 +94,25 @@ export function Controls() {
                   setDrawingWall(false);
                 }}
                 className={`
-                  relative px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300
-                  flex items-center justify-center gap-1 group
+                  px-2 py-2 text-xs font-medium uppercase tracking-wide
                   ${editMode === 'window' 
-                    ? 'btn-secondary text-white' 
-                    : 'text-white/60 hover:text-white hover:bg-white/10'
+                    ? 'bg-black text-white' 
+                    : 'bg-white text-black border border-gray-300 hover:bg-gray-50'
                   }
                 `}
               >
-                <RectangleHorizontal size={12} className="transition-transform group-hover:scale-110" />
-                <span>Windows</span>
+                Windows
               </button>
             </div>
           </div>
           
-          {/* Clear Room Button */}
           <button
             onClick={clearRoom}
-            className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-red-500/20 to-pink-500/20 
-                     border border-red-500/30 text-white font-medium text-sm
-                     hover:from-red-500/30 hover:to-pink-500/30 hover:border-red-500/50
-                     transition-all duration-300 group flex items-center justify-center gap-2"
+            className="w-full px-3 py-2 bg-white border border-gray-400 text-black text-xs 
+                     font-medium hover:bg-gray-50 uppercase tracking-wide"
           >
-            <Trash2 size={14} className="transition-transform group-hover:scale-110" />
             Clear Room
           </button>
-          
-          {/* Instructions based on mode */}
-          <div className="text-xs text-white/60 bg-black/20 p-4 rounded-xl backdrop-blur-sm space-y-2">
-            {editMode === 'select' && (
-              <>
-                <p className="font-semibold text-white/80">Select Mode:</p>
-                <p>• Click furniture to select and move</p>
-                <p>• Drag resize handles to change size</p>
-                <p>• Use controls panel for adjustments</p>
-              </>
-            )}
-            {editMode === 'wall' && (
-              <>
-                <p className="font-semibold text-white/80">Wall Mode:</p>
-                <p>• Click to start drawing a wall</p>
-                <p>• Click again to finish the wall</p>
-                <p>• Walls snap to grid for precision</p>
-              </>
-            )}
-            {editMode === 'furniture' && (
-              <>
-                <p className="font-semibold text-white/80">Furniture Mode:</p>
-                <p>• Choose items from the library</p>
-                <p>• Click to place in the room</p>
-                <p>• Switch to Select to adjust</p>
-              </>
-            )}
-            {editMode === 'door' && (
-              <>
-                <p className="font-semibold text-white/80">Door Mode:</p>
-                <p>• Click on any wall to add doors</p>
-                <p>• Select doors to customize position</p>
-                <p>• Adjust size and color options</p>
-              </>
-            )}
-            {editMode === 'window' && (
-              <>
-                <p className="font-semibold text-white/80">Window Mode:</p>
-                <p>• Click on any wall to add windows</p>
-                <p>• Select windows to customize position</p>
-                <p>• Adjust size and color options</p>
-              </>
-            )}
-          </div>
         </div>
       </div>
     </div>
