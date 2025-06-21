@@ -60,13 +60,13 @@ export function DoorWindowControls() {
   return (
     <div className="fixed top-20 right-20 w-56 z-40">
       <div className="glass-ultra p-3">
-        <div className="text-xs font-medium text-gray-900 mb-3 uppercase tracking-wide">
+        <div className="text-xs font-medium text-black mb-4 uppercase tracking-widest">
           {selectedItem.type === 'door' ? 'Door' : 'Window'}
         </div>
         
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div>
-            <div className="text-xs text-gray-600 mb-1">Position</div>
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Position</div>
             <Slider
               value={[selectedItem.position * 100]}
               onValueChange={updatePosition}
@@ -75,11 +75,11 @@ export function DoorWindowControls() {
               step={1}
               className="w-full"
             />
-            <div className="text-xs text-gray-500 mt-1">{Math.round(selectedItem.position * 100)}%</div>
+            <div className="text-xs text-gray-600 mt-1">{Math.round(selectedItem.position * 100)}%</div>
           </div>
           
           <div>
-            <div className="text-xs text-gray-600 mb-1">Width</div>
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Width</div>
             <Slider
               value={[selectedItem.width]}
               onValueChange={updateWidth}
@@ -88,11 +88,11 @@ export function DoorWindowControls() {
               step={5}
               className="w-full"
             />
-            <div className="text-xs text-gray-500 mt-1">{selectedItem.width}px</div>
+            <div className="text-xs text-gray-600 mt-1">{selectedItem.width}px</div>
           </div>
           
           <div>
-            <div className="text-xs text-gray-600 mb-1">Height</div>
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Height</div>
             <Slider
               value={[selectedItem.height]}
               onValueChange={updateHeight}
@@ -101,19 +101,19 @@ export function DoorWindowControls() {
               step={5}
               className="w-full"
             />
-            <div className="text-xs text-gray-500 mt-1">{selectedItem.height}px</div>
+            <div className="text-xs text-gray-600 mt-1">{selectedItem.height}px</div>
           </div>
           
           <div>
-            <div className="text-xs text-gray-600 mb-2">Material</div>
-            <div className="grid grid-cols-4 gap-1">
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Material</div>
+            <div className="grid grid-cols-4 gap-2">
               {colors.map((color) => (
                 <button
                   key={color}
-                  className={`w-4 h-4 border ${
+                  className={`w-6 h-6 border ${
                     selectedItem.color === color || (!selectedItem.color && color === colors[0])
                       ? 'border-black border-2' 
-                      : 'border-gray-300'
+                      : 'border-gray-400'
                   }`}
                   style={{ backgroundColor: color }}
                   onClick={() => updateColor(color)}
@@ -124,7 +124,7 @@ export function DoorWindowControls() {
           
           <button
             onClick={() => removeDoorWindow(selectedItem.id)}
-            className="w-full text-xs text-gray-600 hover:text-black py-1 border-t border-gray-200 mt-3 pt-2"
+            className="w-full text-xs text-black hover:text-gray-600 py-2 border-t border-gray-300 mt-4 pt-3 uppercase tracking-wide"
           >
             Remove
           </button>

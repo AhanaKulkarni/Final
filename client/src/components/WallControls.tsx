@@ -29,36 +29,36 @@ export function WallControls() {
   return (
     <div className="fixed top-20 left-20 w-56 z-40">
       <div className="glass-ultra p-3">
-        <div className="text-xs font-medium text-gray-900 mb-3 uppercase tracking-wide">
+        <div className="text-xs font-medium text-black mb-4 uppercase tracking-widest">
           Walls
         </div>
         
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div>
-            <div className="text-xs text-gray-600 mb-1">Selection</div>
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Selection</div>
             <select 
               value={selectedWallIndex}
               onChange={(e) => setSelectedWallIndex(Number(e.target.value))}
-              className="w-full px-2 py-1 bg-white border border-gray-300 text-xs text-gray-700"
+              className="w-full px-3 py-2 bg-white border border-gray-400 text-xs text-black font-medium"
             >
               {currentRoom.walls.map((_, index) => (
                 <option key={index} value={index}>
-                  Wall {index + 1}
+                  WALL {index + 1}
                 </option>
               ))}
             </select>
           </div>
           
           <div>
-            <div className="text-xs text-gray-600 mb-2">Material</div>
-            <div className="grid grid-cols-4 gap-1">
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Material</div>
+            <div className="grid grid-cols-4 gap-2">
               {wallColors.map((color) => (
                 <button
                   key={color}
-                  className={`w-4 h-4 border ${
+                  className={`w-6 h-6 border ${
                     selectedWall.color === color || (!selectedWall.color && color === '#F5F5F5')
                       ? 'border-black border-2' 
-                      : 'border-gray-300'
+                      : 'border-gray-400'
                   }`}
                   style={{ backgroundColor: color }}
                   onClick={() => updateWallColor(color)}
@@ -68,7 +68,7 @@ export function WallControls() {
           </div>
           
           <div>
-            <div className="text-xs text-gray-600 mb-1">Thickness</div>
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Thickness</div>
             <Slider
               value={[selectedWall.thickness]}
               onValueChange={updateThickness}
@@ -77,7 +77,7 @@ export function WallControls() {
               step={1}
               className="w-full"
             />
-            <div className="text-xs text-gray-500 mt-1">{selectedWall.thickness}px</div>
+            <div className="text-xs text-gray-600 mt-1">{selectedWall.thickness}px</div>
           </div>
         </div>
       </div>

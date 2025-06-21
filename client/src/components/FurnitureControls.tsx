@@ -37,13 +37,13 @@ export function FurnitureControls() {
   return (
     <div className="fixed top-20 right-20 w-56 z-40">
       <div className="glass-ultra p-3">
-        <div className="text-xs font-medium text-gray-900 mb-3 uppercase tracking-wide">
+        <div className="text-xs font-medium text-black mb-4 uppercase tracking-widest">
           Properties
         </div>
         
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div>
-            <div className="text-xs text-gray-600 mb-1">Rotation</div>
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Rotation</div>
             <Slider
               value={[selectedItem.rotation]}
               onValueChange={updateRotation}
@@ -52,11 +52,11 @@ export function FurnitureControls() {
               step={15}
               className="w-full"
             />
-            <div className="text-xs text-gray-500 mt-1">{selectedItem.rotation}°</div>
+            <div className="text-xs text-gray-600 mt-1">{selectedItem.rotation}°</div>
           </div>
 
           <div>
-            <div className="text-xs text-gray-600 mb-1">Scale</div>
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Scale</div>
             <Slider
               value={[selectedItem.scale]}
               onValueChange={updateScale}
@@ -65,19 +65,19 @@ export function FurnitureControls() {
               step={0.1}
               className="w-full"
             />
-            <div className="text-xs text-gray-500 mt-1">{selectedItem.scale.toFixed(1)}x</div>
+            <div className="text-xs text-gray-600 mt-1">{selectedItem.scale.toFixed(1)}x</div>
           </div>
           
           <div>
-            <div className="text-xs text-gray-600 mb-2">Material</div>
-            <div className="grid grid-cols-4 gap-1">
+            <div className="text-xs text-black mb-2 uppercase tracking-wide">Material</div>
+            <div className="grid grid-cols-4 gap-2">
               {furnitureColors.map((color) => (
                 <button
                   key={color}
-                  className={`w-4 h-4 border ${
+                  className={`w-6 h-6 border ${
                     selectedItem.color === color || (!selectedItem.color && color === '#8B4513') 
                       ? 'border-black border-2' 
-                      : 'border-gray-300'
+                      : 'border-gray-400'
                   }`}
                   style={{ backgroundColor: color }}
                   onClick={() => updateColor(color)}
@@ -88,7 +88,7 @@ export function FurnitureControls() {
 
           <button
             onClick={() => removeFurniture(selectedItem.id)}
-            className="w-full text-xs text-gray-600 hover:text-black py-1 border-t border-gray-200 mt-3 pt-2"
+            className="w-full text-xs text-black hover:text-gray-600 py-2 border-t border-gray-300 mt-4 pt-3 uppercase tracking-wide"
           >
             Remove
           </button>

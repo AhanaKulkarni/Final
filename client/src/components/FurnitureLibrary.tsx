@@ -15,17 +15,17 @@ export function FurnitureLibrary() {
   return (
     <div className="fixed top-20 left-20 z-50 w-60">
       <div className="glass-ultra p-3">
-        <div className="text-xs font-medium text-gray-900 mb-3 uppercase tracking-wide">
+        <div className="text-xs font-medium text-black mb-4 uppercase tracking-widest">
           Objects
         </div>
         
-        <div className="space-y-1">
+        <div className="space-y-2">
           {furnitureTemplates.map((template) => (
             <button
               key={template.type}
               onClick={() => handleClick(template.type)}
-              className="w-full p-2 text-left hover:bg-gray-50 text-xs text-gray-700 
-                       capitalize border-none bg-transparent"
+              className="w-full p-3 text-left hover:bg-white text-xs text-black 
+                       uppercase tracking-wide border-none bg-transparent font-medium"
             >
               {template.name}
             </button>

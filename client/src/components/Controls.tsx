@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRoomStore } from '../lib/stores/useRoomStore';
-import { Trash2, Move, Pencil, Hand, Home, DoorOpen, RectangleHorizontal, Sparkles } from 'lucide-react';
+import { Trash2, Move, Pencil, Hand, Home, DoorOpen, RectangleHorizontal } from 'lucide-react';
 
 export function Controls() {
   const { 
@@ -12,18 +12,12 @@ export function Controls() {
   } = useRoomStore();
   
   return (
-    <div className="fixed bottom-6 left-6 z-50">
-      <div className="glass-ultra p-6 rounded-2xl w-80 card-interactive">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 neon-glow">
-            <Home size={20} className="text-white" />
-          </div>
+    <div className="fixed bottom-20 left-20 z-50">
+      <div className="glass-ultra p-4 w-72">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-4 h-4 bg-black"></div>
           <div>
-            <h2 className="text-lg font-bold text-white gradient-text">Room Designer</h2>
-            <p className="text-xs text-white/60 flex items-center gap-1">
-              <Sparkles size={10} className="animate-pulse" />
-              Premium Edition
-            </p>
+            <h2 className="text-sm font-medium text-black uppercase tracking-widest">Room Designer</h2>
           </div>
         </div>
         
