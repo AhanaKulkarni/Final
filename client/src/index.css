@@ -4,28 +4,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reset and disable scrolling for full-screen desktop experience */
+/* Reset with normal scrolling enabled */
 * {
   box-sizing: border-box;
 }
 
 html {
-  height: 100%;
-  overflow: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  overflow: hidden;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 #root {
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 /* Allow text selection in specific areas */

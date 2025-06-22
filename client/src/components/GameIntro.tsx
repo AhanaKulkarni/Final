@@ -28,8 +28,8 @@ export function GameIntro() {
   };
 
   return (
-    <div className="w-full h-screen bg-gradient-to-br from-amber-50 via-white to-stone-100 flex">
-      <Card className="w-full h-full bg-white/80 backdrop-blur-sm shadow-2xl border-0 rounded-none flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-stone-100 flex items-center justify-center p-8">
+      <Card className="w-full max-w-6xl bg-white/80 backdrop-blur-sm shadow-2xl border-0">
         <CardHeader className="text-center space-y-6 pb-8">
           <div className="flex justify-center">
             <div className="p-6 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full">
@@ -45,7 +45,7 @@ export function GameIntro() {
           </p>
         </CardHeader>
         
-        <CardContent className="flex-1 flex flex-col justify-center space-y-6 px-12 py-8">
+        <CardContent className="space-y-6">
           {/* Game Features */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="text-center p-4 bg-white/60 rounded-xl border border-stone-200">

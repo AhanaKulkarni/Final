@@ -140,12 +140,12 @@ Changelog:
     - Optimized GameIntro screen to max-w-6xl for better big screen presentation
     - Positioned controls with increased margins (top-6, left-6, right-6) for premium feel
     - Maintained responsive design while prioritizing desktop/laptop experience
-  * Full-screen desktop interface (June 22, 2025):
-    - Eliminated scrolling with overflow:hidden on html, body, and #root elements
-    - Converted GameIntro to full-screen layout (w-full h-screen) with proper flex structure
-    - Implemented true desktop application experience with no scrollable content
-    - Fixed sidebar flex-shrink-0 to maintain consistent 384px width on all screen sizes
-    - Achieved complete viewport utilization for immersive gaming experience
+  * Restored normal scrolling functionality (June 22, 2025):
+    - Re-enabled normal website scrolling behavior per user preference
+    - Maintained optimized big laptop layout with max-w-6xl GameIntro screen
+    - Kept enhanced sidebar (w-96) and expanded canvas design for desktop experience
+    - Preserved larger button sizes and improved spacing throughout interface
+    - Balanced desktop optimization with standard web scrolling expectations
 ```
 
 ## User Preferences
