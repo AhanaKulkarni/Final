@@ -15,8 +15,7 @@ export function Controls() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   
   return (
-    <div className="fixed bottom-4 left-4 z-50">
-      <Card className="w-80 bg-white/98 backdrop-blur-sm shadow-xl border border-stone-200">
+    <Card className="bg-white/60 backdrop-blur-sm shadow-lg border border-stone-200">
         <CardHeader className="pb-2 border-b border-stone-100">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2 text-stone-800">
@@ -147,6 +146,5 @@ export function Controls() {
           </CardContent>
         )}
       </Card>
-    </div>
   );
 }

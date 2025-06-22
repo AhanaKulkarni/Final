@@ -22,7 +22,7 @@ export function GamePanel() {
   };
 
   return (
-    <div className="fixed top-4 right-4 w-80 max-h-[calc(100vh-2rem)] overflow-y-auto z-40">
+    <div className="fixed top-4 right-4 w-96 max-h-[calc(100vh-2rem)] overflow-y-auto z-40">
       <Card className="bg-white/95 backdrop-blur-sm shadow-xl border border-stone-200">
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
