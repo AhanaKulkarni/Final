@@ -603,8 +603,8 @@ export function Canvas2D() {
     <div className="relative">
       <canvas
         ref={canvasRef}
-        width={800}
-        height={600}
+        width={1200}
+        height={800}
         className="border-2 border-gray-200 bg-white rounded-lg shadow-lg"
         style={{ cursor: getCursor() }}
         onMouseDown={handleMouseDown}

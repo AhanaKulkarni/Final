@@ -7,8 +7,8 @@ export function UndoRedo() {
   const { canUndo, canRedo, undo, redo } = useRoomStore();
   
   return (
-    <div className="fixed top-4 left-4 z-50 bg-gradient-to-br from-white/98 to-amber-50/95 backdrop-blur-md rounded-xl p-4 shadow-xl border border-stone-200">
-      <div className="flex gap-3">
+    <div className="fixed top-6 left-6 z-50 bg-gradient-to-br from-white/98 to-amber-50/95 backdrop-blur-md rounded-xl p-6 shadow-xl border border-stone-200">
+      <div className="flex gap-4">
         <Button
           variant="outline"
           size="lg"
