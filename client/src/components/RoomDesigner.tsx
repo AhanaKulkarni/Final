@@ -17,7 +17,7 @@ export function RoomDesigner() {
     <div className="w-full h-screen flex bg-gradient-to-br from-stone-50 to-amber-50">
       {/* Left Sidebar for 2D Mode - Wider for big laptops */}
       {viewMode === '2d' && (
-        <div className="w-96 h-full overflow-y-auto bg-white/95 backdrop-blur-sm border-r border-stone-200 shadow-xl">
+        <div className="w-96 h-full overflow-y-auto bg-white/95 backdrop-blur-sm border-r border-stone-200 shadow-xl flex-shrink-0">
           <div className="p-6 space-y-6">
             <FurnitureLibrary />
             <Controls />
