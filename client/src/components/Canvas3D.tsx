@@ -496,7 +496,7 @@ function Scene3D() {
 
 export function Canvas3D() {
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full min-h-screen relative">
       <Canvas
         shadows
         gl={{ 

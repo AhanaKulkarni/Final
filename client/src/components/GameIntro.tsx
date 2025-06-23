@@ -179,6 +179,62 @@ export function GameIntro() {
               <li>• Customize colors and sizes to make it your own</li>
             </ul>
           </div>
+
+          {/* Additional test content for scrolling */}
+          <div className="bg-stone-50 border border-stone-200 rounded-lg p-6 mt-8">
+            <h4 className="font-semibold text-stone-800 mb-4">Game Features & Tips:</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h5 className="font-medium text-stone-700 mb-2">Design Tools:</h5>
+                <ul className="text-sm text-stone-600 space-y-1">
+                  <li>• Wall creation with custom thickness</li>
+                  <li>• Furniture library with 6+ categories</li>
+                  <li>• Drag-and-drop placement system</li>
+                  <li>• Real-time collision detection</li>
+                  <li>• Color customization options</li>
+                  <li>• Resize and rotation controls</li>
+                </ul>
+              </div>
+              <div>
+                <h5 className="font-medium text-stone-700 mb-2">View Modes:</h5>
+                <ul className="text-sm text-stone-600 space-y-1">
+                  <li>• 2D editing with grid snapping</li>
+                  <li>• 3D visualization with lighting</li>
+                  <li>• AR preview using device camera</li>
+                  <li>• Smooth transitions between modes</li>
+                  <li>• Orbit controls for 3D navigation</li>
+                  <li>• Mobile-optimized interface</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-r from-amber-50 to-stone-50 border border-amber-200 rounded-lg p-6 mt-6">
+            <h4 className="font-semibold text-amber-800 mb-4">Pro Design Tips:</h4>
+            <div className="space-y-3">
+              <p className="text-sm text-amber-700">
+                <strong>Start with walls:</strong> Create your room outline first using the wall tool. Click and drag to draw walls, and they'll automatically snap to create clean corners.
+              </p>
+              <p className="text-sm text-amber-700">
+                <strong>Plan your layout:</strong> Think about traffic flow and furniture placement before adding items. Leave enough space for doors to open and people to move around.
+              </p>
+              <p className="text-sm text-amber-700">
+                <strong>Use the grid:</strong> Enable grid snapping for precise placement. This helps align furniture and create professional-looking layouts.
+              </p>
+              <p className="text-sm text-amber-700">
+                <strong>Test in 3D:</strong> Switch to 3D mode frequently to see how your room looks from different angles. This helps identify issues early.
+              </p>
+              <p className="text-sm text-amber-700">
+                <strong>Color coordination:</strong> Use the color picker to create cohesive color schemes. Consider how colors work together in both 2D and 3D views.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-8 p-4 bg-white/60 rounded-lg border border-stone-200">
+            <p className="text-sm text-stone-600">
+              Ready to create your dream room? Click "Start Designing" above to begin your room design journey!
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>

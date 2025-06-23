@@ -14,10 +14,10 @@ export function RoomDesigner() {
   const { viewMode, selectedFurniture, selectedDoorWindow, editMode } = useRoomStore();
   
   return (
-    <div className="w-full h-screen flex bg-gradient-to-br from-stone-50 to-amber-50">
+    <div className="w-full min-h-screen flex bg-gradient-to-br from-stone-50 to-amber-50">
       {/* Left Sidebar for 2D Mode - Wider for big laptops */}
       {viewMode === '2d' && (
-        <div className="w-96 h-full overflow-y-auto bg-white/95 backdrop-blur-sm border-r border-stone-200 shadow-xl flex-shrink-0">
+        <div className="w-96 min-h-screen overflow-y-auto bg-white/95 backdrop-blur-sm border-r border-stone-200 shadow-xl flex-shrink-0">
           <div className="p-6 space-y-6">
             <FurnitureLibrary />
             <Controls />
@@ -29,7 +29,7 @@ export function RoomDesigner() {
       )}
       
       {/* Main Canvas Area - Full remaining width */}
-      <div className="flex-1 h-full relative">
+      <div className="flex-1 min-h-screen relative">
         {/* Undo/Redo Controls */}
         <UndoRedo />
         
@@ -37,7 +37,7 @@ export function RoomDesigner() {
         <ViewToggle />
         
         {/* Canvas */}
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full min-h-screen flex items-center justify-center">
           {viewMode === '2d' ? <Canvas2D /> : <Canvas3D />}
         </div>
       </div>
