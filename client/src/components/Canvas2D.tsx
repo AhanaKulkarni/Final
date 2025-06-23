@@ -363,9 +363,12 @@ export function Canvas2D() {
     
     // Only allow wall drawing when in wall mode
     if (editMode === 'wall' && isDrawingWall) {
+      console.log('Wall drawing mode active, current wall start:', currentWallStart);
       if (!currentWallStart) {
+        console.log('Starting new wall at:', snappedPos);
         setCurrentWallStart(snappedPos);
       } else {
+        console.log('Completing wall from', currentWallStart, 'to', snappedPos);
         // Complete the wall
         addWall({
           start: currentWallStart,

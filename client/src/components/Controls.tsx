@@ -55,7 +55,7 @@ export function Controls() {
                   size="sm"
                   onClick={() => {
                     setEditMode('wall');
-                    setDrawingWall(false);
+                    setDrawingWall(true);
                   }}
                   className="flex items-center gap-1 text-xs"
                 >
