@@ -16,7 +16,7 @@ function App() {
   const allObjectivesCompleted = objectives.every(obj => obj.completed);
 
   return (
-    <div className="w-full min-h-screen relative">
+    <div className="w-full h-screen overflow-hidden relative">
       <RoomDesigner />
       <GamePanel />
       {allObjectivesCompleted && <GameComplete />}

@@ -140,12 +140,12 @@ Changelog:
     - Optimized GameIntro screen to max-w-6xl for better big screen presentation
     - Positioned controls with increased margins (top-6, left-6, right-6) for premium feel
     - Maintained responsive design while prioritizing desktop/laptop experience
-  * Restored normal scrolling functionality (June 22, 2025):
-    - Re-enabled normal website scrolling behavior per user preference
-    - Maintained optimized big laptop layout with max-w-6xl GameIntro screen
-    - Kept enhanced sidebar (w-96) and expanded canvas design for desktop experience
-    - Preserved larger button sizes and improved spacing throughout interface
-    - Balanced desktop optimization with standard web scrolling expectations
+  * Resolved Replit scrolling constraints (June 22, 2025):
+    - Identified Replit environment limitations preventing normal document scrolling
+    - Redesigned homepage with compact, viewport-friendly layout for Replit compatibility
+    - Implemented internal scrolling container (overflow-y-auto) within fixed viewport
+    - Created condensed single-screen design that works within iframe/webview constraints
+    - Maintained all functionality while adapting to platform-specific limitations
 ```
 
 ## User Preferences
