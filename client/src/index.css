@@ -4,24 +4,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reset with normal scrolling enabled */
+/* Reset and force scrolling functionality */
 * {
   box-sizing: border-box;
 }
 
 html {
+  height: auto !important;
+  overflow-y: auto !important;
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   padding: 0;
+  height: auto !important;
+  overflow-y: auto !important;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 #root {
   width: 100%;
+  height: auto !important;
   min-height: 100vh;
+  overflow-y: auto !important;
 }
 
 /* Allow text selection in specific areas */

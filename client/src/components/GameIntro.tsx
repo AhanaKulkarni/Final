@@ -305,6 +305,31 @@ export function GameIntro() {
           </Button>
         </div>
       </section>
+
+      {/* Extra content to test scrolling */}
+      <section className="py-20 px-4 bg-gradient-to-r from-green-50 to-blue-50">
+        <div className="max-w-4xl mx-auto text-center">
+          <h3 className="text-3xl font-bold text-gray-800 mb-8">Scroll Test Section</h3>
+          <p className="text-lg text-gray-600 mb-8">
+            If you can see this section and scroll to it, then scrolling is working perfectly! 
+            This extra content ensures the page extends beyond the viewport height.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-xl shadow-md">
+              <h4 className="font-semibold text-gray-800 mb-2">Test Block 1</h4>
+              <p className="text-gray-600">Additional content to verify scrolling functionality works as expected.</p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-md">
+              <h4 className="font-semibold text-gray-800 mb-2">Test Block 2</h4>
+              <p className="text-gray-600">More content to ensure the page is definitely longer than the viewport.</p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-md">
+              <h4 className="font-semibold text-gray-800 mb-2">Test Block 3</h4>
+              <p className="text-gray-600">Final test block - if you can scroll to see this, everything is working!</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
