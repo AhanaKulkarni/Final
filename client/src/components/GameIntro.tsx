@@ -32,48 +32,48 @@ export function GameIntro() {
   };
 
   return (
-    <div className="w-full h-screen overflow-y-auto bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="w-full h-screen overflow-y-auto bg-gray-50">
       <div className="min-h-full flex items-center justify-center p-4">
-        <div className="w-full max-w-5xl space-y-6">
+        <div className="w-full max-w-4xl space-y-6">
           {/* Header */}
           <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-lg">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-700 rounded-lg">
               <Home size={32} className="text-white" />
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Room Designer Studio
+            <h1 className="text-4xl font-bold text-gray-800">
+              Room Designer
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Create stunning room designs with interactive 2D to 3D visualization
+              Design rooms in 2D and visualize them in 3D
             </p>
           </div>
 
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200 text-center">
-              <Layout className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+            <div className="bg-white rounded-lg p-4 border border-gray-200 text-center">
+              <Layout className="w-5 h-5 text-gray-600 mx-auto mb-2" />
               <h3 className="font-medium text-gray-800 text-sm">2D Design</h3>
-              <p className="text-xs text-gray-600">Floor planning</p>
+              <p className="text-xs text-gray-500">Floor planning</p>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200 text-center">
-              <Target className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+            <div className="bg-white rounded-lg p-4 border border-gray-200 text-center">
+              <Target className="w-5 h-5 text-gray-600 mx-auto mb-2" />
               <h3 className="font-medium text-gray-800 text-sm">3D Preview</h3>
-              <p className="text-xs text-gray-600">Real-time 3D</p>
+              <p className="text-xs text-gray-500">Real-time 3D</p>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200 text-center">
-              <Camera className="w-6 h-6 text-pink-500 mx-auto mb-2" />
+            <div className="bg-white rounded-lg p-4 border border-gray-200 text-center">
+              <Camera className="w-5 h-5 text-gray-600 mx-auto mb-2" />
               <h3 className="font-medium text-gray-800 text-sm">AR Mode</h3>
-              <p className="text-xs text-gray-600">Augmented reality</p>
+              <p className="text-xs text-gray-500">Augmented reality</p>
             </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200 text-center">
-              <Home className="w-6 h-6 text-green-500 mx-auto mb-2" />
+            <div className="bg-white rounded-lg p-4 border border-gray-200 text-center">
+              <Home className="w-5 h-5 text-gray-600 mx-auto mb-2" />
               <h3 className="font-medium text-gray-800 text-sm">Customize</h3>
-              <p className="text-xs text-gray-600">Colors & styles</p>
+              <p className="text-xs text-gray-500">Colors & styles</p>
             </div>
           </div>
 
           {/* Main Setup Card */}
-          <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0 rounded-2xl">
+          <Card className="bg-white shadow-sm border border-gray-200 rounded-lg">
             <CardHeader className="text-center pb-4">
               <CardTitle className="text-2xl font-bold text-gray-800">
                 Start Your Design
@@ -140,7 +140,7 @@ export function GameIntro() {
                     variant="outline"
                     size="sm"
                     onClick={() => { setRoomWidth('300'); setRoomHeight('250'); }}
-                    className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
+                    className="bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100"
                   >
                     Small
                   </Button>
@@ -148,7 +148,7 @@ export function GameIntro() {
                     variant="outline"
                     size="sm"
                     onClick={() => { setRoomWidth('400'); setRoomHeight('300'); }}
-                    className="bg-purple-50 border-purple-200 text-purple-700 hover:bg-purple-100"
+                    className="bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100"
                   >
                     Medium
                   </Button>
@@ -156,7 +156,7 @@ export function GameIntro() {
                     variant="outline"
                     size="sm"
                     onClick={() => { setRoomWidth('500'); setRoomHeight('400'); }}
-                    className="bg-pink-50 border-pink-200 text-pink-700 hover:bg-pink-100"
+                    className="bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100"
                   >
                     Large
                   </Button>
@@ -164,7 +164,7 @@ export function GameIntro() {
                     variant="outline"
                     size="sm"
                     onClick={() => { setRoomWidth('600'); setRoomHeight('300'); }}
-                    className="bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                    className="bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100"
                   >
                     Wide
                   </Button>
@@ -175,16 +175,16 @@ export function GameIntro() {
               <Button
                 onClick={startGame}
                 size="lg"
-                className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white font-bold shadow-lg"
+                className="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold"
               >
-                Start Designing Now
+                Start Designing
               </Button>
             </CardContent>
           </Card>
 
           {/* Instructions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200">
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
               <h3 className="font-semibold text-gray-800 mb-3">How to Design:</h3>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• Draw walls by clicking and dragging</li>
@@ -194,7 +194,7 @@ export function GameIntro() {
               </ul>
             </div>
             
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200">
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
               <h3 className="font-semibold text-gray-800 mb-3">Pro Tips:</h3>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• Plan your layout before adding furniture</li>
