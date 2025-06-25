@@ -133,30 +133,7 @@ export const useRoomStore = create<RoomState>()(
       const newHistory = state.history.slice(0, state.historyIndex + 1);
       newHistory.push(JSON.parse(JSON.stringify(newRoom)));
       
-      // Game objective tracking
-      try {
-        const { useGame } = require('./useGame');
-        const gameStore = useGame.getState();
-        if (gameStore.phase === 'playing') {
-          gameStore.incrementStat('furnitureAdded');
-          
-          if (newRoom.furniture.length >= 3) {
-            gameStore.completeObjective('place-furniture');
-          }
-          
-          // Check complete room objective
-          const hasWalls = newRoom.walls.length >= 4;
-          const hasDoor = newRoom.doors.length > 0;
-          const hasWindow = newRoom.windows.length > 0;
-          const hasFurniture = newRoom.furniture.length >= 5;
-          
-          if (hasWalls && hasDoor && hasWindow && hasFurniture) {
-            gameStore.completeObjective('complete-room');
-          }
-        }
-      } catch (e) {
-        // Silently handle if game store not available
-      }
+
       
       return {
         currentRoom: newRoom,
@@ -168,18 +145,7 @@ export const useRoomStore = create<RoomState>()(
     }),
     
     updateFurniture: (id, updates) => set((state) => {
-      // Game objective tracking for color customization
-      if (updates.color) {
-        try {
-          const { useGame } = require('./useGame');
-          const gameStore = useGame.getState();
-          if (gameStore.phase === 'playing') {
-            gameStore.completeObjective('customize-colors');
-          }
-        } catch (e) {
-          // Silently handle if game store not available
-        }
-      }
+
       
       return {
         currentRoom: {

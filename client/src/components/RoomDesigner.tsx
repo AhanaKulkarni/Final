@@ -17,7 +17,7 @@ export function RoomDesigner() {
     <div className="w-full min-h-screen flex bg-gray-50">
       {/* Left Sidebar for 2D Mode - Wider for big laptops */}
       {viewMode === '2d' && (
-        <div className="w-96 min-h-screen overflow-y-auto bg-white/95 backdrop-blur-sm border-r border-stone-200 shadow-xl flex-shrink-0">
+        <div className="w-96 min-h-screen overflow-y-auto bg-white border-r border-gray-200 flex-shrink-0">
           <div className="p-6 space-y-6">
             <FurnitureLibrary />
             <Controls />
@@ -38,7 +38,7 @@ export function RoomDesigner() {
         
         {/* Canvas */}
         <div className="w-full min-h-screen flex items-center justify-center">
-          {viewMode === '2d' ? <Canvas2D /> : <Canvas3D />}
+          {viewMode === '2d' ? <Canvas2D /> : viewMode === '3d' ? <Canvas3D /> : null}
         </div>
       </div>
     </div>
