@@ -146,6 +146,13 @@ Changelog:
     - Implemented internal scrolling container (overflow-y-auto) within fixed viewport
     - Created condensed single-screen design that works within iframe/webview constraints
     - Maintained all functionality while adapting to platform-specific limitations
+  * Cleaned up gamified effects (June 25, 2025):
+    - Removed animated furniture bouncing and colorful lighting effects from 3D view
+    - Simplified 3D environment to clean, professional appearance
+    - Changed gradient backgrounds to solid colors throughout interface
+    - Updated control overlays to minimal white/gray design
+    - Fixed wall drawing functionality by properly enabling drawing mode
+    - Prepared foundation for advanced AR implementation with direction detection
 ```
 
 ## User Preferences
