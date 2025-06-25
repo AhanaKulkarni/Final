@@ -608,7 +608,7 @@ export function Canvas2D() {
         ref={canvasRef}
         width={1200}
         height={800}
-        className="border-2 border-gray-200 bg-white rounded-lg shadow-lg"
+        className="border border-gray-300 bg-white rounded"
         style={{ cursor: getCursor() }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -620,20 +620,20 @@ export function Canvas2D() {
       />
       
       {/* Navigation controls overlay */}
-      <div className="absolute bottom-4 right-4 bg-black/70 text-white p-3 rounded-lg text-xs">
+      <div className="absolute bottom-4 right-4 bg-white/90 text-gray-700 p-3 rounded border shadow text-xs">
         <div className="space-y-1">
-          <div className="font-semibold mb-2">Canvas Navigation:</div>
-          <div>• Ctrl+Drag: Pan view</div>
-          <div>• Mouse wheel: Zoom in/out</div>
-          <div>• Zoom: {Math.round(zoom * 100)}%</div>
+          <div className="font-medium mb-2">Canvas Navigation:</div>
+          <div>Ctrl+Drag: Pan view</div>
+          <div>Mouse wheel: Zoom</div>
+          <div>Zoom: {Math.round(zoom * 100)}%</div>
         </div>
-        <div className="mt-2 pt-2 border-t border-white/20">
+        <div className="mt-2 pt-2 border-t border-gray-200">
           <button
             onClick={() => {
               setPanOffset({ x: 0, y: 0 });
               setZoom(1);
             }}
-            className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded transition-colors"
+            className="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
           >
             Reset View
           </button>

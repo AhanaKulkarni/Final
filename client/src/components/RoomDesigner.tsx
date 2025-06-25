@@ -14,7 +14,7 @@ export function RoomDesigner() {
   const { viewMode, selectedFurniture, selectedDoorWindow, editMode } = useRoomStore();
   
   return (
-    <div className="w-full min-h-screen flex bg-gradient-to-br from-stone-50 to-amber-50">
+    <div className="w-full min-h-screen flex bg-gray-50">
       {/* Left Sidebar for 2D Mode - Wider for big laptops */}
       {viewMode === '2d' && (
         <div className="w-96 min-h-screen overflow-y-auto bg-white/95 backdrop-blur-sm border-r border-stone-200 shadow-xl flex-shrink-0">

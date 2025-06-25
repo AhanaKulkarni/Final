@@ -25,12 +25,7 @@ function Furniture3D({ furniture }: { furniture: FurnitureItem }) {
     (furniture.height * furniture.scale) / 80
   ];
   
-  // Add subtle animation
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.5) * 0.01;
-    }
-  });
+  // Static positioning - no animations
   
   const getGeometry = () => {
     switch (furniture.type) {
@@ -441,17 +436,7 @@ function Lights() {
         shadow-camera-top={20}
         shadow-camera-bottom={-20}
       />
-      <pointLight position={[0, 8, 0]} intensity={0.4} color="#ffeaa7" />
-      <pointLight position={[-5, 3, -5]} intensity={0.3} color="#74b9ff" />
-      <pointLight position={[5, 3, 5]} intensity={0.3} color="#fd79a8" />
-      <spotLight
-        position={[0, 12, 0]}
-        angle={0.6}
-        penumbra={0.5}
-        intensity={0.8}
-        castShadow
-        color="#ffffff"
-      />
+      <pointLight position={[0, 8, 0]} intensity={0.3} color="#ffffff" />
     </>
   );
 }
@@ -505,7 +490,7 @@ export function Canvas3D() {
           toneMappingExposure: 1.2
         }}
         camera={{ position: [12, 10, 12], fov: 50 }}
-        style={{ background: 'linear-gradient(180deg, #87CEEB 0%, #f0f8ff 100%)' }}
+        style={{ background: '#f8f9fa' }}
       >
         <OrbitControls
           enablePan={true}
@@ -519,34 +504,17 @@ export function Canvas3D() {
         />
         
         <Suspense fallback={null}>
-          <Environment preset="sunset" />
           <Scene3D />
-          <ContactShadows 
-            position={[0, 0, 0]} 
-            opacity={0.3} 
-            scale={20} 
-            blur={2} 
-            far={10} 
-          />
         </Suspense>
       </Canvas>
       
-      {/* Enhanced 3D Controls overlay */}
-      <div className="absolute bottom-4 right-4 bg-gradient-to-br from-black/70 to-black/50 backdrop-blur-sm text-white p-4 rounded-xl shadow-lg border border-white/10">
-        <h3 className="font-semibold mb-2 text-sm">3D Navigation</h3>
-        <div className="space-y-1 text-xs opacity-90">
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-blue-500/30 rounded border border-blue-400 flex items-center justify-center text-xs">L</span>
-            <span>Rotate camera</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-green-500/30 rounded border border-green-400 flex items-center justify-center text-xs">R</span>
-            <span>Pan view</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-purple-500/30 rounded border border-purple-400 flex items-center justify-center text-xs">⟳</span>
-            <span>Zoom in/out</span>
-          </div>
+      {/* Simple 3D Controls overlay */}
+      <div className="absolute bottom-4 right-4 bg-white/90 text-gray-700 p-3 rounded border shadow">
+        <div className="text-sm font-medium mb-1">3D Navigation</div>
+        <div className="space-y-1 text-xs">
+          <div>Left click + drag: Rotate</div>
+          <div>Right click + drag: Pan</div>
+          <div>Mouse wheel: Zoom</div>
         </div>
       </div>
     </div>
