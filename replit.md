@@ -159,7 +159,9 @@ Changelog:
     - Cleaned up game tracking code from room store
     - Deleted useGame and useAudio stores
     - Transformed into clean room design tool without game elements
-    - Simplified App component to load RoomDesigner directly
+    - Created professional HomePage component with room name input and feature showcase
+    - Added navigation between home page and room designer with back button
+    - Simplified App component with proper state management for page transitions
 ```
 
 ## User Preferences

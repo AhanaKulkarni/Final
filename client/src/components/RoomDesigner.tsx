@@ -8,9 +8,15 @@ import { DoorWindowControls } from './DoorWindowControls';
 import { Controls } from './Controls';
 import { ViewToggle } from './ViewToggle';
 import { UndoRedo } from './UndoRedo';
+import { Button } from '@/components/ui/button';
 import { useRoomStore } from '../lib/stores/useRoomStore';
+import { ArrowLeft, Home } from 'lucide-react';
 
-export function RoomDesigner() {
+interface RoomDesignerProps {
+  onBackToHome?: () => void;
+}
+
+export function RoomDesigner({ onBackToHome }: RoomDesignerProps) {
   const { viewMode, selectedFurniture, selectedDoorWindow, editMode } = useRoomStore();
   
   return (
@@ -30,6 +36,22 @@ export function RoomDesigner() {
       
       {/* Main Canvas Area - Full remaining width */}
       <div className="flex-1 min-h-screen relative">
+        {/* Back to Home Button */}
+        {onBackToHome && (
+          <div className="fixed top-6 left-6 z-50">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={onBackToHome}
+              className="flex items-center gap-2 bg-white/95 backdrop-blur-sm shadow-lg border-gray-200"
+            >
+              <ArrowLeft size={18} />
+              <Home size={18} />
+              <span>Home</span>
+            </Button>
+          </div>
+        )}
+        
         {/* Undo/Redo Controls */}
         <UndoRedo />
         
