@@ -87,18 +87,7 @@ export const useRoomStore = create<RoomState>()(
       const newHistory = state.history.slice(0, state.historyIndex + 1);
       newHistory.push(JSON.parse(JSON.stringify(newRoom)));
       
-      // Game objective tracking
-      try {
-        const { useGame } = require('./useGame');
-        const gameStore = useGame.getState();
-        if (gameStore.phase === 'playing') {
-          if (newRoom.walls.length >= 4) {
-            gameStore.completeObjective('create-walls');
-          }
-        }
-      } catch (e) {
-        // Silently handle if game store not available
-      }
+
       
       return {
         currentRoom: newRoom,
@@ -175,17 +164,7 @@ export const useRoomStore = create<RoomState>()(
       const newHistory = state.history.slice(0, state.historyIndex + 1);
       newHistory.push(JSON.parse(JSON.stringify(newRoom)));
       
-      // Game objective tracking
-      try {
-        const { useGame } = require('./useGame');
-        const gameStore = useGame.getState();
-        if (gameStore.phase === 'playing') {
-          gameStore.incrementStat('doorsAdded');
-          gameStore.completeObjective('add-door');
-        }
-      } catch (e) {
-        // Silently handle if game store not available
-      }
+
       
       return {
         currentRoom: newRoom,
@@ -204,17 +183,7 @@ export const useRoomStore = create<RoomState>()(
       const newHistory = state.history.slice(0, state.historyIndex + 1);
       newHistory.push(JSON.parse(JSON.stringify(newRoom)));
       
-      // Game objective tracking
-      try {
-        const { useGame } = require('./useGame');
-        const gameStore = useGame.getState();
-        if (gameStore.phase === 'playing') {
-          gameStore.incrementStat('windowsAdded');
-          gameStore.completeObjective('add-window');
-        }
-      } catch (e) {
-        // Silently handle if game store not available
-      }
+
       
       return {
         currentRoom: newRoom,

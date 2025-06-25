@@ -153,6 +153,13 @@ Changelog:
     - Updated control overlays to minimal white/gray design
     - Fixed wall drawing functionality by properly enabling drawing mode
     - Prepared foundation for advanced AR implementation with direction detection
+  * Removed gamification system (June 25, 2025):
+    - Eliminated objectives panel and scoring system completely
+    - Removed GamePanel, GameComplete, GameIntro components
+    - Cleaned up game tracking code from room store
+    - Deleted useGame and useAudio stores
+    - Transformed into clean room design tool without game elements
+    - Simplified App component to load RoomDesigner directly
 ```
 
 ## User Preferences
