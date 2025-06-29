@@ -1,0 +1,73 @@
+[33maf52f5f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Fixed mouse position offset
+[33m28f8f21[m Fixed mouse position offset and improved snapToGrid logic
+[33m24ba3b6[m Initial commit of FinalEDICProject
+[33m2c1f0ba[m Improve the home page layout to work within limited screen space
+[33m0d3a3bf[m Introduce a welcoming home page with access to room design features
+[33md27ad2b[m Transform the application into a straightforward room design tool
+[33m6659a0a[m Refine user interface and remove game-related elements for a cleaner design
+[33mbe01d88[m Refine the visual experience and prepare to integrate Augmented Reality
+[33m1b9c625[m Remove engaging effects and animations to simplify the design interface
+[33me52aeea[m Enable users to draw walls on the 2D canvas to design their rooms
+[33m1727380[m Reduce visual noise in welcome screen to improve user experience
+[33me9c513f[m Restore scrolling functionality and improve layout for a better experience
+[33m55115e1[m Enable scrolling on all pages and add content to test functionality
+[33mbe62ccc[m Redesign the main landing page to improve user experience and site navigation
+[33m7f278c1[m Improve page layout and add intro content to enable proper scrolling
+[33m7a59837[m Enable website scrolling and adjust the landing page layout
+[33mc360ba3[m Create full-screen, no-scroll interface for a more immersive experience
+[33ma39d865[m Improve interface for larger screens, providing more space for design work
+[33md51c8c4[m Improve the layout and appearance to better utilize larger screens
+[33m9b31c1c[m Improve user interface by adding a collapsible panel for room controls
+[33mbca7c6a[m Refine user interface and overall layout for a more streamlined experience
+[33m3cb315c[m Verify scrolling functionality throughout the application interface
+[33mf28cfa0[m Improve display across devices and ensure consistent rendering on web pages
+[33m129a468[m Enable scrolling functionality throughout the entire application interface
+[33m95118a2[m Improve scrolling and ensure the entire design is visible on the screen
+[33m98d969c[m Enable full page scrolling and enhance interface elements for better usability
+[33m4fc1076[m Improve the visibility of undo/redo actions throughout the design tool
+[33m3ca1576[m Enhance user interface by increasing the size of various design controls
+[33m7aeb38e[m Enhance the user interface to provide a more immersive design experience
+[33m4d20334[m Transform the application into an interactive game for designing rooms
+[33maac0039[m Introduce game mode that challenges players to design rooms effectively
+[33mc7ad7bb[m Transform the room designer into an engaging design challenge game
+[33m613b31b[m Adjust dimensions of windows and doors for a more accurate appearance
+[33mdca077b[m Adjust door and window sizes to appear more realistic in the 3D model
+[33m6443993[m Show doors and windows in the 3D view of the room design accurately
+[33m30da696[m Show doors and windows in the 3D view of the room design
+[33md4ded37[m Improve AR functionality and make application compatible with mobile devices
+[33m9679e5f[m Improve camera access and make the application more mobile friendly
+[33m2743ee9[m Add augmented reality mode and enable undo/redo functionality throughout
+[33ma9ae9d1[m Allow users to preview their designs in their own room using augmented reality
+[33mb2ed8ad[m Improve appearance of doors and windows in the 3D room design
+[33m3e52403[m Improve the visibility of doors and windows, add undo and redo buttons
+[33m12bfdba[m Show doors and windows in 3D view and add undo/redo functionality
+[33mf719c91[m Refine the user interface with a lighter color scheme and subtle changes
+[33m27a4c81[m Revamp UI elements to align with a light, neutral color theme
+[33mc016a01[m Update the user interface to use a light brown, beige, and stone color palette
+[33m9577f06[m Improve the look and feel of the user interface to be more sleek
+[33md57d1a5[m Restored to 'cd77cab8d0785bffc836b4557590f7b2daa435dc'
+[33m4a6f2ee[m Refine user interface to have a minimalist design with improved usability
+[33m9b42111[m Implement minimalist design with beige, white, and black color scheme
+[33mcd6f327[m Refine user interface to provide a more modern and professional experience
+[33m00df94d[m Modernize the user interface for a more professional look and feel
+[33m1d88bba[m Reduce visual effects and improve clarity of wall customization controls
+[33m103656d[m Reduce visual clutter and improve readability of settings panels
+[33meff696f[m Reduce visual clutter and improve overall clarity of the interface
+[33ma92067f[m Enhance door, window, and wall customization with improved UI elements
+[33md081d98[m Overhaul the user interface making it visually impressive and user friendly
+[33mfd6700b[m Enhance the user interface with improved styling and interactive elements
+[33m3bec4e5[m Enhance the visual appeal of the room design interface significantly
+[33mcd77cab[m Add doors and windows to the room design with placement controls
+[33m7bca404[m Enable users to add and freely position doors and windows on walls
+[33m8c104b0[m Enable users to add movable doors and windows to their room designs
+[33m1ec68a7[m Allow users to add and move doors and windows around in the room design
+[33me29b631[m Keep furniture on the ground, allow rotation and change wall colors
+[33m67855cd[m Enhance room design with wall colors, furniture rotation, and floor placement
+[33m06493f6[m Add panning and zooming functionality to the 2D room design canvas
+[33m6bd8ab3[m Allow users to move and resize furniture after selecting them in the editor
+[33m6b58281[m Improve furniture editing and overall design with enhanced UI
+[33m9988cb6[m Enhance the visual appeal and add furniture manipulation features
+[33m7724ebe[m Enhance furniture manipulation and 3D rendering capabilities for better design
+[33md9c4d29[m Create an interactive room design tool with 2D and 3D views
+[33m13ec251[m Started building your app
+[33m5df42b5[m Initial commit
