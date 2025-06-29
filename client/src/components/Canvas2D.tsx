@@ -312,15 +312,16 @@ export function Canvas2D() {
   }, [drawRoom]);
   
   const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>): Point => {
-    const canvas = canvasRef.current;
-    if (!canvas) return { x: 0, y: 0 };
-    
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: (e.clientX - rect.left - panOffset.x) / zoom,
-      y: (e.clientY - rect.top - panOffset.y) / zoom
-    };
-  };
+  const canvas = canvasRef.current;
+  if (!canvas) return { x: 0, y: 0 };
+
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left - panOffset.x) / zoom;
+  const y = (e.clientY - rect.top - panOffset.y) / zoom;
+
+  return { x, y };
+};
+  
 
   const transformPoint = (point: Point): Point => {
     return {
