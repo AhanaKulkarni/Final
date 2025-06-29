@@ -310,17 +310,32 @@ export function Canvas2D() {
   useEffect(() => {
     drawRoom();
   }, [drawRoom]);
-  
+
+  // ✅ Fix for high-DPI screens (cursor alignment with canvas)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx?.scale(dpr, dpr);
+  }, []);
+
   const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>): Point => {
-  const canvas = canvasRef.current;
-  if (!canvas) return { x: 0, y: 0 };
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
 
-  const rect = canvas.getBoundingClientRect();
-  const x = (e.clientX - rect.left - panOffset.x) / zoom;
-  const y = (e.clientY - rect.top - panOffset.y) / zoom;
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left - panOffset.x) / zoom;
+    const y = (e.clientY - rect.top - panOffset.y) / zoom;
 
-  return { x, y };
-};
+    return { x, y };
+  };
+
   
 
   const transformPoint = (point: Point): Point => {
