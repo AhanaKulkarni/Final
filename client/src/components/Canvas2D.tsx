@@ -307,21 +307,20 @@ export function Canvas2D() {
   
 
   
- const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>): Point => {
-  const canvas = canvasRef.current;
-  if (!canvas) return { x: 0, y: 0 };
-
-  const rect = canvas.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-
-  const x = (e.clientX - rect.left) * dpr;
-  const y = (e.clientY - rect.top) * dpr;
-
-  return {
-    x: (x - panOffset.x) / zoom,
-    y: (y - panOffset.y) / zoom
+  useEffect(() => {
+    drawRoom();
+  }, [drawRoom]);
+  
+  const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>): Point => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (e.clientX - rect.left - panOffset.x) / zoom,
+      y: (e.clientY - rect.top - panOffset.y) / zoom
+    };
   };
-};
 
   const transformPoint = (point: Point): Point => {
     return {
