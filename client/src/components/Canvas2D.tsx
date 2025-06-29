@@ -73,240 +73,248 @@ export function Canvas2D() {
   };
   
   const drawRoom = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    
-    // Save context and apply transformations
+  const canvas = canvasRef.current;
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  // Reset canvas
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transforms
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+
+  // Apply pan and zoom
+  ctx.translate(panOffset.x, panOffset.y);
+  ctx.scale(zoom, zoom);
+
+  // Draw gradient background
+  const gradient = ctx.createLinearGradient(
+    -panOffset.x / zoom,
+    -panOffset.y / zoom,
+    (canvas.width - panOffset.x) / zoom,
+    (canvas.height - panOffset.y) / zoom
+  );
+  gradient.addColorStop(0, '#f8f9fa');
+  gradient.addColorStop(1, '#e9ecef');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(-panOffset.x / zoom, -panOffset.y / zoom, canvas.width / zoom, canvas.height / zoom);
+
+  // Draw grid lines
+  ctx.strokeStyle = '#dee2e6';
+  ctx.lineWidth = 0.5;
+  const gridSize = 20;
+  for (let x = -panOffset.x % (gridSize * zoom); x < canvas.width; x += gridSize * zoom) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+  for (let y = -panOffset.y % (gridSize * zoom); y < canvas.height; y += gridSize * zoom) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+
+  // Major grid lines
+  ctx.strokeStyle = '#adb5bd';
+  ctx.lineWidth = 1;
+  const majorGridSize = 100;
+  for (let x = -panOffset.x % (majorGridSize * zoom); x < canvas.width; x += majorGridSize * zoom) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+  for (let y = -panOffset.y % (majorGridSize * zoom); y < canvas.height; y += majorGridSize * zoom) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+
+  // Draw walls
+  currentRoom.walls.forEach((wall) => {
+    const wallColor = wall.color || '#2c3e50';
+    ctx.strokeStyle = wallColor;
+    ctx.lineWidth = 12;
+    ctx.lineCap = 'round';
+    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(wall.start.x, wall.start.y);
+    ctx.lineTo(wall.end.x, wall.end.y);
+    ctx.stroke();
+
+    // Reset shadow
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+
+    // Outline
+    ctx.strokeStyle = adjustBrightness(wallColor, -30);
+    ctx.lineWidth = 14;
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.beginPath();
+    ctx.moveTo(wall.start.x, wall.start.y);
+    ctx.lineTo(wall.end.x, wall.end.y);
+    ctx.stroke();
+    ctx.globalCompositeOperation = 'source-over';
+  });
+
+  // Draw furniture
+  currentRoom.furniture.forEach((furniture) => {
+    const isSelected = furniture.id === selectedFurniture;
+
     ctx.save();
-    ctx.translate(panOffset.x, panOffset.y);
-    ctx.scale(zoom, zoom);
-    
-    // Clear canvas with gradient background
-    const gradient = ctx.createLinearGradient(-panOffset.x / zoom, -panOffset.y / zoom, 
-                                           (canvas.width - panOffset.x) / zoom, 
-                                           (canvas.height - panOffset.y) / zoom);
-    gradient.addColorStop(0, '#f8f9fa');
-    gradient.addColorStop(1, '#e9ecef');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(-panOffset.x / zoom, -panOffset.y / zoom, canvas.width / zoom, canvas.height / zoom);
-    
-    // Draw enhanced grid
-    ctx.strokeStyle = '#dee2e6';
-    ctx.lineWidth = 0.5;
-    for (let x = 0; x <= canvas.width; x += 20) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, canvas.height);
-      ctx.stroke();
+    ctx.translate(furniture.position.x, furniture.position.y);
+    ctx.rotate((furniture.rotation * Math.PI) / 180);
+
+    const scaledWidth = furniture.width * furniture.scale;
+    const scaledHeight = furniture.height * furniture.scale;
+
+    if (!isSelected) {
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
+      ctx.fillRect(-scaledWidth / 2 + 2, -scaledHeight / 2 + 2, scaledWidth, scaledHeight);
     }
-    for (let y = 0; y <= canvas.height; y += 20) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(canvas.width, y);
-      ctx.stroke();
-    }
-    
-    // Draw major grid lines
-    ctx.strokeStyle = '#adb5bd';
-    ctx.lineWidth = 1;
-    for (let x = 0; x <= canvas.width; x += 100) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, canvas.height);
-      ctx.stroke();
-    }
-    for (let y = 0; y <= canvas.height; y += 100) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(canvas.width, y);
-      ctx.stroke();
-    }
-    
-    // Draw walls with enhanced styling
-    currentRoom.walls.forEach((wall, index) => {
-      const wallColor = wall.color || '#2c3e50';
-      ctx.strokeStyle = wallColor;
-      ctx.lineWidth = 12;
-      ctx.lineCap = 'round';
-      ctx.shadowColor = 'rgba(0,0,0,0.3)';
-      ctx.shadowBlur = 4;
-      ctx.shadowOffsetX = 2;
-      ctx.shadowOffsetY = 2;
-      
-      ctx.beginPath();
-      ctx.moveTo(wall.start.x, wall.start.y);
-      ctx.lineTo(wall.end.x, wall.end.y);
-      ctx.stroke();
-      
-      // Reset shadow
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-      
-      // Draw wall outline
-      ctx.strokeStyle = adjustBrightness(wallColor, -30);
-      ctx.lineWidth = 14;
-      ctx.globalCompositeOperation = 'destination-over';
-      ctx.beginPath();
-      ctx.moveTo(wall.start.x, wall.start.y);
-      ctx.lineTo(wall.end.x, wall.end.y);
-      ctx.stroke();
-      ctx.globalCompositeOperation = 'source-over';
-    });
-    
-    // Draw furniture with enhanced styling
-    currentRoom.furniture.forEach(furniture => {
-      const isSelected = furniture.id === selectedFurniture;
-      
-      ctx.save();
-      ctx.translate(furniture.position.x, furniture.position.y);
-      ctx.rotate((furniture.rotation * Math.PI) / 180);
-      
-      const scaledWidth = furniture.width * furniture.scale;
-      const scaledHeight = furniture.height * furniture.scale;
-      
-      // Draw shadow
-      if (!isSelected) {
-        ctx.fillStyle = 'rgba(0,0,0,0.1)';
-        ctx.fillRect(-scaledWidth / 2 + 2, -scaledHeight / 2 + 2, scaledWidth, scaledHeight);
-      }
-      
-      // Draw furniture rectangle
-      const color = furniture.color || '#4a90e2';
-      const gradient = ctx.createLinearGradient(-scaledWidth / 2, -scaledHeight / 2, scaledWidth / 2, scaledHeight / 2);
-      gradient.addColorStop(0, color);
-      gradient.addColorStop(1, adjustBrightness(color, -20));
-      ctx.fillStyle = gradient;
-      ctx.fillRect(-scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight);
-      
-      // Draw border
-      ctx.strokeStyle = isSelected ? '#e74c3c' : adjustBrightness(color, -40);
-      ctx.lineWidth = isSelected ? 3 : 2;
-      ctx.strokeRect(-scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight);
-      
-      // Draw selection handles
-      if (isSelected) {
-        const handleSize = 8;
-        ctx.fillStyle = '#e74c3c';
-        const corners = [
-          [-scaledWidth / 2, -scaledHeight / 2], // top-left
-          [scaledWidth / 2, -scaledHeight / 2],  // top-right
-          [-scaledWidth / 2, scaledHeight / 2],  // bottom-left
-          [scaledWidth / 2, scaledHeight / 2]    // bottom-right
-        ];
-        
-        corners.forEach(([x, y]) => {
-          ctx.fillRect(x - handleSize / 2, y - handleSize / 2, handleSize, handleSize);
-        });
-      }
-      
-      // Draw furniture label
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 12px Inter, Arial, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-      ctx.lineWidth = 3;
-      const label = furniture.type.charAt(0).toUpperCase() + furniture.type.slice(1);
-      ctx.strokeText(label, 0, 4);
-      ctx.fillText(label, 0, 4);
-      
-      ctx.restore();
-    });
-    
-    // Draw doors and windows
-    const allDoorWindows = [...currentRoom.doors, ...currentRoom.windows];
-    allDoorWindows.forEach((item) => {
-      const wall = currentRoom.walls[item.wallIndex];
-      if (!wall) return;
-      
-      const wallPos = getPositionOnWall(wall, item.position);
-      const wallAngle = Math.atan2(wall.end.y - wall.start.y, wall.end.x - wall.start.x);
-      
-      ctx.save();
-      ctx.translate(wallPos.x, wallPos.y);
-      ctx.rotate(wallAngle);
-      
-      const isSelected = selectedDoorWindow === item.id;
-      const color = item.color || (item.type === 'door' ? '#8B4513' : '#4169E1');
-      
-      if (item.type === 'door') {
-        // Draw door
-        ctx.fillStyle = color;
-        ctx.fillRect(-item.width / 2, -10, item.width, 20);
-        
-        // Door frame
-        ctx.strokeStyle = adjustBrightness(color, -40);
-        ctx.lineWidth = 2;
-        ctx.strokeRect(-item.width / 2, -10, item.width, 20);
-        
-        // Door handle
-        ctx.fillStyle = '#FFD700';
-        ctx.beginPath();
-        ctx.arc(item.width / 2 - 8, 0, 3, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        // Draw window
-        ctx.fillStyle = color;
-        ctx.fillRect(-item.width / 2, -8, item.width, 16);
-        
-        // Window frame
-        ctx.strokeStyle = adjustBrightness(color, -40);
-        ctx.lineWidth = 2;
-        ctx.strokeRect(-item.width / 2, -8, item.width, 16);
-        
-        // Window cross
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(0, -8);
-        ctx.lineTo(0, 8);
-        ctx.moveTo(-item.width / 2, 0);
-        ctx.lineTo(item.width / 2, 0);
-        ctx.stroke();
-      }
-      
-      // Selection indicator
-      if (isSelected) {
-        ctx.strokeStyle = '#e74c3c';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([5, 5]);
-        ctx.strokeRect(-item.width / 2 - 5, -15, item.width + 10, 30);
-        ctx.setLineDash([]);
-      }
-      
-      ctx.restore();
-    });
-    
-    // Draw current wall being drawn
-    if (isDrawingWall && currentWallStart) {
-      ctx.strokeStyle = '#e74c3c';
-      ctx.lineWidth = 10;
-      ctx.setLineDash([15, 10]);
-      ctx.lineCap = 'round';
-      
-      ctx.beginPath();
-      ctx.moveTo(currentWallStart.x, currentWallStart.y);
-      ctx.lineTo(mousePos.x, mousePos.y);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      
-      // Draw start point indicator
+
+    const color = furniture.color || '#4a90e2';
+    const furnitureGradient = ctx.createLinearGradient(
+      -scaledWidth / 2,
+      -scaledHeight / 2,
+      scaledWidth / 2,
+      scaledHeight / 2
+    );
+    furnitureGradient.addColorStop(0, color);
+    furnitureGradient.addColorStop(1, adjustBrightness(color, -20));
+    ctx.fillStyle = furnitureGradient;
+    ctx.fillRect(-scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight);
+
+    ctx.strokeStyle = isSelected ? '#e74c3c' : adjustBrightness(color, -40);
+    ctx.lineWidth = isSelected ? 3 : 2;
+    ctx.strokeRect(-scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight);
+
+    // Handles
+    if (isSelected) {
+      const handleSize = 8;
       ctx.fillStyle = '#e74c3c';
-      ctx.beginPath();
-      ctx.arc(currentWallStart.x, currentWallStart.y, 6, 0, Math.PI * 2);
-      ctx.fill();
+      const corners = [
+        [-scaledWidth / 2, -scaledHeight / 2],
+        [scaledWidth / 2, -scaledHeight / 2],
+        [-scaledWidth / 2, scaledHeight / 2],
+        [scaledWidth / 2, scaledHeight / 2],
+      ];
+      corners.forEach(([x, y]) => {
+        ctx.fillRect(x - handleSize / 2, y - handleSize / 2, handleSize, handleSize);
+      });
     }
-    
-    // Restore context
+
+    // Label
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 12px Inter, Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    ctx.lineWidth = 3;
+    const label = furniture.type.charAt(0).toUpperCase() + furniture.type.slice(1);
+    ctx.strokeText(label, 0, 4);
+    ctx.fillText(label, 0, 4);
+
     ctx.restore();
-  }, [currentRoom, selectedFurniture, isDrawingWall, currentWallStart, mousePos, panOffset, zoom]);
+  });
+
+  // Draw doors and windows
+  const allDoorWindows = [...currentRoom.doors, ...currentRoom.windows];
+  allDoorWindows.forEach((item) => {
+    const wall = currentRoom.walls[item.wallIndex];
+    if (!wall) return;
+
+    const wallPos = getPositionOnWall(wall, item.position);
+    const wallAngle = Math.atan2(wall.end.y - wall.start.y, wall.end.x - wall.start.x);
+
+    ctx.save();
+    ctx.translate(wallPos.x, wallPos.y);
+    ctx.rotate(wallAngle);
+
+    const isSelected = selectedDoorWindow === item.id;
+    const color = item.color || (item.type === 'door' ? '#8B4513' : '#4169E1');
+
+    if (item.type === 'door') {
+      // Draw door
+      ctx.fillStyle = color;
+      ctx.fillRect(-item.width / 2, -10, item.width, 20);
+
+      // Door frame
+      ctx.strokeStyle = adjustBrightness(color, -40);
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-item.width / 2, -10, item.width, 20);
+
+      // Door handle
+      ctx.fillStyle = '#FFD700';
+      ctx.beginPath();
+      ctx.arc(item.width / 2 - 8, 0, 3, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Draw window
+      ctx.fillStyle = color;
+      ctx.fillRect(-item.width / 2, -8, item.width, 16);
+
+      // Window frame
+      ctx.strokeStyle = adjustBrightness(color, -40);
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-item.width / 2, -8, item.width, 16);
+
+      // Window cross
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, -8);
+      ctx.lineTo(0, 8);
+      ctx.moveTo(-item.width / 2, 0);
+      ctx.lineTo(item.width / 2, 0);
+      ctx.stroke();
+    }
+
+    // Selection indicator
+    if (isSelected) {
+      ctx.strokeStyle = '#e74c3c';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([5, 5]);
+      ctx.strokeRect(-item.width / 2 - 5, -15, item.width + 10, 30);
+      ctx.setLineDash([]);
+    }
+
+    ctx.restore();
+  });
+
+  // Draw current wall being drawn
+  if (isDrawingWall && currentWallStart) {
+    ctx.strokeStyle = '#e74c3c';
+    ctx.lineWidth = 10;
+    ctx.setLineDash([15, 10]);
+    ctx.lineCap = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(currentWallStart.x, currentWallStart.y);
+    ctx.lineTo(mousePos.x, mousePos.y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Draw start point indicator
+    ctx.fillStyle = '#e74c3c';
+    ctx.beginPath();
+    ctx.arc(currentWallStart.x, currentWallStart.y, 6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore(); // Restore original transform
+}, [canvasRef, panOffset, zoom, currentRoom, selectedFurniture, selectedDoorWindow, isDrawingWall, currentWallStart, mousePos]);
   
 
-  
   useEffect(() => {
     drawRoom();
   }, [drawRoom]);
